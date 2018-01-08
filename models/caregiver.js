@@ -11,5 +11,5 @@ var caregiverSchema = new Schema({
 });
 
 
-//Export function to create "User" model class
+//Export function to create "Caregiver" model class
 module.exports = mongoose.model('Caregiver', caregiverSchema);
