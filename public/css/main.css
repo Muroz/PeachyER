@@ -1,0 +1,21 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.contentBlock {
+  margin-top: 20;
+  background: #ffffff;
+  height: 250;
+  text-align: center;
+}
+
+.navbar {
+    background-color:#ffffff;  
+    display: block;
+    width: 100%;
+}
