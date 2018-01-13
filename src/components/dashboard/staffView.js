@@ -10,6 +10,24 @@ render(){
     return(
         <div>
             Staff view goes here
+            <div>
+                 //Staff panel
+                <Panel>
+                    <Panel.Heading>
+                        <div>
+                            <img width="75" src="{props.avatar_url}" />
+                            <div className="cardCol2">
+                                <div>{props.name}</div>
+                                <div>{props.location}</div>
+                            </div>
+                        </div>
+                    </Panel.Heading>
+                    <Panel.Body>
+                        //Panel for Dashboard content here
+                    </Panel.Body>
+		      </Panel>
+        
+            <div/>
         </div>
     )
   }
