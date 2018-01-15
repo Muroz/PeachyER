@@ -5,14 +5,15 @@ var bcrypt   = require('bcrypt-nodejs');
 //Define a schema
 var Schema = mongoose.Schema;
 
-var caregiverSchema = new Schema({
+var clientSchema = new Schema({
     name: String,
     id: String,
-    visits: [{
-        visit: {
+    visitsBy: [{
+        staffId: mongoose.Schema.Types.ObjectId,
+        visits: [{
             type: mongoose.Schema.Types.ObjectId,
             ref:'Visit'
-        }
+        }]
     }],
     properties:[String],
     missedVisits: Number,
@@ -21,5 +22,5 @@ var caregiverSchema = new Schema({
 });
 
 
-//Export function to create "Caregiver" model class
-module.exports = mongoose.model('Caregiver', caregiverSchema);
+//Export function to create "Client" model class
+module.exports = mongoose.model('Client', clientSchema);

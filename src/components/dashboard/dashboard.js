@@ -13,14 +13,14 @@ import NavBar from './../navbar';
 class Dashboard extends React.Component{
 render(){
     return(
-        <div>
+        <div >
         <div className='navbar'>
             <NavBar />
         </div>
-        <Well>
+        <div className='background'>
             <Row>
                 <Col xs={12} md={8}>
-                    Dashboard title
+                    <h1 className='dashboard_title'> Dashboard </h1>
                 </Col>
                 <Col xs={6} md={4}>
                     Search bar
@@ -50,7 +50,7 @@ render(){
                     </div>
                 </Col>
             </Row>
-        </Well>
+        </div>
         </div>
     )
   }

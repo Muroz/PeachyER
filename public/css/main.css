@@ -1,21 +1,66 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
 }
 
 .contentBlock {
-  margin-top: 20;
+  margin-left: 20;
+  margin-right: 20;
+  margin-top: 10;
+  margin-bottom: 20;
   background: #ffffff;
   height: 250;
   text-align: center;
 }
 
 .navbar {
-    background-color:#ffffff;  
-    display: block;
-    width: 100%;
+  background-color:#ffffff;  
+  width: 100%;
+  height:80;
+}
+
+.logo {
+  width: 140;
+  height: 70;
+}
+
+.barElement {
+  text-align: center;
+  margin-top:30;
+}
+
+.profile_pic{
+
+  margin-top: 5;
+  width: 55;
+  height: 55;
+  border-radius: 25px;
+  float:left;
+}
+.profile_content{
+  margin-left:70;
+  text-align: left;
+}
+.profile_name{
+  margin-top: 10;
+
+}
+
+.log_out{
+  margin-top: 10;
+
+}
+
+.background{
+ background: #A6B2DD;
+ width: 100%;
+ height: 100%;
+
+ align-items: center;
+}
+
+.dashboard_title{
+  margin-left: 10;
 }
