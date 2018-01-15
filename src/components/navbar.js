@@ -33,8 +33,8 @@ render(){
                     
                     <img src="/images/profile_pic.jpg" className='profile_pic' />
                     <div className='profile_content'>
-                    <h6 className='profile_name'> Diego Zuluaga </h6>
-                    <a> <h6 className='log_out'> Log out </h6> </a>
+                        <h6 className='profile_name'> Diego Zuluaga </h6>
+                        <a> <h6 className='log_out'> Log out </h6> </a>
                     </div>
                 </Col>
 
