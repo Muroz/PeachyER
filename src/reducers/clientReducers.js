@@ -2,12 +2,23 @@
 
 
 
-export function clientReducers(state={devices:[], users:[], userSelected:false, error:null, selectedUser:{}, zones:[]}, action){
+export function clientReducers(state={clients:[], staff:[]}, action){
     switch (action.type){
         case "SEARCH":
            return { ...state}
            break;
-
+        case "GET_CLIENTS":
+            return {...state, clients:action.payload}
+            break;
+        case "GET_STAFF":
+            return {...state, staff:action.payload}
+            break;
+        case "ADD_CLIENT":
+            return {...state, clients:[...state.clients, ...action.payload]}
+            break;
+        case "ADD_STAFF":
+            return {...state, staff:[...state.staff, ...action.payload]}
+            break;
     }
     return state
 }

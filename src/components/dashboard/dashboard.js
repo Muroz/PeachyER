@@ -17,7 +17,7 @@ render(){
         <div className='navbar'>
             <NavBar />
         </div>
-        <div className='background'>
+        <div className='dashboard_background'>
             <Row>
                 <Col xs={12} md={8}>
                     <h1 className='dashboard_title'> Dashboard </h1>
@@ -28,24 +28,24 @@ render(){
             </Row>
             <Row>
                 <Col xs={10} md={7}>
-                    <div class='contentBlock'>
+                    <div class='dashboard_contentBlock'>
                         <StatsView />
                     </div>
                 </Col>
                 <Col xs={8} md={5}>
-                    <div class='contentBlock'>
+                    <div class='dashboard_contentBlock'>
                         <AlertView />
                     </div>
                 </Col>
             </Row>
             <Row>
                 <Col xs={10} md={7}>
-                    <div class='contentBlock'>
+                    <div class='dashboard_contentBlock'>
                         <StaffView />
                     </div>
                 </Col>
                 <Col xs={8} md={5}>
-                    <div class='contentBlock'>
+                    <div class='dashboard_contentBlock'>
                         <ActivityView />
                     </div>
                 </Col>

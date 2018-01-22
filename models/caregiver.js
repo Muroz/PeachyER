@@ -7,17 +7,19 @@ var Schema = mongoose.Schema;
 
 var caregiverSchema = new Schema({
     name: String,
-    id: String,
     visits: [{
         visit: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'Visit'
         }
     }],
+    employeeID: String,
+    phoneNumber: String,
     properties:[String],
     missedVisits: Number,
     lateVisits: Number,
-    missedClockInsOuts: Number
+    missedClockInsOuts: Number,
+    region:String
 });
 
 

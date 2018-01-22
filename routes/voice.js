@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
+var Visit= require('./../models/visit');
+
 
 router.get('/', function(req,res,next){
-    console.log('works');
 })
 
 // Create a route that will handle Twilio webhook requests, sent as an
@@ -13,13 +14,40 @@ router.post('/', function(req,res,next) {
   const twiml = new VoiceResponse();
   //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service! Stay in line to receive the care plan for this visit');
 
-   // Use the <Gather> verb to collect user input
-  const gather = twiml.gather({numDigits: 4});
-  gather.say('Please press iysit id');
-  console.log(gather)
+/** helper function to set up a <Gather> */
+  function gather() {
+    const gatherNode = twiml.gather({ numDigits: 7, timeout: 15 });
+    gatherNode.say({ voice: 'alice' }, 'Welcome to the Peachy service! Please press the visit id');
 
-  // If the user doesn't enter input, loop
-  twiml.redirect('/voice');
+    // If the user doesn't enter input, loop
+    twiml.redirect('/voice');
+  }
+
+    console.log(req);
+    var today = new Date();
+    console.log(today.toDateString() == 'Mon Jan 15 2018');
+
+  // If the user entered digits, process their request
+  if (req.body.Digits.length == 7) {
+    // var today = new Date();
+    // console.log(today.toDateString())
+    // var idString = today.toDateString();
+    // idString = idString.replace(/\s+/g, '');
+    // var idedString = idString + req.body.Caller;
+
+    // Visit.findOne({'visitid':idedString, 'client':req.body.Digits}, function(err, visit){
+    //   if(err) return handleError(err);
+
+    //   console.log(visit);
+    // })
+    console.log(req.body.Digits);
+  } else {
+    // If no input was sent, use the <Gather> verb to collect user input
+    gather();
+  }
+
+  console.log('here')
+  console.log(req.body.Digits);
 
   // Render the response as XML in reply to the webhook request
   res.type('text/xml');

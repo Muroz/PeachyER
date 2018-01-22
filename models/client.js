@@ -15,10 +15,8 @@ var clientSchema = new Schema({
             ref:'Visit'
         }]
     }],
-    properties:[String],
-    missedVisits: Number,
-    lateVisits: Number,
-    missedClockInsOuts: Number
+    phoneNumber: String,
+    region: String
 });
 
 

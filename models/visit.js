@@ -6,6 +6,7 @@ var bcrypt   = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
 var visitSchema = new Schema({
+    visitId: String,
     date: Date,
     state: String,
     clockInTime: Date,
