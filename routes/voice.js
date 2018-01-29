@@ -1,15 +1,14 @@
+//routes/voice.js
+
 var express = require('express');
 var router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 var Visit= require('./../models/visit');
 
 
-router.get('/', function(req,res,next){
-})
-
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
-router.post('/', function(req,res,next) {
+router.post('/', function(req,res) {
 
   const twiml = new VoiceResponse();
   //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service! Stay in line to receive the care plan for this visit');

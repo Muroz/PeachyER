@@ -1,3 +1,5 @@
+//models/user.js
+
 //Require Mongoose
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');

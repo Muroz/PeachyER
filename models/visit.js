@@ -1,6 +1,7 @@
+//models/visit.js
+
 //Require Mongoose
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
 
 //Define a schema
 var Schema = mongoose.Schema;
