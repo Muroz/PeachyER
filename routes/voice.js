@@ -16,7 +16,7 @@ router.post('/', function(req,res,next) {
 
 /** helper function to set up a <Gather> */
   function gather() {
-    const gatherNode = twiml.gather({ numDigits: 7, timeout: 15 });
+    const gatherNode = twiml.gather({ numDigits: 7, timeout: 15});
     gatherNode.say({ voice: 'alice' }, 'Welcome to the Peachy service! Please press the visit id');
 
     // If the user doesn't enter input, loop

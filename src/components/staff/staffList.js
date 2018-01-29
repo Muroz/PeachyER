@@ -15,7 +15,6 @@ class StaffList extends React.Component{
     }
 
     setStaff(staff, index){
-        console.log(staff);
         return(<StaffCell key={index} name={staff.name}/>);
 
     }
@@ -31,7 +30,6 @@ class StaffList extends React.Component{
 }
 
 function mapStateToProps(state){
-    console.log(state.clientReducers);
     return {
         staff:state.clientReducers.staff
     }

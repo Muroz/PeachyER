@@ -13,9 +13,11 @@ class ClientCell extends React.Component{
 
     render(){
         return(
+            <a hrer="/profile">
             <Well>
                 <h3> {this.props.name} </h3>
             </Well>
+            </a>
         )
     }
 }
