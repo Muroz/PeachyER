@@ -14,8 +14,10 @@ class Dashboard extends React.Component{
 render(){
     return(
         <div >
+        <div className='navbar'>
             <NavBar />
-        <div className='dashboard_background'>
+        </div>
+        <div className='background'>
             <Row>
                 <Col xs={12} md={8}>
                     <h1 className='dashboard_title'> Dashboard </h1>
@@ -26,24 +28,24 @@ render(){
             </Row>
             <Row>
                 <Col xs={10} md={7}>
-                    <div class='dashboard_contentBlock'>
+                    <div class='contentBlock'>
                         <StatsView />
                     </div>
                 </Col>
                 <Col xs={8} md={5}>
-                    <div class='dashboard_contentBlock'>
+                    <div class='contentBlock'>
                         <AlertView />
                     </div>
                 </Col>
             </Row>
             <Row>
                 <Col xs={10} md={7}>
-                    <div class='dashboard_contentBlock'>
+                    <div class='contentBlock'>
                         <StaffView />
                     </div>
                 </Col>
                 <Col xs={8} md={5}>
-                    <div class='dashboard_contentBlock'>
+                    <div class='contentBlock'>
                         <ActivityView />
                     </div>
                 </Col>
