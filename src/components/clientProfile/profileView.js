@@ -4,9 +4,8 @@ import {Image, Row, Col, Well, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import NavBar from './../navbar';
-import SummaryView from './summaryView';
-import StaffList from './clientList';
 import {fetchClients} from './../../actions/fetchingActions.js';
+import ScheduleView from './scheduleView';
 
 
 class ProfileView extends React.Component{
@@ -17,9 +16,7 @@ render(){
             <div className='navbar'>
                 <NavBar />
             </div>
-            <SummaryView />
-            <StaffList />
-           
+           <ScheduleView />
         </div>
     )
   }

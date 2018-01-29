@@ -46,7 +46,7 @@ handleSubmitClient(){
   }
 render(){
     return(
-        <div className="addButton_overlay">
+        <div className="addButton_overlay" onClick={this.props.closePopup}>
         <div className="addButton_popup">
             <Well>
             <Button onClick={e => this.setForm(e,'client')}> Add Client </Button>
@@ -73,8 +73,6 @@ render(){
               </FormGroup>
               <Button
                 onClick={(!this.props.msg)?(this.handleSubmitClient.bind(this)):(this.resetForm.bind(this))}> Add
-                {/*bsStyle={(!this.props.style)?("primary"):(this.props.style)}>
-                {(!this.props.msg)?("Save book"):(this.props.msg)}*/}
               </Button>
             </Panel>
             :
@@ -89,8 +87,6 @@ render(){
               </FormGroup>
               <Button
                 onClick={(!this.props.msg)?(this.handleSubmitStaff.bind(this)):(this.resetForm.bind(this))}> Add
-                {/*bsStyle={(!this.props.style)?("primary"):(this.props.style)}>
-                {(!this.props.msg)?("Save book"):(this.props.msg)}*/}
               </Button>
             </Panel>
             }

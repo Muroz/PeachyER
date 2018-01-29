@@ -5,7 +5,8 @@ module.exports = function(app, passport) {
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
-        res.render('index.ejs'); // load the index.ejs file
+        // render the page and pass in any flash data if it exists
+        res.render('login.ejs', { message: req.flash('loginMessage') }); 
     });
 
     // =====================================
@@ -64,13 +65,23 @@ module.exports = function(app, passport) {
     })
 
     // =====================================
-    // STAFF ==============================
+    // STAFF ===============================
     // =====================================
     app.get('/staff', isLoggedIn, function(req,res) {
         res.render('staff.ejs', {
             user : req.user
         });
     })
+    
+    // =====================================
+    // PROFILE =============================
+    // =====================================
+    app.get('/profile', isLoggedIn, function(req,res) {
+        res.render('profile.ejs', {
+            user : req.user
+        });
+    })
+
     // =====================================
     // LOGOUT ==============================
     // =====================================

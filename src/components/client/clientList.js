@@ -31,7 +31,6 @@ class ClientList extends React.Component{
 }
 
 function mapStateToProps(state){
-    console.log(state.clientReducers);
     return {
         clients:state.clientReducers.clients
     }
