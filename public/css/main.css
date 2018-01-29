@@ -33,8 +33,6 @@ body {
   background-position: fixed;
   letter-spacing: -1px;
 }
-a {
-}
 
 .dashboard_contentBlock {
   margin-left: 20;
@@ -48,68 +46,65 @@ a {
 }
 
 .navbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 10%);
+  grid-template-rows: 80px;
   background-color:#ffffff;  
-  width: 100%;
-  height:80;
+  align-items: center;
+  justify-items: center;
+}
+
+.navbar_profile{
+  grid-column: 9 / span 2;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  /*grid-template-rows: 1fr 1fr 1fr;
+  background: #4CAF50; */
+}
+
+.navbar_logo {
+
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.navbar_profile_pic {
+  width: 120;
+  height: 60;
 }
 
 .logo {
-  margin-top: 18;
-  width: 100;
-  height: 40;
+  width: 120;
+  height: 60;
 }
 
-.barElement {
-  text-align: center;
-  margin-top:30;
-}
-
-.profile_pic{
-
+/* /* .profile_pic{
+  grid-row: span 2;
   margin-top: 5;
   width: 55;
   height: 55;
   border-radius: 25px;
-  float:left;
-}
-.profile_content{
-  margin-left:70;
-  text-align: left;
 }
 .profile_name{
   margin-top: 10;
-
+  grid-column: 3;
+  grid-row: 1;
 }
+.profile_logout{
+  grid-column: 3;
+  grid-row: 3;
+} */
 
-.log_out{
-  margin-top: 10;
-
-}
-
-.dashboard_background{
- background: #A6B2DD;
- width: 100%;
- height: 100%;
-
- align-items: center;
-}
-
-.dashboard_title{
-  margin-left: 10;
-}
-
-.navbar_profile{
-  float: right;
-  margin-right: 30;
-}
-
-.navbar_ul {
+/* .navbar_ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 
     background-color: #ffffff;
-    justify-content: center; /* align horizontal */
+    justify-content: center; /* align horizontal 
     align-items: center;
     
 }
@@ -117,7 +112,7 @@ a {
 .navbar_li {
     float: left;
 
-}
+} 
 
 li a {
     display: block;
@@ -136,6 +131,27 @@ li a:hover:not(.active) {
 .active {
     background-color: #4CAF50;
 }
+
+
+v
+
+.barElement {
+  text-align: center;
+  margin-top:30;
+} */
+
+.dashboard_background{
+ background: #A6B2DD;
+ width: 100%;
+ height: 100%;
+
+ align-items: center;
+}
+
+.dashboard_title{
+  margin-left: 10;
+}
+
 
 
 
@@ -180,13 +196,10 @@ li a:hover:not(.active) {
   margin-top: 30;
 }
 
-
-
-
-.allForPopUp {}
-
-
-
+h1 {
+  margin: 0;
+  padding: 0;
+}
 html, body, .app {
   margin: 0;
   padding: 0;

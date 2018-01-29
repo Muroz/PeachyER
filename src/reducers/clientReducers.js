@@ -4,9 +4,6 @@
 
 export function clientReducers(state={clients:[], staff:[]}, action){
     switch (action.type){
-        case "SEARCH":
-           return { ...state}
-           break;
         case "GET_CLIENTS":
             return {...state, clients:action.payload}
             break;

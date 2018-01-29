@@ -1,3 +1,4 @@
+
 "use strict"
 import React from 'react';
 import {Image, Row, Col, Well, Button, Panel} from 'react-bootstrap';
@@ -13,7 +14,7 @@ class ClientCell extends React.Component{
 
     render(){
         return(
-            <a hrer="/profile">
+            <a href="/profile">
             <Well>
                 <h3> {this.props.name} </h3>
             </Well>

@@ -18,9 +18,7 @@ componentDidMount(){
 render(){
     return(
         <div>
-            <div className='navbar'>
-                <NavBar />
-            </div>
+            <NavBar />
             <StaffList />
         </div>
     )

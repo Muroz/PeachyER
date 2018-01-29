@@ -1,6 +1,7 @@
+//models/client.js
+
 //Require Mongoose
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
 
 //Define a schema
 var Schema = mongoose.Schema;
@@ -14,7 +15,9 @@ var clientSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref:'Visit'
         }]
-    }]
+    }],
+    phoneNumber: String,
+    region: String
 });
 
 

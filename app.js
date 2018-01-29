@@ -11,7 +11,6 @@ var session      = require('express-session');
 
 var voice = require('./routes/voice');
 var fetch = require('./routes/fetch');
-var main = require('./routes/main');
 
 var app = express();
 
@@ -19,15 +18,12 @@ var configDB = require('./config/database.js');
 
 var later = require('later');
 
-//schema importing
-
-
 //Import the mongoose module
 var mongoose = require('mongoose');
 
-var Client = require('./models/client');
-var Caregiver = require('./models/caregiver');
-var Visit = require('./models/visit');
+// var Client = require('./models/client');
+// var Caregiver = require('./models/caregiver');
+// var Visit = require('./models/visit');
 
 //Set up default mongoose connection
 mongoose.connect(configDB.url, {

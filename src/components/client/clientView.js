@@ -1,6 +1,5 @@
 "use strict"
 import React from 'react';
-import {Image, Row, Col, Well, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import NavBar from './../navbar';
@@ -18,9 +17,7 @@ componentDidMount(){
 render(){
     return(
         <div>
-            <div className='navbar'>
-                <NavBar />
-            </div>
+            <NavBar />
             <SummaryView />
             <StaffList />
            

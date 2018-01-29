@@ -14,9 +14,7 @@ class Dashboard extends React.Component{
 render(){
     return(
         <div >
-        <div className='navbar'>
             <NavBar />
-        </div>
         <div className='dashboard_background'>
             <Row>
                 <Col xs={12} md={8}>

@@ -1,6 +1,5 @@
 "use strict"
 import React from 'react';
-import {Image, Row, Col, Well, Button} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 

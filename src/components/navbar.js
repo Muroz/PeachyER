@@ -8,44 +8,44 @@ import AddButton from './addButton';
 class NavBar extends React.Component{
 
     constructor() {
-    super();
-    this.state = {
-      showPopup: false
-    };
-  }
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
-  }
-render(){
-    return(
-            <ul className="navbar_ul">
-                <li className="navbar_li"> <img src="/images/peachy_logo.png" className='logo' /> </li>
-                <li className="navbar_li"><a href="/dashboard">Home</a></li>
-                <li className="navbar_li"><a href="/client">Clients</a></li>
-                <li className="navbar_li"><a href="/staff">Staff</a></li>
-                <li className="navbar_li"> <a onClick={this.togglePopup.bind(this)}>Add person</a> </li>
-                <li className='navbar_profile'> 
-                    <img src="/images/profile_pic.jpg" className='profile_pic' />
-                    <div className='profile_content'>
-                    <h6 className='profile_name'> Diego Zuluaga </h6>
-                    <a> <h6 className='log_out'> Log out </h6> </a>
+        super();
+        this.state = {
+            showPopup: false
+        };
+    }
+    togglePopup() {
+        this.setState({
+        showPopup: !this.state.showPopup
+        });
+    }
+    render(){
+        return(
+                <div className="navbar">
+                    <div className="navbar_li navbar_logo"> <img src="/images/peachy_logo.png" className='logo' /> </div>
+                    <div className="navbar_li navbar_home"><a href="/dashboard">Home</a></div>
+                    <div className="navbar_li navbar_client"><a href="/client">Clients</a></div>
+                    <div className="navbar_li navbar_staff"><a href="/staff">Staff</a></div>
+                    <div className="navbar_li navbar_add"> <a onClick={this.togglePopup.bind(this)}>Add person</a> </div>
+                    <div className='navbar_profile'> 
+                        <img src="/images/user.png" className='navbar_profile_pic' />
+                        <div className='profile_content'>
+                        <h6 className='profile_name'> Diego Zuluaga </h6>
+                        <a> <h6 className='profile_logout'> Log out </h6> </a>
+                        </div>
                     </div>
-                </li>
 
-                 {this.state.showPopup ? 
-                    <AddButton
-                        closePopup={this.togglePopup.bind(this)}
-                    />
-                    : null
-                }
+                    {this.state.showPopup ? 
+                        <AddButton
+                            closePopup={this.togglePopup.bind(this)}
+                        />
+                        : null
+                    }
 
-            </ul>
+                </div>
 
-            
-    )
-  }
+                
+        )
+    }
 }
 
 function mapStateToProps(state){
