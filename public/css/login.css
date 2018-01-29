@@ -1,0 +1,48 @@
+.container {
+    display: grid;
+    font-family: 'Roboto', sans-serif;
+    grid-template-columns: repeat(auto-fill, 10%);
+    grid-template-rows: 20% 2fr 3fr;
+    grid-auto-flow:column;
+    justify-items:center;
+}
+
+.login_title {
+
+    grid-column: 5/span 2;
+    grid-row-start: 2
+}
+
+.login_logo {
+    grid-column: 4 / span 4;
+    justify-items: center;
+}
+.login_pic {
+    height: 200px;
+}
+form {
+    display: grid;
+    grid-gap: 20px;
+    grid-column: 2/ span 8;
+    grid-row-start: 3;
+  
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+label {
+    font-size: 25px;
+    align-self: center;
+    background: white;
+    grid-column: 1 / 2;
+}
+ 
+input {
+    background: white;
+    grid-column: 3 / span 4;
+}
+
+button {
+    grid-column: 1 / span 8;
+    grid-row: 3;
+}

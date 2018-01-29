@@ -1,4 +1,4 @@
-// app/routes.js
+// routes/main.js
 
 module.exports = function(app, passport) {
 
@@ -6,7 +6,8 @@ module.exports = function(app, passport) {
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
-        res.render('index.ejs'); // load the index.ejs file
+        // render the page and pass in any flash data if it exists
+        res.render('login.ejs', { message: req.flash('loginMessage') }); 
     });
 
     // =====================================
@@ -14,7 +15,6 @@ module.exports = function(app, passport) {
     // =====================================
     // show the login form
     app.get('/login', function(req, res) {
-
         // render the page and pass in any flash data if it exists
         res.render('login.ejs', { message: req.flash('loginMessage') }); 
     });
@@ -25,7 +25,6 @@ module.exports = function(app, passport) {
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
-
 
     // =====================================
     // SIGNUP ==============================
@@ -56,12 +55,41 @@ module.exports = function(app, passport) {
     });
 
     // =====================================
+    // CLIENT ==============================
+    // =====================================
+    app.get('/client', isLoggedIn, function(req,res) {
+        res.render('client.ejs', {
+            user : req.user
+        });
+    })
+
+    // =====================================
+    // STAFF ===============================
+    // =====================================
+    app.get('/staff', isLoggedIn, function(req,res) {
+        res.render('staff.ejs', {
+            user : req.user
+        });
+    })
+    
+    // =====================================
+    // PROFILE =============================
+    // =====================================
+    app.get('/profile', isLoggedIn, function(req,res) {
+        res.render('profile.ejs', {
+            user : req.user
+        });
+    })
+
+    // =====================================
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
     });
+
+
 };
 
 // route middleware to make sure a user is logged in

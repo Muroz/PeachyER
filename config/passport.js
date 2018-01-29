@@ -1,12 +1,12 @@
 // config/passport.js
 
-// load all the things we need
-var LocalStrategy   = require('passport-local').Strategy;
+//Load the passport 'local' strategy
+var LocalStrategy = require('passport-local').Strategy;
 
-// load up the user model
-var User            = require('./../models/user');
+//Load up the user model
+var User = require('./../models/user');
 
-// expose this function to our app using module.exports
+//Export this function
 module.exports = function(passport) {
 
     // =========================================================================
@@ -30,9 +30,6 @@ module.exports = function(passport) {
     // =========================================================================
     // LOCAL SIGNUP ============================================================
     // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
     passport.use('local-signup', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
@@ -81,9 +78,6 @@ module.exports = function(passport) {
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
     passport.use('local-login', new LocalStrategy({
         // by default, local strategy uses username and password, we will override with email
         usernameField : 'email',
