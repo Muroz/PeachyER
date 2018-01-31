@@ -8,10 +8,13 @@ require('dotenv').load();
 var app = require('../app');
 var debug = require('debug')('peachyer:server');
 var http = require('http');
-	
+
+
+
 // if (process.env.NODE_ENV !== 'production') {
 //   require('dotenv').load();
 // }
+
 
 
 
@@ -33,6 +36,8 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
+
+
 server.on('error', onError);
 server.on('listening', onListening);
 
