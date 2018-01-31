@@ -23,17 +23,11 @@ router.post('/', function(req,res) {
 //     // If the user doesn't enter input, loop
 //     twiml.redirect('/voice');
 //   }
-
-    console.log(req.body);
-    console.log(req.body.digits);
     var today = new Date();
-    console.log(today.toDateString());
-    console.log(today.toDateString() == 'Wed Jan 31 2018');
 
   // If the user entered digits, process their request
   // if (req.body.Digits.length == 7) {
     var today = new Date();
-    console.log(today.toDateString())
     var idString = today.toDateString();
     idString = idString.replace(/\s+/g, '');
     var idedString = idString + req.body.digits;

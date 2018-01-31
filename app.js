@@ -23,7 +23,7 @@ var mongoose = require('mongoose');
 
 // var Client = require('./models/client');
 // var Caregiver = require('./models/caregiver');
-// var Visit = require('./models/visit');
+ var Visit = require('./models/visit');
 
 //Set up default mongoose connection
 mongoose.connect(configDB.url, {
@@ -39,48 +39,6 @@ var db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-
-//hardcoded values
-// var alex = new Caregiver({
-//     name: "Alex",
-//     missedVisits:0,
-//     lateVisits:0,
-//     missedClockInsOuts:0,
-//     visits:[]
-// });
-
-// var joe = new Client({
-//     name: "Joe",
-//     id: '7097692806'
-// })
-
-// var today= new Date();
-// //console.log(today.toDateString() == 'Mon Jan 15 2018');
-// var dateString = today.toDateString();
-// dateString = dateString.replace(/\s+/g, '');
-// visitId = dateString + joe.id;
-
-// var startDate = new Date(2018, 1, 15, 20, 45);
-// var endDate = new Date(2018, 1, 15, 22, 45);
-// var visit = new Visit({
-//     visitId: visitId,
-//     date: today,
-//     state: 'Will happen',
-//     staffId: alex._id,
-//     clientId: joe._id,
-//     startTime: startDate,
-//     endTime: endDate,
-//     timezone: 'Canada'
-
-// })
-
-// alex.save();
-// joe.save();
-// visit.save();
-
-
-//end of hardcoded values
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -129,7 +87,7 @@ app.use(function(err, req, res, next) {
 });
 var sched = later.parse.recur().every(1).minute().onWeekday();
 var t = later.setInterval(function() {
-    console.log(new Date());
+    
   }, sched);
 module.exports = app;
 

@@ -31,3 +31,6 @@ npm-debug.log
 
 # Environmental variables
 .env
+
+# webpack bundle
+public/bundle.js
