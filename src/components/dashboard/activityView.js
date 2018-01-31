@@ -2,9 +2,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import socketIOClient from "socket.io-client";
-import { endianness } from 'os';
 import { setImmediate, setInterval } from 'timers';
+import { fetchActivity } from '../../actions/fetchingActions';
 
 
 class ActivityView extends React.Component{
@@ -13,10 +12,12 @@ class ActivityView extends React.Component{
         this.state = {
           timer: null
         };
+        this.tick = this.tick.bind(this);
+
       }
 
       componentDidMount() {
-        let timer = setInterval(this.tick, 1000);
+        let timer = setInterval(this.tick, 5000);
         this.setState({timer});
       }
       componentWillUnmount(){
@@ -24,11 +25,11 @@ class ActivityView extends React.Component{
       }
       tick(){
         console.log('ticking');
+        this.props.fetchActivity();
       }
 render(){
     return(
         <div style={{ textAlign: "center" }}>
-          Here comes the info    
         </div>
     )
   }
@@ -36,8 +37,14 @@ render(){
 
 function mapStateToProps(state){
     return {
+      activity:state.clientReducers.activity
     }
 }
 
-export default connect(mapStateToProps)(ActivityView);
+function mapDispatchToProps(dispatch){
+  return bindActionCreators({fetchActivity:fetchActivity},dispatch);
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityView);
 

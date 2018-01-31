@@ -4,7 +4,9 @@ var express = require('express');
 var router = express.Router();
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 var Visit= require('./../models/visit');
-
+var Caregiver = require('./../models/caregiver');
+var Client = require('./../models/client');
+var Activity = require('./../models/recentActivity');
 
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
@@ -22,24 +24,39 @@ router.post('/', function(req,res) {
 //     twiml.redirect('/voice');
 //   }
 
-//     console.log(req);
-//     var today = new Date();
-//     console.log(today.toDateString() == 'Mon Jan 15 2018');
+    console.log(req.body);
+    console.log(req.body.digits);
+    var today = new Date();
+    console.log(today.toDateString());
+    console.log(today.toDateString() == 'Wed Jan 31 2018');
 
   // If the user entered digits, process their request
   // if (req.body.Digits.length == 7) {
-  //   // var today = new Date();
-  //   // console.log(today.toDateString())
-  //   // var idString = today.toDateString();
-  //   // idString = idString.replace(/\s+/g, '');
-  //   // var idedString = idString + req.body.Caller;
+    var today = new Date();
+    console.log(today.toDateString())
+    var idString = today.toDateString();
+    idString = idString.replace(/\s+/g, '');
+    var idedString = idString + req.body.digits;
+    Visit.findOne({'visitId':idedString}, function(err, visit){
+      if(err) return err;
+      Caregiver.findOne({_id:visit.staffId}, function(err, staff){
+        if (err) return err;
+        Client.findOne({_id:visit.clientId}, function(err, client){
+          if(err) return err;
+          var recent = new Activity({
+            timestamp: Date.now(),
+            state:'late',
+            client: client.name,
+            employee: staff.name,
+            action:'Checked in',
+            region: visit.timezone
+          })
+          recent.save();
+        })
+      })
 
-  //   // Visit.findOne({'visitid':idedString, 'client':req.body.Digits}, function(err, visit){
-  //   //   if(err) return handleError(err);
-
-  //   //   console.log(visit);
-  //   // })
-  //   console.log(req.body.Digits);
+    })
+    console.log(req.body.Digits);
   // } else {
   //   // If no input was sent, use the <Gather> verb to collect user input
   //   gather();

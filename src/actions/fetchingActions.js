@@ -21,7 +21,7 @@ export function fetchStaff(){ return function(dispatch){
             dispatch({type:'GET_STAFF', payload:response.data})
         })
         .catch(function(err){
-            dispatch({type:'GET_CLIENTS_STAFF', payload:err})
+            dispatch({type:'GET_STAFF_REJECTED', payload:err})
         })
 
 }};
@@ -35,7 +35,7 @@ export function addStaff(staff){
         dispatch({type:"ADD_STAFF", payload:response.data})
       })
       .catch(function(err){
-        dispatch({type:"ADD_STAFF_REJECTED", payload:"there was an error while adding staff info"})
+        dispatch({type:"ADD_STAFF_REJECTED", payload:err})
       })
   }
 }
@@ -48,7 +48,20 @@ export function addClient(client){
         dispatch({type:"ADD_CLIENT", payload:response.data})
       })
       .catch(function(err){
-        dispatch({type:"ADD_CLIENT_REJECTED", payload:"there was an error while adding client info"})
+        dispatch({type:"ADD_CLIENT_REJECTED", payload:err})
+      })
+  }
+}
+
+// Fetch activity information
+export function fetchActivity(){
+  return function(dispatch){
+    axios.post("/fetch/activity")
+      .then(function(response){
+        dispatch({type:"GET_ACTIVITY", payload:response.data})
+      })
+      .catch(function(err){
+        dispatch({type:"GET_ACTIVITY_REJECTED", payload:err})
       })
   }
 }
