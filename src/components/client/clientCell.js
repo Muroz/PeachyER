@@ -1,32 +1,27 @@
+"use strict";
+import React from "react";
+import { Image, Row, Col, Well, Button, Panel } from "react-bootstrap";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-"use strict"
-import React from 'react';
-import {Image, Row, Col, Well, Button, Panel} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+class ClientCell extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-
-class ClientCell extends React.Component{
-
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        return(
-            <a href="/profile">
-            <Well>
-                <h3> {this.props.name} </h3>
-            </Well>
-            </a>
-        )
-    }
+  render() {
+    return (
+      <a href="/profile">
+        <Well>
+          <h3> {this.props.name} </h3>
+        </Well>
+      </a>
+    );
+  }
 }
 
-function mapStateToProps(state){
-    return {
-    }
+function mapStateToProps(state) {
+  return {};
 }
 
 export default connect(mapStateToProps)(ClientCell);
-
