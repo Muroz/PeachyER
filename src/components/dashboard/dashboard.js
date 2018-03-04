@@ -14,40 +14,6 @@ class Dashboard extends React.Component {
     return (
       <div>
         <NavBar />
-        <div className="dashboard_background">
-          <Row>
-            <Col xs={12} md={8}>
-              <h1 className="dashboard_title"> Dashboard </h1>
-            </Col>
-            <Col xs={6} md={4}>
-              Search bar
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={10} md={7}>
-              <div class="dashboard_contentBlock">
-                <StatsView />
-              </div>
-            </Col>
-            <Col xs={8} md={5}>
-              <div class="dashboard_contentBlock">
-                <AlertView />
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={10} md={7}>
-              <div class="dashboard_contentBlock">
-                <StaffView />
-              </div>
-            </Col>
-            <Col xs={8} md={5}>
-              <div class="dashboard_contentBlock">
-                <ActivityView />
-              </div>
-            </Col>
-          </Row>
-        </div>
       </div>
     );
   }

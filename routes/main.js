@@ -59,33 +59,6 @@ module.exports = function(app, passport) {
   });
 
   // =====================================
-  // CLIENT ==============================
-  // =====================================
-  app.get("/client", isLoggedIn, function(req, res) {
-    res.render("client.ejs", {
-      user: req.user
-    });
-  });
-
-  // =====================================
-  // STAFF ===============================
-  // =====================================
-  app.get("/staff", isLoggedIn, function(req, res) {
-    res.render("staff.ejs", {
-      user: req.user
-    });
-  });
-
-  // =====================================
-  // PROFILE =============================
-  // =====================================
-  app.get("/profile", isLoggedIn, function(req, res) {
-    res.render("profile.ejs", {
-      user: req.user
-    });
-  });
-
-  // =====================================
   // LOGOUT ==============================
   // =====================================
   app.get("/logout", function(req, res) {

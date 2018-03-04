@@ -16,11 +16,20 @@ var caregiverSchema = new Schema({
       }
     }
   ],
-  employeeID: String,
+  billedVisits: [
+    {
+      visit: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Visit"
+      }
+    }
+  ],
+  payingHours: Number,
+  employeeId: String,
   phoneNumber: String,
-  properties: [String],
   missedVisits: Number,
   lateVisits: Number,
+  company: String,
   missedClockInsOuts: Number,
   region: String
 });

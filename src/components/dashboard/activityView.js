@@ -15,14 +15,13 @@ class ActivityView extends React.Component {
   }
 
   componentDidMount() {
-    let timer = setInterval(this.tick, 5000);
+    let timer = setInterval(this.tick, 60000);
     this.setState({ timer });
   }
   componentWillUnmount() {
     this.clearInterval(this.state.timer);
   }
   tick() {
-    console.log("ticking");
     this.props.fetchActivity();
   }
   render() {

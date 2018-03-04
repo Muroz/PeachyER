@@ -34,3 +34,6 @@ npm-debug.log
 
 # webpack bundle
 public/bundle.js
+
+#google secret
+client_secret.json

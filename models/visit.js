@@ -9,15 +9,23 @@ var Schema = mongoose.Schema;
 var visitSchema = new Schema({
   visitId: String,
   date: Date,
-  state: String,
+  active: {type:Boolean, default:false},
+  status: {type:String, default:'Scheduled'},
   clockInTime: Date,
   clockOutTime: Date,
-  id: String,
-  staffId: mongoose.Schema.Types.ObjectId,
-  clientId: mongoose.Schema.Types.ObjectId,
   startTime: Date,
   endTime: Date,
-  timezone: String
+  scheduledDuration: Number,
+  duration : {type:Number, default:0},
+  timezone: {type:String,default:'Canada'},
+  caregiverMessage:{type:{}, default:{}},
+  managerMessage:{type:{}, default:{}},
+  replyNumberC: {type:String, default:'Not available'},
+  replyNumberM: {type:String, default:'Not available'},
+  caregiverName: {type:String, default:'Not available'},
+  clientName: {type:String, default:'Not available'},
+  company: String
+
 });
 
 //Export function to create "Visit" model class

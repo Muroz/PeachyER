@@ -7,60 +7,138 @@ var Visit = require("./../models/visit");
 var Caregiver = require("./../models/caregiver");
 var Client = require("./../models/client");
 var Activity = require("./../models/recentActivity");
+var moment = require("moment");
 
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
 router.post("/", function(req, res) {
-  //   const twiml = new VoiceResponse();
-  //   //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service! Stay in line to receive the care plan for this visit');
+  const twiml = new VoiceResponse();
+  //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service!');
 
-  // /** helper function to set up a <Gather> */
-  //   function gather() {
-  //     const gatherNode = twiml.gather({ numDigits: 7, timeout: 15});
-  //     gatherNode.say({ voice: 'alice' }, 'Welcome to the Peachy service! Please press the visit id');
+  /** helper function to set up a <Gather> */
+  function gather() {
+    const gatherNode = twiml.gather({ numDigits: 4, timeout:5 });
+    gatherNode.say('Welcome to the peachy service');
 
-  //     // If the user doesn't enter input, loop
-  //     twiml.redirect('/voice');
-  //   }
-  var today = new Date();
+    // If the user doesn't enter input, loop
+    twiml.redirect('/voice');
+  }
+
+  function communicate(sentence){
+    twiml.say(sentence);
+
+    // Render the response as XML in reply to the webhook request
+    res.type('text/xml');
+    res.send(twiml.toString());
+
+  }
+
+  function checker(sentence){
+    twiml.say(sentence);
+
+    twiml.redirect('/voice');
+    // Render the response as XML in reply to the webhook request
+    res.type('text/xml');
+    res.send(twiml.toString());
+
+  }
 
   // If the user entered digits, process their request
-  // if (req.body.Digits.length == 7) {
-  var today = new Date();
-  var idString = today.toDateString();
-  idString = idString.replace(/\s+/g, "");
-  var idedString = idString + req.body.digits;
-  Visit.findOne({ visitId: idedString }, function(err, visit) {
-    if (err) return err;
-    Caregiver.findOne({ _id: visit.staffId }, function(err, staff) {
-      if (err) return err;
-      Client.findOne({ _id: visit.clientId }, function(err, client) {
-        if (err) return err;
-        var recent = new Activity({
-          timestamp: Date.now(),
-          state: "late",
-          client: client.name,
-          employee: staff.name,
-          action: "Checked in",
-          region: visit.timezone
-        });
-        recent.save();
-      });
-    });
-  });
-  console.log(req.body.Digits);
-  // } else {
-  //   // If no input was sent, use the <Gather> verb to collect user input
-  //   gather();
-  // }
+  if (req.body.Digits) {
+     if(req.body.Digits.length == 4){
+      Visit.findOne({visitId: req.body.From+req.body.Digits}, function(err, visit){
+        if(err) return err;
+   
+        if(visit==null) {
+          checker('No scheduled visit found');
+          Visit.create({
+            visitId:req.body.From+req.body.Digits,
+            caregiverName: 'Unconfirmed',
+            clientName:'Unconfirmed',
+            date:new moment(),
+            startTime: new moment(),
+            endTime:new moment(),
+            scheduledDuration:0,
+            replyNumberC:'Not available',
+            status:'reported'
+          });
+          return;
+        } 
+        else if(visit.status == 'Completed'){
+          checker('This visit has been completed already');
+        } 
+        else if (visit.active){
 
-  // console.log('here')
-  // console.log(req.body.Digits);
+          communicate('You have just clocked out!')
 
-  // Render the response as XML in reply to the webhook request
-  res.type("text/xml");
-  //res.send(twiml.toString());
-  res.send();
+          var endTime = new moment()
+          //duration in minutes
+          var duration = (endTime.diff(visit.clockInTime,'minutes',true));
+          
+          visit.clockOutTime = endTime;
+          visit.duration = duration;
+          visit.active = false;
+          if (visit.status != 'reported'){
+            visit.status = 'Completed';
+          }
+          Client.findOne({id:req.body.From}, function(err,client){
+            if(err) return err;
+            if(client==null) return 'No client found';
+            client.billedHours += visit.scheduledDuration;
+            client.billedVisits.push(visit);
+    
+            Caregiver.findOne({phoneNumber:client.schedule[moment().format('dddd')][2]}, function(err,carer){
+              if (err) return err;
+              if(carer==null) {
+                checker('No carer found with the given ID');
+                return 'No caregivers found';
+              };
+    
+              carer.payingHours += visit.scheduledDuration;
+              carer.billedVisits.push(visit);
+              carer.visits.push(visit);
+    
+              carer.save();
+    
+              //client.visitsBy[carer.name].push(visit);
+              client.save();
+            });
+          });
+        } else {
+
+          communicate('You have just clocked in!');
+
+          visit.clockInTime= new Date();
+          visit.active = true;
+          visit.status = 'In process';
+        }
+    
+        visit.save();
+      })
+     } 
+     else {
+       gather();
+
+      // Render the response as XML in reply to the webhook request
+      res.type('text/xml');
+      res.send(twiml.toString());
+     }
+  } else {
+    // If no input was sent, use the <Gather> verb to collect user input
+    gather();
+
+
+    // Render the response as XML in reply to the webhook request
+    res.type('text/xml');
+    res.send(twiml.toString());
+  }
+
+
 });
 
+
+router.post("/message", function(req,res){
+  console.log('receiving message');
+  //implement handling for errors
+})
 module.exports = router;
