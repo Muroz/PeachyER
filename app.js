@@ -620,7 +620,10 @@ var reportUpdate = later.setInterval(function(){
           console.log(response.values);
           console.log(checkValues);
           console.log('Consolidating shift info');
-          if(response.values.length == 0){
+          if (response.values == undefined){
+            console.log('no values found');
+          }
+          else if(response.values.length == 0){
             console.log('page is empty')
           }
           else if(!response.values.isMatch(checkValues)){
@@ -715,7 +718,10 @@ var reportUpdate = later.setInterval(function(){
           console.log('Consolidating all shift info');
           console.log(response.values);
           console.log(checkValues);
-          if(response.values.length == 0){
+          if (response.values == undefined){
+            console.log('no values found');
+          }
+          else if(response.values.length == 0){
             console.log('page is empty')
           }
           else if(!response.values.isMatch(checkValues)){
