@@ -33,15 +33,16 @@ var clientSchema = new Schema({
     }
   ],
   schedule:{ 
-    Monday: [{start:String, end:String, phone:String}],
-    Tuesday: [{start:String, end:String, phone:String}],
-    Wednesday: [{start:String, end:String, phone:String}],
-    Thursday: [{start:String, end:String, phone:String}],
-    Friday: [{start:String, end:String, phone:String}],
-    Saturday: [{start:String, end:String, phone:String}],
-    Sunday: [{start:String, end:String, phone:String}],
+    Monday: [{start:String, end:String, phone:String, shiftNumber:Number}],
+    Tuesday: [{start:String, end:String, phone:String, shiftNumber:Number}],
+    Wednesday: [{start:String, end:String, phone:String, shiftNumber:Number}],
+    Thursday: [{start:String, end:String, phone:String, shiftNumber:Number}],
+    Friday: [{start:String, end:String, phone:String, shiftNumber:Number}],
+    Saturday: [{start:String, end:String, phone:String, shiftNumber:Number}],
+    Sunday: [{start:String, end:String, phone:String, shiftNumber:Number}],
   },
   phoneNumber: String,
+  secondaryPhoneNumber: String,
   region: String,
   company: String
 });

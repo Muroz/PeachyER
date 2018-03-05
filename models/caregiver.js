@@ -27,6 +27,7 @@ var caregiverSchema = new Schema({
   payingHours: Number,
   employeeId: String,
   phoneNumber: String,
+  secondaryPhoneNumber: String,
   missedVisits: Number,
   lateVisits: Number,
   company: String,

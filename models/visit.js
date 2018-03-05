@@ -24,6 +24,7 @@ var visitSchema = new Schema({
   replyNumberM: {type:String, default:'Not available'},
   caregiverName: {type:String, default:'Not available'},
   clientName: {type:String, default:'Not available'},
+  statusLog: {type:Array, default:['Scheduled']},
   company: String
 
 });

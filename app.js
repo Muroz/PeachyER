@@ -30,18 +30,16 @@ var moment = require('moment');
 //Import the mongoose module
 var mongoose = require('mongoose');
 
- var ClientModel = require('./models/client');
- var Caregiver = require('./models/caregiver');
- var Visit = require('./models/visit');
+var ClientModel = require('./models/client');
+var Caregiver = require('./models/caregiver');
+var Visit = require('./models/visit');
 
 
- //google spreadsheets
- var fs = require('fs');
+//google spreadsheets
+var fs = require('fs');
 var readline = require('readline');
 var google = require('googleapis');
 var googleAuth = require('google-auth-library');
-// If modifying these scopes, delete your previously saved credentials
-// at ~/.credentials/sheets.googleapis.com-nodejs-quickstart.json
 var SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
@@ -187,7 +185,7 @@ function storeToken(token) {
 
 
 /////////////////////////////////////////////////////
-/////////// Late
+/////////// Late runs every minutes
 ////////////////////////////////////////////////////
 
 var visitSched = later.parse.recur().every(1).minute();
@@ -204,8 +202,10 @@ var t = later.setInterval(function() {
           if (currentTime.diff(visit.startTime,'minutes',true)>10 || currentTime.diff(visit.endTime,'minutes',true)>10){
             if(currentTime.diff(visit.endTime)>10){
               visit.status = 'reported'
+              visit.statusLog.push('reported');
             } else {
               visit.status = 'Late';
+              visit.statusLog.push('late');
             }
             visit.save();
           }
@@ -215,13 +215,14 @@ var t = later.setInterval(function() {
         else if(visit.status == 'Late'){
           visit.caregiverMessage = { state:'sent', sentTime: new moment(), reply:''}
           visit.status = 'notifiedC';
+          visit.statusLog.push('notifiedC');
           var visitState = visit.active?'out':'in'
           var bodyString = "This is the peachy service, you haven't clocked "+ visitState + " yet for your shift.";
-          client.messages.create({
-            from: process.env.TWILIO_PHONE,
-            to: visit.replyNumberC,
-            body: bodyString
-          }).then((messsage) => console.log(message.sid));
+          // client.messages.create({
+          //   from: process.env.TWILIO_PHONE,
+          //   to: visit.replyNumberC,
+          //   body: bodyString
+          // }).then((messsage) => console.log(message.sid));
         } 
         
         else if (visit.status == 'notifiedC'){
@@ -230,14 +231,15 @@ var t = later.setInterval(function() {
           if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
             visit.managerMessage = { state:'sent', sentTime: new Date(), reply:''}
             visit.status = 'notifiedM';
+            visit.statusLog.push('notifiedM');
             var visitState = visit.active?'out':'in'
             var bodyString = "This is the peachy service, "+visit.caregiverName+" hasn't clocked"+ visitState + "for the visit yet.";
 
-            client.messages.create({
-              from: process.env.TWILIO_PHONE,
-              to: visit.replyNumberM,
-              body: bodyString
-            }).then((messsage) => console.log(message.sid));
+            // client.messages.create({
+            //   from: process.env.TWILIO_PHONE,
+            //   to: visit.replyNumberM,
+            //   body: bodyString
+            // }).then((messsage) => console.log(message.sid));
           
           }
         } 
@@ -247,6 +249,7 @@ var t = later.setInterval(function() {
 
           if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
             visit.status = 'reported';
+            visit.statusLog.push('reported');
           }
 
         }
@@ -257,10 +260,10 @@ var t = later.setInterval(function() {
 
 
 /////////////////////////////////////////////////////
-/////////// Schedules
+/////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().every(1).minute();
+var lateSched = later.parse.recur().on(1).hour();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
@@ -290,16 +293,16 @@ var late = later.setInterval(function(){
 
         Caregiver.findOne({phoneNumber:visit.phone}, function(err,carer){
 
-          // Visit.create({
-          //   visitId:client.phoneNumber+carer.employeeId,
-          //   caregiverName: carer.name,
-          //   clientName:client.name,
-          //   date:new moment(),
-          //   startTime: startTime,
-          //   endTime:endTime,
-          //   scheduledDuration:duration,
-          //   replyNumberC:visit.phone
-          // });
+          Visit.create({
+            visitId:client.phoneNumber+carer.employeeId+visit.shiftNumber,
+            caregiverName: carer.name,
+            clientName:client.name,
+            date:new moment(),
+            startTime: startTime,
+            endTime:endTime,
+            scheduledDuration:duration,
+            replyNumberC:visit.phone
+          });
   
           console.log('visit created');
         });
@@ -312,10 +315,97 @@ var late = later.setInterval(function(){
   })
 }, lateSched);
 
+/////////////////////////////////////////////////////
+/////////// Real time updates runs every minute
+////////////////////////////////////////////////////
+
+var realTimeSched = later.parse.recur().every(1).minute();
+var realTime = later.setInterval(function(){
+
+  // Load client secrets from a local file.
+  fs.readFile('client_secret.json', function processClientSecrets(err, content) {
+    if (err) {
+      console.log('Error loading client secret file: ' + err);
+      return;
+    }
+    // Authorize a client with the loaded credentials, then call the
+    // Google Sheets API.
+    authorize(JSON.parse(content), updateCurrent);
+  });
+
+  function updateCurrent(auth) {
+    var sheets = google.sheets('v4');
+								
+    //current completed shifts
+
+    Visit.find({$or:[{status:'Completed'},{status:'In process'}]}, function(err,visits){
+      var checkValues = [];
+      visits.forEach(function(visit,index,arr){
+        var checkRow = [];
+        var stringDate = moment(visit['date']).format("MMM Do YY");
+        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
+        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
+        var stringClockIn = '';
+        var stringClockOut = '';
+        if (visit['clockInTime'] == undefined){
+          stringClockIn = 'N/A'
+        } else {
+          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
+        }
+        if (visit['clockOutTime'] == undefined){
+          stringClockOut = 'N/A'
+        }else {
+          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
+        }
+        
+        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
+
+        checkValues.push(checkRow);
+      })
+
+      var infoLenght = checkValues.length + 6;
+      
+      sheets.spreadsheets.values.clear({
+        auth: auth,
+        spreadsheetId:  process.env.SPREADSHEET,
+        range: "Who's Working!A"+infoLenght+":I",
+      }, function(err, response) {
+        if (err) {
+          console.log('The API returned an error: ' + err);
+          return;
+        }
+        //console.log(response.updatedData);
+
+      });
+
+      sheets.spreadsheets.values.update({
+        auth: auth,
+        spreadsheetId:  process.env.SPREADSHEET,
+        range: "Who's Working!A6:I",
+        valueInputOption: 'RAW',
+        includeValuesInResponse: true,
+        resource:{
+          values: checkValues
+        }
+      }, function(err, response) {
+        if (err) {
+          console.log('The API returned an error: ' + err);
+          return;
+        }
+        //console.log(response.updatedData);
+      });
+     
+    })
+   
+
+
+  }
+
+},realTimeSched);
 
 
 /////////////////////////////////////////////////////
-/////////// Reports
+/////////// Reports runs every 10 minutes
 ////////////////////////////////////////////////////
 
 var reportSched = later.parse.recur().every(1).minute();
@@ -338,7 +428,6 @@ var reportCreation = later.setInterval(function(){
     //unconfirmed shifts
     Visit.find({status:'reported'}, function(err,visits){
       var checkValues = [];
-      var listOfKeys = ['date','visitId','caregiverName','clientName','clockInTime','clockOutTime','startTime','endTime']
 
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
@@ -363,7 +452,7 @@ var reportCreation = later.setInterval(function(){
         }
         
         
-        checkRow.push(stringDate, visit['visitId'],visit['caregiverName'],stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd);
+        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
 
         checkValues.push(checkRow);
       })
@@ -373,7 +462,7 @@ var reportCreation = later.setInterval(function(){
       sheets.spreadsheets.values.clear({
         auth: auth,
         spreadsheetId: process.env.SPREADSHEET,
-        range: 'Unconfirmed Shifts!A'+infoLenght+':H',
+        range: 'Unconfirmed Shifts!A'+infoLenght+':I',
       }, function(err, response) {
         if (err) {
           console.log('The API returned an error: ' + err);
@@ -386,7 +475,7 @@ var reportCreation = later.setInterval(function(){
       sheets.spreadsheets.values.update({
         auth: auth,
         spreadsheetId:  process.env.SPREADSHEET,
-        range: 'Unconfirmed Shifts!A6:H',
+        range: 'Unconfirmed Shifts!A6:I',
         valueInputOption: 'RAW',
         includeValuesInResponse: true,
         resource:{
@@ -407,13 +496,10 @@ var reportCreation = later.setInterval(function(){
 
     Visit.find({}, function(err,visits){
       var checkValues = [];
-      var listOfKeys = ['date','visitId','clockInTime','clockOutTime','duration','startTime','endTime','scheduledDuration']
+
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
 
-        // for (key in listOfKeys){
-        //   checkRow.push(visit[listOfKeys[key]])
-        // }
         var stringDate = moment(visit['date']).format("MMM Do YY");
         var stringStart = moment(visit['startTime']).format('h:mm:ss a');
         var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
@@ -430,7 +516,7 @@ var reportCreation = later.setInterval(function(){
           stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
         }
         
-        checkRow.push(stringDate, visit['visitId'],visit['caregiverName'],stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd);
+        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
 
         checkValues.push(checkRow);
       })
@@ -440,7 +526,7 @@ var reportCreation = later.setInterval(function(){
       sheets.spreadsheets.values.clear({
         auth: auth,
         spreadsheetId:  process.env.SPREADSHEET,
-        range: 'Scheduled Shifts Today!A'+infoLenght+':H',
+        range: 'Scheduled Shifts Today!A'+infoLenght+':I',
       }, function(err, response) {
         if (err) {
           console.log('The API returned an error: ' + err);
@@ -453,7 +539,7 @@ var reportCreation = later.setInterval(function(){
       sheets.spreadsheets.values.update({
         auth: auth,
         spreadsheetId:  process.env.SPREADSHEET,
-        range: 'Scheduled Shifts Today!A6:H',
+        range: 'Scheduled Shifts Today!A6:I',
         valueInputOption: 'RAW',
         includeValuesInResponse: true,
         resource:{
@@ -470,86 +556,17 @@ var reportCreation = later.setInterval(function(){
       
     })
 
-    //current completed shifts
-
-    Visit.find({$or:[{status:'Completed'},{status:'In process'}]}, function(err,visits){
-      var checkValues = [];
-      var listOfKeys = ['date','visitId','clockInTime','clockOutTime','duration','startTime','endTime','scheduledDuration']
-      visits.forEach(function(visit,index,arr){
-        var checkRow = [];
-        var stringDate = moment(visit['date']).format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
-        var stringClockIn = '';
-        var stringClockOut = '';
-        if (visit['clockInTime'] == undefined){
-          stringClockIn = 'N/A'
-        } else {
-          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
-        }
-        if (visit['clockOutTime'] == undefined){
-          stringClockOut = 'N/A'
-        }else {
-          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
-        }
-        
-        checkRow.push(stringDate, visit['visitId'],visit['caregiverName'],stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd);
-        
-        
-        // for (key in listOfKeys){
-        //   checkRow.push(visit[listOfKeys[key]])
-        // }
-
-        checkValues.push(checkRow);
-      })
-
-      var infoLenght = checkValues.length + 6;
-      
-      sheets.spreadsheets.values.clear({
-        auth: auth,
-        spreadsheetId:  process.env.SPREADSHEET,
-        range: "Who's Working!A"+infoLenght+":H",
-      }, function(err, response) {
-        if (err) {
-          console.log('The API returned an error: ' + err);
-          return;
-        }
-        //console.log(response.updatedData);
-
-      });
-
-      sheets.spreadsheets.values.update({
-        auth: auth,
-        spreadsheetId:  process.env.SPREADSHEET,
-        range: "Who's Working!A6:H",
-        valueInputOption: 'RAW',
-        includeValuesInResponse: true,
-        resource:{
-          values: checkValues
-        }
-      }, function(err, response) {
-        if (err) {
-          console.log('The API returned an error: ' + err);
-          return;
-        }
-        //console.log(response.updatedData);
-      });
-     
-    })
-   
-
-
-  }
+   }
 
 },reportSched);
 
 
 
 /////////////////////////////////////////////////////
-/////////// Report update
+/////////// Report update runs every minute
 ////////////////////////////////////////////////////
 
-var updateSched = later.parse.recur().every(1).minute();
+var updateSched = later.parse.recur().every(10).minute();
 var reportUpdate = later.setInterval(function(){
 
   // Load client secrets from a local file.
@@ -562,8 +579,6 @@ var reportUpdate = later.setInterval(function(){
     // Google Sheets API.
     authorize(JSON.parse(content), updateReports);
   });
-
-
 
 
   //Update the reports when changes are seen
@@ -595,7 +610,7 @@ var reportUpdate = later.setInterval(function(){
         }
         
         
-        checkRow.push(stringDate, visit['visitId'],visit['caregiverName'],stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd);
+        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
 
         checkValues.push(checkRow);
       })
@@ -605,20 +620,16 @@ var reportUpdate = later.setInterval(function(){
        sheets.spreadsheets.values.get({
           auth: auth,
           spreadsheetId:  process.env.SPREADSHEET,
-          range: 'Unconfirmed Shifts!A6:H'+arr1Lenght,
+          range: 'Unconfirmed Shifts!A6:I'+arr1Lenght,
         }, function(err, response) {
           if (err) {
             console.log('The API returned an error: ' + err);
             return;
           }
-
-          
+       
           Array.prototype.isMatch = function ( array ) {
             return this.toString() == array.toString();
           };
-
-          console.log(response.values);
-          console.log(checkValues);
           console.log('Consolidating shift info');
           if (response.values == undefined){
             console.log('no values found');
@@ -632,30 +643,31 @@ var reportUpdate = later.setInterval(function(){
 
               for (var y= 0; y < checkValues[0].length; y++) {
 
-                // if(response.values[x][y] != checkValues[x][y]){
-                //   var query = {};
-                //   query['visitId'] = checkValues[x][1];
-                //   var updateX = x;
+                if(response.values[x][y] != checkValues[x][y]){
+                  var query = {};
+                  query['visitId'] = checkValues[x][8];
+                  var updateX = x;
 
-                //   Visit.findOne(query,function(err,visit){
-                //     if (visit == null) return;
-                //     console.log('visit found');
+                  Visit.findOne(query,function(err,visit){
+                    if (visit == null) return;
+                    console.log('visit found');
 
-                //     //var keyList = ['date','visitId','caregiverName','clockInTime','clockOutTime','clientName','startTime','endTime'];
+                      // Employee name	Time in	Time out	Client ID	Scheduled in	Scheduled out	Varience	Date	Visit ID
 
-                //     var stringStart = moment(response.values[updateX][6],'h:mm:ss a');
-                //     var stringEnd = moment(response.values[updateX][7],'h:mm:ss a');
+                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a');
+                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a');
 
-                //     visit.visitId = response.values[updateX][1]
-                //     visit.caregiverName =  response.values[updateX][2]
-                //     visit.startTime = stringStart;
-                //     visit.endTime = stringEnd;
+                    visit.visitId = response.values[updateX][8]
+                    visit.caregiverName =  response.values[updateX][0]
+                    visit.startTime = stringStart;
+                    visit.endTime = stringEnd;
               
-                //     console.log('updating');
-                //     visit.save();
+                    console.log('updating');
+                    visit.save();
 
-                //   })
-                // }
+                  })
+                }
+
               }
             }
           }
@@ -695,7 +707,7 @@ var reportUpdate = later.setInterval(function(){
         }
         
         
-        checkRow.push(stringDate, visit['visitId'],visit['caregiverName'],stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd);
+        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
 
         checkValues.push(checkRow);
       })
@@ -705,7 +717,7 @@ var reportUpdate = later.setInterval(function(){
        sheets.spreadsheets.values.get({
           auth: auth,
           spreadsheetId:  process.env.SPREADSHEET,
-          range: 'Scheduled Shifts Today!A6:H'+arr1Lenght,
+          range: 'Scheduled Shifts Today!A6:I'+arr1Lenght,
         }, function(err, response) {
           if (err) {
             console.log('The API returned an error: ' + err);
@@ -716,8 +728,6 @@ var reportUpdate = later.setInterval(function(){
             return this.toString() == array.toString();
           };
           console.log('Consolidating all shift info');
-          console.log(response.values);
-          console.log(checkValues);
           if (response.values == undefined){
             console.log('no values found');
           }
@@ -729,30 +739,30 @@ var reportUpdate = later.setInterval(function(){
             for (var x = 0; x < checkValues.length; x++) {
 
               for (var y= 0; y < checkValues[0].length; y++) {
-                // if(response.values[x][y] != checkValues[x][y]){
-                //   var query = {};
-                //   query['visitId'] = checkValues[x][1];
-                //   var updateX = x;
+                if(response.values[x][y] != checkValues[x][y]){
+                  var query = {};
+                  query['visitId'] = checkValues[x][8];
+                  var updateX = x;
 
-                //   Visit.findOne(query,function(err,visit){
-                //     if (visit == null) return;
-                //     console.log('visit found');
-                //     console.log(visit);
-                //     //var keyList = ['date','visitId','caregiverName','clockInTime','clockOutTime','clientName','startTime','endTime'];
+                  Visit.findOne(query,function(err,visit){
+                    if (visit == null) return;
+                    console.log('visit found');
+                    console.log(visit);
+                    //var keyList = ['date','visitId','caregiverName','clockInTime','clockOutTime','clientName','startTime','endTime'];
 
-                //     var stringStart = moment(response.values[updateX][6],'h:mm:ss a');
-                //     var stringEnd = moment(response.values[updateX][7],'h:mm:ss a');
+                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a');
+                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a');
 
-                //     visit.visitId = response.values[updateX][1]
-                //     visit.caregiverName =  response.values[updateX][2]
-                //     visit.startTime = stringStart;
-                //     visit.endTime = stringEnd;
+                    visit.visitId = response.values[updateX][8]
+                    visit.caregiverName =  response.values[updateX][0]
+                    visit.startTime = stringStart;
+                    visit.endTime = stringEnd;
               
-                //     console.log('updating');
-                //     visit.save();
+                    console.log('updating');
+                    visit.save();
 
-                //   })
-                // }
+                  })
+                }
               }
             }
           }
@@ -769,126 +779,6 @@ var reportUpdate = later.setInterval(function(){
 module.exports = app;
 
 
-
-
-
-//make unconfimed refresh every minute
-//add confirmed to unconfirmed shifts
-
-
-/* tester function 
-
-  //     Visit.find({},function(err,visits){
-  //       var checkValues = [];
-  //       var arr1Lenght = 1
-  //       visits.forEach(function(visit, index, arr){
-  //         visit = visit.toJSON()
-  
-  //       var checkRow = [];
-  //       var stringDate = moment(visit['date']).format("MMM Do YY");
-  //       var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-  //       var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
-  //       var stringClockIn = '';
-  //       var stringClockOut = '';
-  //       if (visit['clockInTime'] == undefined){
-  //         stringClockIn = 'N/A'
-  //       } else {
-  //         stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
-  //       }
-  //       if (visit['clockOutTime'] == undefined){
-  //         stringClockOut = 'N/A'
-  //       }else {
-  //         stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
-  //       }
-        
-  //         checkRow.push(stringDate, visit['visitId'],visit['caregiverName'],stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd);
-  //         checkValues.push(checkRow);
-  //       })
-  //       arr1Lenght += checkValues.length
-
-  //       sheets.spreadsheets.values.get({
-  //         auth: auth,
-  //         spreadsheetId: '1o5_6JOGjHnd_Jd27-3Aer-Ib55BN4JsMUsXJRKICvmg',
-  //         range: 'Sheet1!A2:O'+arr1Lenght,
-  //       }, function(err, response) {
-  //         if (err) {
-  //           console.log('The API returned an error: ' + err);
-  //           return;
-  //         }
-
-  //         Array.prototype.isMatch = function ( array ) {
-  //           return this.toString() == array.toString();
-  //         };
-  
-  //         console.log('time of truth');
-  //         console.log(response.values.isMatch(checkValues));
-  //         console.log(response.values)
-  //         console.log(checkValues);
-
-  //       });
-  //       var infoLenght = checkValues.length + 2;
-  //       sheets.spreadsheets.values.clear({
-  //         auth: auth,
-  //         spreadsheetId: '1o5_6JOGjHnd_Jd27-3Aer-Ib55BN4JsMUsXJRKICvmg',
-  //         range: 'Sheet1!A'+infoLenght+':O',
-  //       }, function(err, response) {
-  //         if (err) {
-  //           console.log('The API returned an error: ' + err);
-  //           return;
-  //         }
-  //         //console.log(response.updatedData);
-
-  //       });
- 
-  //       sheets.spreadsheets.values.update({
-  //         auth: auth,
-  //         spreadsheetId: '1o5_6JOGjHnd_Jd27-3Aer-Ib55BN4JsMUsXJRKICvmg',
-  //         range: 'Sheet1!A2',
-  //         valueInputOption: 'RAW',
-  //         includeValuesInResponse: true,
-  //         resource:{
-  //           values: checkValues
-  //         }
-  //       }, function(err, response) {
-  //         if (err) {
-  //           console.log('The API returned an error: ' + err);
-  //           return;
-  //         }
-  //         //console.log(response.updatedData);
-  //       });
-  //     });
-  
-
-
-  // //   sheets.spreadsheets.values.update({
-  // //     auth: auth,
-  // //     spreadsheetId: '1o5_6JOGjHnd_Jd27-3Aer-Ib55BN4JsMUsXJRKICvmg',
-  // //     range: 'Sheet1!A5:B',
-  // //     valueInputOption: 'RAW',
-  // //     includeValuesInResponse: true,
-  // //     resource:{
-  // //       values: [
-  // //         [new Date().toISOString(), "Some value"]
-  // //       ]
-  // //     }
-  // //   }, function(err, response) {
-  // //     if (err) {
-  // //       console.log('The API returned an error: ' + err);
-  // //       return;
-  // //     }
-  // //     console.log(response);
-  // //     console.log(response.updatedData);
-  // //     // var rows = response.values;
-  // //     // if (rows.length == 0) {
-  // //     //   console.log('No data found.');
-  // //     // } else {
-  // //     //   console.log('Name, Major:');
-  // //     //   for (var i = 0; i < rows.length; i++) {
-  // //     //     var row = rows[i];
-  // //     //     // Print columns A and E, which correspond to indices 0 and 4.
-  // //     //     console.log('%s, %s', row[0], row[1]);
-  // //     //   }
-  // //     // }
-  // //   });
-
-  */
+// ADD DAY NUMBER TO THE SCHEDULE SO PUT BOTH DAYS ON IT
+//Uncomment messaging
+// remove comments

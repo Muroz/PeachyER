@@ -45,7 +45,7 @@ router.post("/", function(req, res) {
 
   // If the user entered digits, process their request
   if (req.body.Digits) {
-     if(req.body.Digits.length == 4){
+     if(req.body.Digits.length == 5){
       Visit.findOne({visitId: req.body.From+req.body.Digits}, function(err, visit){
         if(err) return err;
    
@@ -66,7 +66,9 @@ router.post("/", function(req, res) {
         } 
         else if(visit.status == 'Completed'){
           checker('This visit has been completed already');
-        } 
+        } else if(visit.status == 'reported'){
+          checker('This visit has been reported to the manager for lack of response');
+        }
         else if (visit.active){
 
           communicate('You have just clocked out!')
