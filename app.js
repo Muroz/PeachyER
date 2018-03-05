@@ -263,7 +263,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on(1).hour();
+var lateSched = later.parse.recur().on(7).hour();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
@@ -748,7 +748,6 @@ var reportUpdate = later.setInterval(function(){
                     if (visit == null) return;
                     console.log('visit found');
                     console.log(visit);
-                    //var keyList = ['date','visitId','caregiverName','clockInTime','clockOutTime','clientName','startTime','endTime'];
 
                     var stringStart = moment(response.values[updateX][5],'h:mm:ss a');
                     var stringEnd = moment(response.values[updateX][6],'h:mm:ss a');
