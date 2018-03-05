@@ -281,7 +281,7 @@ var late = later.setInterval(function(){
           return 'Problem with the input start'
         }
 
-        var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2])).tz('America/St_Johns');;
+        var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2]))
 
         var endString = visit.end.split(':');
 
@@ -289,7 +289,7 @@ var late = later.setInterval(function(){
           return 'Problem with the input end'
         }
 
-        var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2])).tz('America/St_Johns');;
+        var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2]))
 
         var duration = endTime.diff(startTime,'hours');
 
@@ -348,19 +348,19 @@ var realTime = later.setInterval(function(){
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
         checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
@@ -438,19 +438,19 @@ var reportCreation = later.setInterval(function(){
         var checkRow = [];
 
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
         
@@ -503,19 +503,19 @@ var reportCreation = later.setInterval(function(){
         var checkRow = [];
 
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
         checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
@@ -596,19 +596,19 @@ var reportUpdate = later.setInterval(function(){
         var checkRow = [];
        
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
         
@@ -656,8 +656,8 @@ var reportUpdate = later.setInterval(function(){
 
                       // Employee name	Time in	Time out	Client ID	Scheduled in	Scheduled out	Varience	Date	Visit ID
 
-                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a').tz('America/St_Johns');
-                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a').tz('America/St_Johns');
+                    var stringStart = moment(response.values[updateX][5],'h:mm a').tz('America/St_Johns');
+                    var stringEnd = moment(response.values[updateX][6],'h:mm a').tz('America/St_Johns');
 
                     visit.visitId = response.values[updateX][8]
                     visit.caregiverName =  response.values[updateX][0]
@@ -693,19 +693,19 @@ var reportUpdate = later.setInterval(function(){
         var checkRow = [];
        
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
         
@@ -751,8 +751,8 @@ var reportUpdate = later.setInterval(function(){
                     console.log('visit found');
                     console.log(visit);
 
-                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a').tz('America/St_Johns');;
-                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a').tz('America/St_Johns');;
+                    var stringStart = moment(response.values[updateX][5],'h:mm a').tz('America/St_Johns');;
+                    var stringEnd = moment(response.values[updateX][6],'h:mm a').tz('America/St_Johns');;
 
                     visit.visitId = response.values[updateX][8]
                     visit.caregiverName =  response.values[updateX][0]
