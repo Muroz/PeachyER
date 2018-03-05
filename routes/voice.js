@@ -17,7 +17,7 @@ router.post("/", function(req, res) {
 
   /** helper function to set up a <Gather> */
   function gather() {
-    const gatherNode = twiml.gather({ numDigits: 4, timeout:10 });
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:10 });
     gatherNode.say('Welcome to the peachy service, please enter you 5 digit code');
 
     // If the user doesn't enter input, loop
