@@ -111,6 +111,14 @@ app.use(function(err, req, res, next) {
 });
 
 
+
+
+
+
+
+
+
+
 //////////////////////////////////////////////////////
 ////////////Helper functions
 ///////////////////////////////////////////////////////
@@ -182,6 +190,20 @@ function storeToken(token) {
 }
 
 //scheduled actions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////
@@ -261,6 +283,20 @@ var t = later.setInterval(function() {
   }, visitSched);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
@@ -317,6 +353,26 @@ var late = later.setInterval(function(){
   })
 }, lateSched);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////
 /////////// Real time updates runs every minute
 ////////////////////////////////////////////////////
@@ -345,25 +401,22 @@ var realTime = later.setInterval(function(){
     ]}, function(err,visits){
     //Visit.find({$or:[{status:'Completed'},{status:'In process'}]}, function(err,visits){
       var checkValues = [];
+
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
         var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
         var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm a');
         var stringClockIn = '';
-        var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
           stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm a');
         }
-        if (visit['clockOutTime'] == undefined){
-          stringClockOut = 'N/A'
-        }else {
-          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
-        }
-        
-        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
+    
+
+        //checkRow.push(visit['caregiverName'],visit['clientName'],stringClockIn,stringStart,stringEnd,stringDate, visit['visitId']);
+        checkRow.push(visit['caregiverName'],visit['clientName'],stringClockIn,stringStart,stringEnd);
 
         checkValues.push(checkRow);
       })
@@ -386,7 +439,7 @@ var realTime = later.setInterval(function(){
       sheets.spreadsheets.values.update({
         auth: auth,
         spreadsheetId:  process.env.SPREADSHEET,
-        range: "Who's Working!A6:I",
+        range: "Who's Working!A6:G",
         valueInputOption: 'RAW',
         includeValuesInResponse: true,
         resource:{
@@ -409,11 +462,34 @@ var realTime = later.setInterval(function(){
 },realTimeSched);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////
 /////////// Reports runs every 5 minutes 
 /////////////////////////////////////////////////////
 
-var reportSched = later.parse.recur().every(5).minute();
+var reportSched = later.parse.recur().every(2).minute();
 var reportCreation = later.setInterval(function(){
 
   // Load client secrets from a local file.
@@ -453,8 +529,8 @@ var reportCreation = later.setInterval(function(){
           stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
-        
-        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
+      
+        checkRow.push(visit['caregiverName'], visit['clientName'],stringClockIn,stringClockOut,visit.scheduledDuration,stringStart,stringEnd,stringDate, visit['visitId'],visit.duration,visit.status);
 
         checkValues.push(checkRow);
       })
@@ -464,7 +540,7 @@ var reportCreation = later.setInterval(function(){
       sheets.spreadsheets.values.clear({
         auth: auth,
         spreadsheetId: process.env.SPREADSHEET,
-        range: 'Unconfirmed Shifts!A'+infoLenght+':I',
+        range: 'Unconfirmed Shifts!A'+infoLenght+':K',
       }, function(err, response) {
         if (err) {
           console.log('The API returned an error: ' + err);
@@ -477,7 +553,7 @@ var reportCreation = later.setInterval(function(){
       sheets.spreadsheets.values.update({
         auth: auth,
         spreadsheetId:  process.env.SPREADSHEET,
-        range: 'Unconfirmed Shifts!A6:I',
+        range: 'Unconfirmed Shifts!A6:K',
         valueInputOption: 'RAW',
         includeValuesInResponse: true,
         resource:{
@@ -492,7 +568,9 @@ var reportCreation = later.setInterval(function(){
       });
 
      
-    })
+    });
+
+
 
     //all shifts
    
@@ -518,7 +596,7 @@ var reportCreation = later.setInterval(function(){
           stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
-        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
+        checkRow.push(visit['caregiverName'],visit['clientName'],stringStart,stringEnd,visit.scheduledDuration,stringClockIn,stringClockOut,stringDate, visit['visitId']);
 
         checkValues.push(checkRow);
       })
@@ -564,11 +642,49 @@ var reportCreation = later.setInterval(function(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+//unconfirmed
+var unconCaregiver = 0;
+var unconClient = 1;
+var unconClockIn = 2;
+var unconClockOut = 3;
+var unconSchedDuration = 4;
+var unconStartTime = 5;
+var unconEndTime = 6;
+var unconDate = 7;
+var unconVID = 8;
+var unconDuration = 9;
+var unconStatus = 10;
+
+//all shifts
+var allSCaregiver = 0;
+var allSClient = 1;
+var allSStartTime = 2;
+var allSEndTime = 3;
+var allSSchedDuration = 4;
+var allSClockIn= 5;
+var allSClockOut = 6;
+var allSDate = 7;
+var allSVID = 8;
+
+
 /////////////////////////////////////////////////////
 /////////// Report update runs every minute
 ////////////////////////////////////////////////////
 
-var updateSched = later.parse.recur().every(10).minute();
+var updateSched = later.parse.recur().every(5).minute();
 var reportUpdate = later.setInterval(function(){
 
   // Load client secrets from a local file.
@@ -611,8 +727,7 @@ var reportUpdate = later.setInterval(function(){
           stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm a');
         }
         
-        
-        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
+        checkRow.push(visit['caregiverName'], visit['clientName'],stringClockIn,stringClockOut,visit.scheduledDuration,stringStart,stringEnd,stringDate, visit['visitId'],visit.duration,visit.status);
 
         checkValues.push(checkRow);
       })
@@ -622,23 +737,25 @@ var reportUpdate = later.setInterval(function(){
        sheets.spreadsheets.values.get({
           auth: auth,
           spreadsheetId:  process.env.SPREADSHEET,
-          range: 'Unconfirmed Shifts!A6:I'+arr1Lenght,
+          range: 'Unconfirmed Shifts!A6:K'+arr1Lenght,
         }, function(err, response) {
           if (err) {
             console.log('The API returned an error: ' + err);
             return;
           }
           
-          console.log(response.values);
           Array.prototype.isMatch = function ( array ) {
             return this.toString() == array.toString();
           };
+
           console.log('Consolidating shift info');
           if (response.values == undefined){
             console.log('no values found');
+            console.log(response);
           }
           else if(response.values.length == 0){
             console.log('page is empty')
+            console.log(response);
           }
           else if(!response.values.isMatch(checkValues)){
             console.log('updating visit information');
@@ -648,29 +765,35 @@ var reportUpdate = later.setInterval(function(){
               for (var y= 0; y < checkValues[0].length; y++) {
 
                 if(response.values[x][y] != checkValues[x][y]){
-                  var query = {};
-                  query['visitId'] = checkValues[x][8];
-                  var updateX = x;
+                  if(response.values[x][unconStatus] != 'Confirmed'){
+                    return;
+                  }
+                  else {
+                    var query = {};
+                    query['visitId'] = checkValues[x][unconVID];
+                    var updateX = x;
 
-                  Visit.findOne(query,function(err,visit){
-                    if (visit == null) return;
-                    console.log('visit found');
+                    Visit.findOne(query,function(err,visit){
+                      if (visit == null) return;
+                      console.log('visit found');
 
-                      // Employee name	Time in	Time out	Client ID	Scheduled in	Scheduled out	Varience	Date	Visit ID
+                        // Employee name	Time in	Time out	Client ID	Scheduled in	Scheduled out	Varience	Date	Visit ID
 
-                    var stringStart = moment(response.values[updateX][5],'h:mm a').tz('America/St_Johns');
-                    var stringEnd = moment(response.values[updateX][6],'h:mm a').tz('America/St_Johns');
+                      var stringStart = moment(response.values[updateX][unconStartTime],'h:mm a').tz('America/St_Johns');
+                      var stringEnd = moment(response.values[updateX][unconEndTime],'h:mm a').tz('America/St_Johns');
 
-                    visit.visitId = response.values[updateX][8]
-                    visit.caregiverName =  response.values[updateX][0]
-                    visit.startTime = stringStart;
-                    visit.endTime = stringEnd;
-              
-                    console.log('updating');
-                    visit.save();
+                      visit.visitId = response.values[updateX][unconVID]
+                      visit.caregiverName =  response.values[updateX][unconCaregiver]
+                      visit.status = 'Completed';
+                      visit.startTime = stringStart;
+                      visit.endTime = stringEnd;
+                
+                      console.log('updating');
+                      visit.save();
 
-                  })
-                }
+                    })
+                  }
+                } 
 
               }
             }
@@ -711,7 +834,7 @@ var reportUpdate = later.setInterval(function(){
         }
         
         
-        checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
+        checkRow.push(visit['caregiverName'],visit['clientName'],stringStart,stringEnd,visit.scheduledDuration,stringClockIn,stringClockOut,stringDate, visit['visitId']);
 
         checkValues.push(checkRow);
       })
@@ -731,12 +854,14 @@ var reportUpdate = later.setInterval(function(){
           Array.prototype.isMatch = function ( array ) {
             return this.toString() == array.toString();
           };
-          console.log('Consolidating all shift info');
+          console.log('Consolidating all shifts info');
           if (response.values == undefined){
             console.log('no values found');
+            console.log(response);
           }
           else if(response.values.length == 0){
             console.log('page is empty')
+            console.log(response);
           }
           else if(!response.values.isMatch(checkValues)){
             console.log('updating visit information');
@@ -750,14 +875,12 @@ var reportUpdate = later.setInterval(function(){
 
                   Visit.findOne(query,function(err,visit){
                     if (visit == null) return;
-                    console.log('visit found');
-                    console.log(visit);
 
-                    var stringStart = moment(response.values[updateX][5],'h:mm a').tz('America/St_Johns');;
-                    var stringEnd = moment(response.values[updateX][6],'h:mm a').tz('America/St_Johns');;
+                    var stringStart = moment(response.values[updateX][allSStartTime],'h:mm a').tz('America/St_Johns');;
+                    var stringEnd = moment(response.values[updateX][allSEndTime],'h:mm a').tz('America/St_Johns');;
 
-                    visit.visitId = response.values[updateX][8]
-                    visit.caregiverName =  response.values[updateX][0]
+                    visit.visitId = response.values[updateX][allSVID];
+                    visit.caregiverName =  response.values[updateX][allSCaregiver];
                     visit.startTime = stringStart;
                     visit.endTime = stringEnd;
               
@@ -785,3 +908,22 @@ module.exports = app;
 // ADD DAY NUMBER TO THE SCHEDULE SO PUT BOTH DAYS ON IT
 //Uncomment messaging
 // remove comments
+// completed appear on all shifts, not who's working
+
+
+/*
+ timezone: 'Canada',
+  duration: 2.958466666666667,
+  status: 'Completed',
+  active: false }
+updating
+(node:16636) UnhandledPromiseRejectionWarning: ValidationError: Visit validation failed: endTime: Cast to Date failed for value "moment.invalid(/* 2.958466667 )" at path "endTime"
+
+at new ValidationError (/home/ec2-user/peachyER/PeachyER/node_modules/mongoose/lib/error/validation.js:28:11)
+at model.Document.invalidate (/home/ec2-user/peachyER/PeachyER/node_modules/mongoose/lib/document.js:1673:32)
+*/
+
+
+
+//    checkRow.push(visit['caregiverName'], visit['clientName'],stringClockIn,stringClockOut,visit.scheduledDuration,stringStart,stringEnd,stringDate, visit['visitId'],visit.duration,visit.status);
+//add note onto it and the schema
