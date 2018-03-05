@@ -17,8 +17,8 @@ router.post("/", function(req, res) {
 
   /** helper function to set up a <Gather> */
   function gather() {
-    const gatherNode = twiml.gather({ numDigits: 4, timeout:5 });
-    gatherNode.say('Welcome to the peachy service');
+    const gatherNode = twiml.gather({ numDigits: 4, timeout:10 });
+    gatherNode.say('Welcome to the peachy service, please enter you 5 digit code');
 
     // If the user doesn't enter input, loop
     twiml.redirect('/voice');
@@ -46,7 +46,7 @@ router.post("/", function(req, res) {
   // If the user entered digits, process their request
   if (req.body.Digits) {
      if(req.body.Digits.length == 5){
-      Visit.findOne({visitId: req.body.From+req.body.Digits}, function(err, visit){
+      Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
         if(err) return err;
    
         if(visit==null) {

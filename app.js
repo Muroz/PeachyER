@@ -25,7 +25,7 @@ var later = require('later');
 
 
 //import moment
-var moment = require('moment');
+var moment = require('moment-timezone');
 
 //Import the mongoose module
 var mongoose = require('mongoose');
@@ -197,10 +197,12 @@ var t = later.setInterval(function() {
 
         //search for company specifics here
         if(visit.status == 'Scheduled'){
-          var currentTime = new moment();
+          var currentTime = new moment().tz('America/St_Johns');
+          var localStart = new moment(visit.startTime).tz('America/St_Johns');
+          var localEnd = new moment(visit.endTime).tz('America/St_Johns');
 
-          if (currentTime.diff(visit.startTime,'minutes',true)>10 || currentTime.diff(visit.endTime,'minutes',true)>10){
-            if(currentTime.diff(visit.endTime)>10){
+          if (currentTime.diff(localStart,'minutes',true)>10){
+            if(currentTime.diff(localEnd)>10){
               visit.status = 'reported'
               visit.statusLog.push('reported');
             } else {
@@ -213,39 +215,39 @@ var t = later.setInterval(function() {
         }
 
         else if(visit.status == 'Late'){
-          visit.caregiverMessage = { state:'sent', sentTime: new moment(), reply:''}
+          visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
           visit.status = 'notifiedC';
           visit.statusLog.push('notifiedC');
           var visitState = visit.active?'out':'in'
           var bodyString = "This is the peachy service, you haven't clocked "+ visitState + " yet for your shift.";
-          // client.messages.create({
-          //   from: process.env.TWILIO_PHONE,
-          //   to: visit.replyNumberC,
-          //   body: bodyString
-          // }).then((messsage) => console.log(message.sid));
+          client.messages.create({
+            from: process.env.TWILIO_PHONE,
+            to: visit.replyNumberC,
+            body: bodyString
+          }).then((messsage) => console.log(message.sid));
         } 
         
         else if (visit.status == 'notifiedC'){
           var currentTime = new moment();
 
           if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
-            visit.managerMessage = { state:'sent', sentTime: new Date(), reply:''}
+            visit.managerMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
             visit.status = 'notifiedM';
             visit.statusLog.push('notifiedM');
             var visitState = visit.active?'out':'in'
             var bodyString = "This is the peachy service, "+visit.caregiverName+" hasn't clocked"+ visitState + "for the visit yet.";
 
-            // client.messages.create({
-            //   from: process.env.TWILIO_PHONE,
-            //   to: visit.replyNumberM,
-            //   body: bodyString
-            // }).then((messsage) => console.log(message.sid));
+            client.messages.create({
+              from: process.env.TWILIO_PHONE,
+              to: visit.replyNumberM,
+              body: bodyString
+            }).then((messsage) => console.log(message.sid));
           
           }
         } 
         
         else if (visit.status == 'notifiedM'){
-          var currentTime = new moment();
+          var currentTime = new moment().tz('America/St_Johns');
 
           if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
             visit.status = 'reported';
@@ -263,7 +265,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on(7).hour();
+var lateSched = later.parse.recur().on('14:58:00').time();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
@@ -279,7 +281,7 @@ var late = later.setInterval(function(){
           return 'Problem with the input start'
         }
 
-        var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2]));
+        var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2])).tz('America/St_Johns');;
 
         var endString = visit.end.split(':');
 
@@ -287,7 +289,7 @@ var late = later.setInterval(function(){
           return 'Problem with the input end'
         }
 
-        var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2]));
+        var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2])).tz('America/St_Johns');;
 
         var duration = endTime.diff(startTime,'hours');
 
@@ -297,7 +299,7 @@ var late = later.setInterval(function(){
             visitId:client.phoneNumber+carer.employeeId+visit.shiftNumber,
             caregiverName: carer.name,
             clientName:client.name,
-            date:new moment(),
+            date:new moment().tz('America/St_Johns'),
             startTime: startTime,
             endTime:endTime,
             scheduledDuration:duration,
@@ -338,24 +340,27 @@ var realTime = later.setInterval(function(){
 								
     //current completed shifts
 
-    Visit.find({$or:[{status:'Completed'},{status:'In process'}]}, function(err,visits){
+    Visit.find({$and:[
+      {$or:[{status:'Completed'},{status:'In process'}]}, {'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}
+    ]}, function(err,visits){
+    //Visit.find({$or:[{status:'Completed'},{status:'In process'}]}, function(err,visits){
       var checkValues = [];
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
-        var stringDate = moment(visit['date']).format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
+        var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         
         checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
@@ -405,10 +410,10 @@ var realTime = later.setInterval(function(){
 
 
 /////////////////////////////////////////////////////
-/////////// Reports runs every 10 minutes
-////////////////////////////////////////////////////
+/////////// Reports runs every 5 minutes 
+/////////////////////////////////////////////////////
 
-var reportSched = later.parse.recur().every(1).minute();
+var reportSched = later.parse.recur().every(5).minute();
 var reportCreation = later.setInterval(function(){
 
   // Load client secrets from a local file.
@@ -426,29 +431,26 @@ var reportCreation = later.setInterval(function(){
     var sheets = google.sheets('v4');
     
     //unconfirmed shifts
-    Visit.find({status:'reported'}, function(err,visits){
+    Visit.find({$or:[{status:'reported'},{status:'Late'},{status:'notifiedC'},{status:'notifiedM'}]}, function(err,visits){
       var checkValues = [];
 
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
-        // for (key in listOfKeys){
-        //   checkRow.push(visit[listOfKeys[key]])
-        // }
 
-        var stringDate = moment(visit['date']).format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
+        var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         
         
@@ -493,27 +495,27 @@ var reportCreation = later.setInterval(function(){
     })
 
     //all shifts
-
-    Visit.find({}, function(err,visits){
+   
+    Visit.find({'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err,visits){
       var checkValues = [];
 
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
 
-        var stringDate = moment(visit['date']).format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
+        var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         
         checkRow.push(visit['caregiverName'], stringClockIn,stringClockOut,visit['clientName'],stringStart,stringEnd,visit.duration,stringDate, visit['visitId']);
@@ -593,20 +595,20 @@ var reportUpdate = later.setInterval(function(){
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
        
-        var stringDate = moment(visit['date']).format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
+        var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         
         
@@ -654,8 +656,8 @@ var reportUpdate = later.setInterval(function(){
 
                       // Employee name	Time in	Time out	Client ID	Scheduled in	Scheduled out	Varience	Date	Visit ID
 
-                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a');
-                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a');
+                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a').tz('America/St_Johns');
+                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a').tz('America/St_Johns');
 
                     visit.visitId = response.values[updateX][8]
                     visit.caregiverName =  response.values[updateX][0]
@@ -683,27 +685,27 @@ var reportUpdate = later.setInterval(function(){
 
     //all shifts
 
-    Visit.find({}, function(err,visits){
+    Visit.find({'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err,visits){
       var checkValues = [];
       var arr1Lenght = 1;
 
       visits.forEach(function(visit,index,arr){
         var checkRow = [];
        
-        var stringDate = moment(visit['date']).format("MMM Do YY");
-        var stringStart = moment(visit['startTime']).format('h:mm:ss a');
-        var stringEnd = moment(visit['endTime']).format('h:mm:ss a');
+        var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
+        var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm:ss a');
+        var stringEnd = moment(visit['endTime']).tz('America/St_Johns').format('h:mm:ss a');
         var stringClockIn = '';
         var stringClockOut = '';
         if (visit['clockInTime'] == undefined){
           stringClockIn = 'N/A'
         } else {
-          stringClockIn = moment(visit['clockInTime']).format('h:mm:ss a');
+          stringClockIn = moment(visit['clockInTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         if (visit['clockOutTime'] == undefined){
           stringClockOut = 'N/A'
         }else {
-          stringClockOut = moment(visit['clockOutTime']).format('h:mm:ss a');
+          stringClockOut = moment(visit['clockOutTime']).tz('America/St_Johns').format('h:mm:ss a');
         }
         
         
@@ -749,8 +751,8 @@ var reportUpdate = later.setInterval(function(){
                     console.log('visit found');
                     console.log(visit);
 
-                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a');
-                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a');
+                    var stringStart = moment(response.values[updateX][5],'h:mm:ss a').tz('America/St_Johns');;
+                    var stringEnd = moment(response.values[updateX][6],'h:mm:ss a').tz('America/St_Johns');;
 
                     visit.visitId = response.values[updateX][8]
                     visit.caregiverName =  response.values[updateX][0]
