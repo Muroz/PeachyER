@@ -401,8 +401,9 @@ var realTime = later.setInterval(function(){
     ]}, function(err,visits){
     //Visit.find({$or:[{status:'Completed'},{status:'In process'}]}, function(err,visits){
       var checkValues = [];
-
+     
       visits.forEach(function(visit,index,arr){
+        console.log(visit)
         var checkRow = [];
         var stringDate = moment(visit['date']).tz('America/St_Johns').format("MMM Do YY");
         var stringStart = moment(visit['startTime']).tz('America/St_Johns').format('h:mm a');
