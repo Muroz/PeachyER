@@ -265,7 +265,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on('14:58:00').time();
+var lateSched = later.parse.recur().on('15:20:00').time();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
@@ -281,7 +281,7 @@ var late = later.setInterval(function(){
           return 'Problem with the input start'
         }
 
-        var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2]))
+        var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2])).tz('America/St_Johns');;
 
         var endString = visit.end.split(':');
 
@@ -289,7 +289,7 @@ var late = later.setInterval(function(){
           return 'Problem with the input end'
         }
 
-        var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2]))
+        var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2])).tz('America/St_Johns');;
 
         var duration = endTime.diff(startTime,'hours');
 
@@ -628,7 +628,8 @@ var reportUpdate = later.setInterval(function(){
             console.log('The API returned an error: ' + err);
             return;
           }
-       
+          
+          console.log(response.values);
           Array.prototype.isMatch = function ( array ) {
             return this.toString() == array.toString();
           };
@@ -641,6 +642,7 @@ var reportUpdate = later.setInterval(function(){
           }
           else if(!response.values.isMatch(checkValues)){
             console.log('updating visit information');
+       
             for (var x = 0; x < checkValues.length; x++) {
 
               for (var y= 0; y < checkValues[0].length; y++) {
