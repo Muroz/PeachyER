@@ -12,8 +12,41 @@ html {
   font-size: 10px;
   color: var(--black);
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
+
 }
 
+body{
+  letter-spacing: 1px!important;
+  font-family:Roboto, sans-serif!important;
+}
+a {
+  font-size: 20;
+  font-family:Roboto, sans-serif;
+  color:white;
+  font-weight: bold;
+}
+
+a:link, a:visited {
+  color: black;
+  padding: 10px 0px;
+  width: 120;
+  height:50;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: peachpuff;
+}
+
+.navbar_li{
+
+}
+
+.navbar_li:hover{
+  background: lightblue;
+}
 /*
   WAT IS THIS?!
   We inherit box-sizing: border-box; from our <html> selector
@@ -49,7 +82,8 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, 10%);
   grid-template-rows: 80px;
-  background-color:#ffffff;  
+  /* background-color:lightgoldenrodyellow;   */
+  background-color: lightskyblue;
   align-items: center;
   justify-items: center;
 }
@@ -63,6 +97,10 @@ body {
   justify-items: center;
   /*grid-template-rows: 1fr 1fr 1fr;
   background: #4CAF50; */
+}
+
+.navbar_logout {
+  grid-column: 9/10;
 }
 
 .navbar_logo {
@@ -81,64 +119,6 @@ body {
   height: 60;
 }
 
-/* /* .profile_pic{
-  grid-row: span 2;
-  margin-top: 5;
-  width: 55;
-  height: 55;
-  border-radius: 25px;
-}
-.profile_name{
-  margin-top: 10;
-  grid-column: 3;
-  grid-row: 1;
-}
-.profile_logout{
-  grid-column: 3;
-  grid-row: 3;
-} */
-
-/* .navbar_ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-
-    background-color: #ffffff;
-    justify-content: center; /* align horizontal 
-    align-items: center;
-    
-}
-
-.navbar_li {
-    float: left;
-
-} 
-
-li a {
-    display: block;
-    color: black;
-    text-align: center;
-    padding: 14px 16px;
-    height: 80;
-    display: table-cell;
-    vertical-align: middle;
-}
-
-li a:hover:not(.active) {
-    background-color: #111;
-}
-
-.active {
-    background-color: #4CAF50;
-}
-
-
-v
-
-.barElement {
-  text-align: center;
-  margin-top:30;
-} */
 
 .dashboard_background{
  background: #A6B2DD;
@@ -290,3 +270,143 @@ html, body, .app {
       "so so so"
   }
 }*/
+
+
+.tabContainer { 
+    /* color: #000000 !important; */
+    background: rgb(184, 221, 233) !important;
+    font-weight: bold!important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif!important;
+}
+
+/* .tabContainer:active,
+.tabContainer:focus,
+*/
+.tabContainer:hover{
+  background: peachpuff!important
+} 
+
+.dialogWindow{
+  /* margin:auto;
+  width:100%!important; */
+  display: grid;
+  grid-template-columns: repeat(1, 1fr 1fr);
+  grid-template-rows: repeat(12,40px); 
+  align-items: center;
+}
+
+/* .row1a{
+  grid-column: 1/2;
+  grid-row:1/2;
+}
+.row1b{
+  grid-column: 2/3;
+  grid-row:1/2;
+}
+
+.row2a{
+  grid-column: 1/2;
+  grid-row:2/3;
+}
+.row2b{
+  grid-column: 2/3;
+  grid-row:2/3;
+} */
+
+.row3a{
+  grid-column: 1/2;
+  grid-row:3/4;
+}
+.row3b{
+  grid-column: 2/3;
+  grid-row:3/4;
+}
+
+.row4a{
+  grid-column: 1/2;
+  grid-row:4/5;
+}
+.row4b{
+  grid-column: 2/3;
+  grid-row: 4/5;
+
+}
+
+.row5a{
+  grid-column: 1/2;
+  grid-row:7/8;
+}
+.row5b{
+  grid-column: 2/3;
+  grid-row:7/8;
+}
+/* 
+.row6a{
+  grid-column: 1/2;
+  grid-row:6/7;
+}
+.row6b{
+  grid-column: 2/3;
+  grid-row:6/7;
+}
+
+.row7a{
+  grid-column: 1/2;
+  grid-row:7/8;
+}
+.row7b{
+  grid-column: 2/3;
+  grid-row:7/8;
+}
+
+.row8a{
+  grid-column: 1/2;
+  grid-row:8/9;
+}
+.row8b{
+  grid-column: 2/3;
+  grid-row:8/9;
+} */
+
+
+.tableHeader {
+  color:black!important;
+  font-size: 18!important;
+}
+
+.directoryBody{
+  padding: 50px;
+}
+
+.directoryTitle{
+  font-size: 50;
+  color: lightskyblue;
+  border-bottom: 1px solid lightskyblue;
+}
+
+.directoryList{
+  display: grid;
+  grid-template-columns: repeat(1,1fr);
+
+}
+
+.directoryItem{
+  margin: 10px;
+  padding:30;
+  border: 1px solid lightblue;
+  background: rgb(212, 239, 255);
+  font-size: 20;
+  color:rgb(112, 112, 112);
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+}
+
+.directoryItemTitle{
+  grid-column: 1/-1;
+  border-bottom: 1px solid rgb(112, 112, 112);
+  font-size: 30;
+}
+
+.directoryItemBody{
+  padding-top: 10px;
+}

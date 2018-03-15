@@ -20,32 +20,25 @@ class NavBar extends React.Component {
   render() {
     return (
       <div className="navbar">
-        <div className="navbar_li navbar_logo">
+        <div className="navbar_logo">
           {" "}
           <img src="/images/peachy_logo.png" className="logo" />{" "}
         </div>
         <div className="navbar_li navbar_home">
-          <a href="/dashboard">Home</a>
+          <a href="/dashboard">Dashboard</a>
         </div>
         <div className="navbar_li navbar_client">
-          <a href="/client">Clients</a>
+          <a href="/clients">Clients</a>
         </div>
         <div className="navbar_li navbar_staff">
           <a href="/staff">Staff</a>
         </div>
-        <div className="navbar_li navbar_add">
+        {/* <div className="navbar_li navbar_add">
           {" "}
           <a onClick={this.togglePopup.bind(this)}>Add person</a>{" "}
-        </div>
-        <div className="navbar_profile">
-          <img src="/images/user.png" className="navbar_profile_pic" />
-          <div className="profile_content">
-            <h6 className="profile_name"> Diego Zuluaga </h6>
-            <a>
-              {" "}
-              <h6 className="profile_logout"> Log out </h6>{" "}
-            </a>
-          </div>
+        </div> */}
+        <div className="navbar_li navbar_logout" >
+          <a href="/logout"> Logout </a>
         </div>
 
         {this.state.showPopup ? (

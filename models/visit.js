@@ -15,7 +15,7 @@ var visitSchema = new Schema({
   clockOutTime: Date,
   startTime: Date,
   endTime: Date,
-  scheduledDuration: Number,
+  scheduledDuration: String,
   duration : {type:Number, default:0},
   timezone: {type:String,default:'Canada'},
   caregiverMessage:{type:{}, default:{}},
@@ -25,6 +25,7 @@ var visitSchema = new Schema({
   caregiverName: {type:String, default:'Not available'},
   clientName: {type:String, default:'Not available'},
   statusLog: {type:Array, default:['Scheduled']},
+  notes:{type:String, default:'None'},
   company: String
 
 });

@@ -65,7 +65,31 @@ module.exports = function(app, passport) {
     req.logout();
     res.redirect("/");
   });
+
+   // =====================================
+  // CLIENT SECTION =====================
+  // =====================================
+  // we will want this protected so you have to be logged in to visit
+  // we will use route middleware to verify this (the isLoggedIn function)
+  app.get("/clients", isLoggedIn, function(req, res) {
+    res.render("clients.ejs", {
+      user: req.user // get the user out of session and pass to template
+    });
+  });
+
+  // =====================================
+  // STAFF SECTION =====================
+  // =====================================
+  // we will want this protected so you have to be logged in to visit
+  // we will use route middleware to verify this (the isLoggedIn function)
+  app.get("/staff", isLoggedIn, function(req, res) {
+    res.render("staff.ejs", {
+      user: req.user // get the user out of session and pass to template
+    });
+  });
 };
+
+ 
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
