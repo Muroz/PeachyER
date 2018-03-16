@@ -13,7 +13,7 @@ import {
     TableRowColumn,
   } from 'material-ui/Table';
 
-class RealtimeTable extends React.Component {
+class OvertimeTable extends React.Component {
 
     constructor(props){
         super(props);
@@ -33,12 +33,14 @@ class RealtimeTable extends React.Component {
 
         }
     }
+    
 
     setTableInfo(visit, index){
         return (<TableRow key={index} >
                   <TableRowColumn ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
+                  <TableRowColumn ref={"clockOutTime"+index}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): '00:00'} </TableRowColumn>
                   <TableRowColumn ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                 </TableRow>)
@@ -60,13 +62,14 @@ class RealtimeTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                A confirmed shift is a beautiful thing
+                Who pays for overtime these days
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">Care staff name</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client ID</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockOutTime">Time clocked in</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Start">Scheduled start</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="End">Scheduled end</TableHeaderColumn>
             </TableRow>
@@ -77,7 +80,7 @@ class RealtimeTable extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
             >
-            {this.props.confirmed?this.props.confirmed.map(this.setTableInfo,this):null}
+            {this.props.overtime?this.props.overtime.map(this.setTableInfo,this):null}
             </TableBody>
         </Table>
         )
@@ -86,7 +89,7 @@ class RealtimeTable extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {confirmed: state.clientReducers.confirmed};
+  return {overtime: state.clientReducers.overtime};
 }
 
-export default connect(mapStateToProps)(RealtimeTable);
+export default connect(mapStateToProps)(OvertimeTable);

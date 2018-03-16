@@ -1,7 +1,7 @@
 "use strict";
 
 export function clientReducers(
-  state = { clients: [], staff: [], activity: [], allShifts:[], unconfirmed:[],confimed:[],allShifts:[], selectedRow:-1 },
+  state = { clients: [], staff: [], activity: [], allShifts:[], unconfirmed:[],late:[],overtime:[],confimed:[],allShifts:[], selectedRow:-1 },
   action
 ) {
   switch (action.type) {
@@ -32,6 +32,12 @@ export function clientReducers(
     case "GET_ALLSHIFTS":
       return {...state, allShifts: action.payload}
       break;
+    case "GET_LATE":
+      return{...state, late:action.payload}
+      break;
+    case "GET_OVERTIME":
+      return{...state, overtime:action.payload}
+      break;
     case "UPDATE_UNCONFIRMED_VISIT":
       const shiftsToUpdate = [...state.unconfirmed]
       const indexToUpdate = shiftsToUpdate.findIndex(
@@ -40,6 +46,15 @@ export function clientReducers(
         }
       )
       return {...state, unconfirmed: [...shiftsToUpdate.slice(0, indexToUpdate), action.payload, ...shiftsToUpdate.slice(indexToUpdate + 1)]}
+      break;
+    case "UPDATE_ALLSHIFTS_VISIT":
+      const allshiftsToUpdate = [...state.allShifts]
+      const allindexToUpdate = allshiftsToUpdate.findIndex(
+        function(shift){
+          return shift._id === action.payload._id;
+        }
+      )
+      return {...state, allShifts: [...allshiftsToUpdate.slice(0, allindexToUpdate), action.payload, ...allshiftsToUpdate.slice(allindexToUpdate + 1)]}
       break;
     case "SELECT_ROW":
       return {...state, selectedRow:action.payload}

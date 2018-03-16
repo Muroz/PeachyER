@@ -104,7 +104,6 @@ export function fetchUnconfirmedShifts() {
     axios
       .post("/fetch/getUnconfirmed")
       .then(function(response) {
-        console.log(response);
         dispatch({ type: "GET_UNCONFIRMED", payload: response.data });
       })
       .catch(function(err) {
@@ -120,7 +119,6 @@ export function fetchConfirmedShifts() {
     axios
       .post("/fetch/getConfirmed")
       .then(function(response) {
-        console.log(response);
         dispatch({ type: "GET_CONFIRMED", payload: response.data });
       })
       .catch(function(err) {
@@ -129,21 +127,55 @@ export function fetchConfirmedShifts() {
   };
 }
 
+// Fetch late shifts information
+export function fetchLateShifts() {
+  return function(dispatch) {
+    axios
+      .post("/fetch/getLate")
+      .then(function(response) {
+        dispatch({ type: "GET_LATE", payload: response.data });
+      })
+      .catch(function(err) {
+        dispatch({ type: "GET_LATE_REJECTED", payload: err });
+      });
+  };
+}
+
+// Fetch overtime shifts information
+export function fetchOvertimeShifts() {
+  return function(dispatch) {
+    axios
+      .post("/fetch/getOvertime")
+      .then(function(response) {
+        dispatch({ type: "GET_OVERTIME", payload: response.data });
+      })
+      .catch(function(err) {
+        dispatch({ type: "GET_OVERTIME_REJECTED", payload: err });
+      });
+  };
+}
+
+
 // Add client entry
-export function updateVisit(visit) {
+export function updateVisit(visit,type) {
   console.log('updating');
   console.log(visit);
+
   return function(dispatch) {
     axios
       .post("/fetch/updateVisit", visit)
       .then(function(response) {
-        console.log(response);
-        dispatch({ type: "UPDATE_UNCONFIRMED_VISIT", payload: response.data });
+        if(type=='unconfirmed'){
+          dispatch({ type: "UPDATE_UNCONFIRMED_VISIT", payload: response.data });
+        } else if(type=='allShifts'){
+          dispatch({ type: "UPDATE_ALLSHIFTS_VISIT", payload: response.data });
+        }
       })
       .catch(function(err) {
         dispatch({ type: "UPDATE_VISIT_REJECTED", payload: err });
       });
   };
+
 }
 
 export function checkIn(id) {

@@ -57,32 +57,16 @@ router.post("/", function(req, res) {
   if (req.body.Digits) {
 
      if(req.body.Digits.length == 5){
-      console.log('call went through');
       Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
         if(err) return err;
         
         if(visit==null) {
           gatherAgain();
-          //checker('No scheduled visit found, check the number you input');
-          // Visit.create({
-          //   visitId:req.body.From+req.body.Digits,
-          //   caregiverName: 'Unconfirmed',
-          //   clientName:'Unconfirmed',
-          //   date:new moment(),
-          //   startTime: new moment(),
-          //   endTime:new moment(),
-          //   scheduledDuration:0,
-          //   replyNumberC:'Not available',
-          //   status:'reported'
-          // });
           return;
         } 
-        else if(visit.status == 'Completed'){
+        else if(visit.status == 'Completed' || visit.status == 'Cancelled' || visit.status == 'Unconfirmed'){
           checker('This visit has been completed already');
         } 
-        // else if(visit.status == 'reported'){
-        //   checker('This visit has been reported to the manager for lack of response');
-        // }
         else if (visit.active){
           console.log('visit found');
           console.log('visit')

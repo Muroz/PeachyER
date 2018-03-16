@@ -13,7 +13,7 @@ import {
     TableRowColumn,
   } from 'material-ui/Table';
 
-class RealtimeTable extends React.Component {
+class LateTable extends React.Component {
 
     constructor(props){
         super(props);
@@ -34,11 +34,12 @@ class RealtimeTable extends React.Component {
         }
     }
 
+
     setTableInfo(visit, index){
-        return (<TableRow key={index} >
+        return (<TableRow key={index}>
                   <TableRowColumn ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
-                  <TableRowColumn ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
+                  <TableRowColumn ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): '00:00'} </TableRowColumn>
                   <TableRowColumn ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                 </TableRow>)
@@ -46,7 +47,7 @@ class RealtimeTable extends React.Component {
 
     render() {
         return(
-            <Table    
+            <Table         
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
             fixedFooter={this.state.fixedFooter}
@@ -60,7 +61,7 @@ class RealtimeTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                A confirmed shift is a beautiful thing
+                A late shift isn't so beautiful
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>
@@ -77,7 +78,7 @@ class RealtimeTable extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
             >
-            {this.props.confirmed?this.props.confirmed.map(this.setTableInfo,this):null}
+            {this.props.late?this.props.late.map(this.setTableInfo,this):null}
             </TableBody>
         </Table>
         )
@@ -86,7 +87,7 @@ class RealtimeTable extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {confirmed: state.clientReducers.confirmed};
+  return {late: state.clientReducers.late};
 }
 
-export default connect(mapStateToProps)(RealtimeTable);
+export default connect(mapStateToProps)(LateTable);

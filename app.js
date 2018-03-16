@@ -227,8 +227,8 @@ var t = later.setInterval(function() {
           var localStart = new moment(visit.startTime).tz('America/St_Johns');
           var localEnd = new moment(visit.endTime).tz('America/St_Johns');
 
-          if (currentTime.diff(localStart,'minutes',true)>10){
-            if(currentTime.diff(localEnd)>10){
+          if (currentTime.diff(localStart,'minutes',true)>1){
+            if(currentTime.diff(localEnd)>1){
               visit.status = 'Unconfirmed'
               visit.statusLog.push('Unconfirmed');
             } else {
@@ -251,6 +251,7 @@ var t = later.setInterval(function() {
         }
 
         else if(visit.status == 'Late' || visit.status == 'Overtime'){
+          console.log(visit.status,'messaging');
           visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
           visit.status = 'Notified Caregiver';
           visit.statusLog.push('Notified Caregiver');
@@ -313,7 +314,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on('10:04:00').time();
+var lateSched = later.parse.recur().on('10:58:00').time();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
@@ -339,14 +340,11 @@ var late = later.setInterval(function(){
 
         var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2])).tz('America/St_Johns');;
 
-        var duration = endTime.diff(startTime,'hours',true);
+        var duration = Math.round(endTime.diff(startTime,'hours',true));
 
-        console.log(endTime);
-        console.log(startTime);
-        console.log(duration);
-
-        Caregiver.findOne({phoneNumber:visit.phone}, function(err,carer){
-
+        Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
+          if(carer==null) return
+          console.log(carer.name);
           Visit.create({
             visitId:client.phoneNumber+carer.employeeId+visit.shiftNumber,
             caregiverName: carer.name,
@@ -355,7 +353,7 @@ var late = later.setInterval(function(){
             startTime: startTime,
             endTime:endTime,
             scheduledDuration:duration,
-            replyNumberC:visit.phone,
+            replyNumberC:carer.phoneNumber,
             company:client.company
           });
   
