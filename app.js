@@ -220,7 +220,6 @@ var t = later.setInterval(function() {
       }
       visits.forEach(function(visit,index,arr){
 
-
         //search for company specifics here
         if(visit.status == 'Scheduled'){
           var currentTime = new moment().tz('America/St_Johns');
@@ -244,7 +243,7 @@ var t = later.setInterval(function() {
           var currentTime = new moment().tz('America/St_Johns');
           var localEnd = new moment(visit.endTime).tz('America/St_Johns');
           
-          if(currentTime.diff(localEnd,'minutes',true)>10){
+          if(currentTime.diff(localEnd,'minutes',true)>5){
             visit.status = 'Overtime';
             visit.statusLog.push('Overtime')
           }
@@ -252,41 +251,43 @@ var t = later.setInterval(function() {
 
         else if(visit.status == 'Late' || visit.status == 'Overtime'){
           console.log(visit.status,'messaging');
-          visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
+          // visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
           visit.status = 'Notified Caregiver';
           visit.statusLog.push('Notified Caregiver');
-          var visitState = visit.active?'out':'in'
-          var bodyString = "This is the peachy service, you haven't clocked "+ visitState + " yet for your shift.";
-          clientTwilio.messages.create({
-            from: process.env.TWILIO_PHONE,
-            to: visit.replyNumberC,
-            body: bodyString
-          }).then((messsage) => console.log(message.sid));
+          //var visitState = visit.active?'out':'in'
+          // var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
+          // clientTwilio.messages.create({
+          //   from: process.env.TWILIO_PHONE,
+          //   to: visit.replyNumberC,
+          //   body: bodyString
+          // }).then((messsage) => console.log(message.sid));
         }
+
+        //create overtime notified
         
         else if (visit.status == 'Notified Caregiver'){
           var currentTime = new moment();
-
-          if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
-            visit.managerMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
+          if( currentTime.diff(localEnd,'minutes',true)>15){
+          //if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
+            //visit.managerMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
             visit.status = 'Notified Manager';
             visit.statusLog.push('Notified Manager');
-            var visitState = visit.active?'out':'in'
-            var bodyString = "This is the peachy service, "+visit.caregiverName+" hasn't clocked"+ visitState + "for the visit yet.";
+            //var visitState = visit.active?'out':'in'
+            // var bodyString = "Hi Tracy, this is Peachy letting you know that "+visit.caregiverName+" is late for their shift. There is no need to reply to this message. Thanks!";
 
-            clientTwilio.messages.create({
-              from: process.env.TWILIO_PHONE,
-              to: visit.replyNumberM,
-              body: bodyString
-            }).then((messsage) => console.log(message.sid));
+            // clientTwilio.messages.create({
+            //   from: process.env.TWILIO_PHONE,
+            //   to: visit.replyNumberM,
+            //   body: bodyString
+            // }).then((messsage) => console.log(message.sid));
           
           }
         } 
         
         else if (visit.status == 'Notified Manager'){
           var currentTime = new moment().tz('America/St_Johns');
-
-          if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
+          if( currentTime.diff(localEnd,'minutes',true)>30){
+          //if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
             visit.status = 'Unconfirmed';
             visit.statusLog.push('Unconfirmed');
           }

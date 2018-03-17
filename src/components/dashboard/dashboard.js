@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import NavBar from "./../navbar";
-import {fetchAllShifts,fetchConfirmedShifts,fetchUnconfirmedShifts, updateVisit, selectRow, fetchOvertimeShifts, fetchLateShifts} from '../../actions/fetchingActions';
+import {fetchAllShifts,fetchConfirmedShifts,fetchUnconfirmedShifts, updateVisit, selectRow, fetchOvertimeShifts, fetchLateShifts, fetchStaff, fetchClients} from '../../actions/fetchingActions';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
 import moment from 'moment-timezone';
@@ -36,6 +36,9 @@ class Dashboard extends React.Component {
     startTime: null,
     endTime: null,
     status: '',
+
+    messageClock:'',
+    messageTime:'',
 
     tabValue: 'confirmed',
 
@@ -107,6 +110,7 @@ class Dashboard extends React.Component {
     visit.endTime =  moment(this.state.endTime)
     visit.status = this.refs.status.props.value
 
+ 
     this.setState({open: false,
       // selected:[0], 
       selectedVisit:null,
@@ -128,6 +132,8 @@ class Dashboard extends React.Component {
     this.props.fetchUnconfirmedShifts();
     this.props.fetchOvertimeShifts();
     this.props.fetchLateShifts();
+    this.props.fetchStaff();
+    this.props.fetchClients();
   }
 
  
@@ -165,66 +171,85 @@ class Dashboard extends React.Component {
   handleChangeTimeChange = (type,event, date) => {
 
     if(type == 'clockInTime'){
-      if(this.state.clockInTime == null && this.state.clockOutTime == null){
-        this.setState({'clockInTime':date, 'save':false})
-      } else if (this.state.clockOutTime != null) {
+      // if(this.state.clockInTime == null && this.state.clockOutTime == null){
+      //   this.setState({'clockInTime':date, 'save':false})
+      // } else 
+      if (this.state.clockOutTime != null) {
         // console.log(moment(date).diff(moment(this.state.clockOutTime),'minutes'));
         if(moment(date).diff(moment(this.state.clockOutTime),'minutes')<0){
-          this.setState({'clockInTime':date, 'save':true})
+          this.setState({'clockInTime':date, 'save':true, messageClock:''})
         } else {
-          this.setState({'save':false})
+          var message = 'Clock in time cannot be later than the set clock out time';
+          this.setState({'save':false, messageClock:message})
         }
       } else {
-        this.setState({'clockInTime':date,'save':false});
+        this.setState({'clockInTime':date,'save':true, messageClock:''});
       }
     } 
     
     else if(type == 'clockOutTime'){
-      if(this.state.clockInTime == null && this.state.clockOutTime == null){
-        this.setState({'clockOutTime':date, 'save':false})
-      } else if (this.state.clockInTime != null) {
+      // if(this.state.clockInTime == null && this.state.clockOutTime == null){
+      //   this.setState({'clockOutTime':date, 'save':false})
+      // } else 
+      if (this.state.clockInTime != null) {
         if(moment(date).diff(moment(this.state.clockInTime),'minutes')>0){
-          this.setState({'clockOutTime':date, 'save':true})
+          this.setState({'clockOutTime':date, 'save':true, messageClock:''})
         } else {
-          this.setState({'save':false})
+          var message = 'Clock out time cannot be earlier than the set clock in time';
+          this.setState({'save':false, messageClock:message})
         }
       } else {
-        this.setState({'clockOutTime':date,'save':false});
+        this.setState({'clockOutTime':date,'save':true, messageClock:''});
       }
     } 
     
     else if(type == 'startTime'){
-      if(this.state.startTime == null && this.state.endTime == null){
-        this.setState({'startTime':date, 'save':false})
-      } else if (this.state.endTime != null) {
+      // if(this.state.startTime == null && this.state.endTime == null){
+      //   this.setState({'startTime':date, 'save':false})
+      // } else 
+      if (this.state.endTime != null) {
         var difference = Math.round(moment(this.state.endTime).diff(moment(date),'hours',true));
         if(moment(date).diff(moment(this.state.endTime),'minutes')<0){
-          this.setState({'startTime':date, 'save':true, scheduledDuration:difference})
+          this.setState({'startTime':date, 'save':true, scheduledDuration:difference, messageTime:''})
         } else {
-          this.setState({'save':false, scheduledDuration:0})
+          var message = 'Start time cannot be later than the set end time';
+          this.setState({'save':false, scheduledDuration:0, messageTime:message})
         }
       } else {
-        this.setState({'startTime':date,'save':false, scheduledDuration:0});
+        this.setState({'startTime':date,'save':true, scheduledDuration:0, messageTime:''});
       }
     } 
     
     else if(type == 'endTime'){
-      if(this.state.startTime == null && this.state.endTime == null){
-        this.setState({'endTime':date, 'save':false})
-      } else if (this.state.startTime != null) {
+      // if(this.state.startTime == null && this.state.endTime == null){
+      //   this.setState({'endTime':date, 'save':false})
+      // } else 
+      if (this.state.startTime != null) {
         var difference = Math.round(moment(date).diff(moment(this.state.startTime),'hours',true));
         if(moment(date).diff(moment(this.state.startTime),'minutes')>0){
-          this.setState({'endTime':date, 'save':true, scheduledDuration:difference})
+          this.setState({'endTime':date, 'save':true, scheduledDuration:difference, messageTime:''})
         } else {
-          this.setState({'save':false, scheduledDuration:0})
+          var message = 'End time cannot be earlier than the set start time';
+          this.setState({'save':false, scheduledDuration:0,messageTime:message})
         }
       } else {
-        this.setState({'endTime':date,'save':false, scheduledDuration:0});
+        this.setState({'endTime':date,'save':true, scheduledDuration:0, messageTime:''});
       }
     } 
   };
 
-  handleChangeStatus = (event, index, value) => this.setState({status:value});
+  handleChangeStatus = (event, index, value) => {
+    if(value=='In process' || value =='Overtime'){
+      this.setState({status:value, clockOutTime:null, save:true});
+      console.log('1 this is ', value);
+    } else if(value=='Scheduled' || value=='Late'){
+      this.setState({status:value, clockInTime:null,clockOutTime:null, save:true});
+      console.log('2 this is ', value);
+    } else {
+      this.setState({status:value});
+    }
+
+  }
 
   handleChangeTab = (value) => {
     this.setState({
@@ -249,6 +274,25 @@ class Dashboard extends React.Component {
     }
   };
 
+
+  handleChangeCaregiver = (event, index, value) => {
+    this.setState({caregiverName:value});
+  }
+
+  setStaff(staff,index){
+
+    return(<MenuItem key={index} value={staff.name} primaryText={staff.name} />)
+  }
+
+  handleChangeClient = (event, index, value) => {
+    this.setState({clientName:value});
+  }
+
+  setClients(client,index){
+
+    return(<MenuItem key={index} value={client.name} primaryText={client.name} />)
+  }
+
   render() {
 
     const actions = [
@@ -266,8 +310,7 @@ class Dashboard extends React.Component {
     />
     
     ];
-
-    
+ 
     var dialog;
 
     if(this.state.tabValue == 'unconfirmed' || this.state.tabValue == 'allShifts'){
@@ -287,7 +330,7 @@ class Dashboard extends React.Component {
         bodyClassName="dialogWindow"
       >
         
-        <div className="row1a">Care staff name: </div>   
+        {/* <div className="row1a">Care staff name: </div>   
         <TextField
           className="row1b"
           ref='caregiverName'
@@ -295,8 +338,28 @@ class Dashboard extends React.Component {
           errorText= {this.state.errorTextcaregiverName}
           defaultValue={this.state.caregiverName}
           onChange={this.handleTextChange}
-        />
-        <div className="row2a">Client ID: </div>   
+        /> */}
+        <div className="row8a">Care staff name:     </div> 
+        <DropDownMenu 
+          ref="caregiverName" value={this.state.caregiverName} 
+          onChange={this.handleChangeCaregiver}  
+          className="dropdown"
+          style={{width:'100px'}}
+          autoWidth={true}>
+          {this.props.staff.map(this.setStaff,this)}
+        </DropDownMenu>
+
+        <div className="row8a">Client ID:     </div> 
+        <DropDownMenu 
+          ref="clientName" value={this.state.clientName} 
+          onChange={this.handleChangeClient}  
+          className="dropdown"
+          style={{width:'100px'}}
+          autoWidth={true}>
+          {this.props.clients.map(this.setClients,this)}
+        </DropDownMenu>
+
+        {/* <div className="row2a">Client ID: </div>   
         <TextField
           ref='clientName'
           id="clientName"
@@ -304,7 +367,7 @@ class Dashboard extends React.Component {
           className="row2b"
           defaultValue={this.state.clientName}
           onChange={this.handleTextChange}
-        />
+        /> */}
         <div className="row3a">Time clocked in: </div>  
         <div className="row3b">
         <TimePicker
@@ -357,7 +420,8 @@ class Dashboard extends React.Component {
           ref="status" value={this.state.status} 
           onChange={this.handleChangeStatus}  
           className="row8b"
-          autoWidth={false}>
+          className="dropdown"
+          autoWidth={true}>
           <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
           <MenuItem value={'Completed'} primaryText="Completed" />
           <MenuItem value={'Cancelled'} primaryText="Cancelled" />
@@ -368,6 +432,12 @@ class Dashboard extends React.Component {
           <MenuItem value={'In process'} primaryText="In process" />
           <MenuItem value={'Scheduled'} primaryText="Scheduled" />
         </DropDownMenu>
+
+        <div className='alertMessage'>
+          {this.state.messageClock}
+          <br />
+          {this.state.messageTime}
+        </div>
 
       </Dialog>
     } else {
@@ -423,7 +493,9 @@ function mapStateToProps(state) {
     allShifts: state.clientReducers.allShifts,
     late: state.clientReducers.late,
     overtime: state.clientReducers.overtime,
-    selectedRow: state.clientReducers.selectedRow
+    selectedRow: state.clientReducers.selectedRow,
+    staff: state.clientReducers.staff,
+    clients: state.clientReducers.clients
   };
 }
 
@@ -437,6 +509,14 @@ function mapDispatchToProps(dispatch) {
     updateVisit:updateVisit, 
     selectRow:selectRow,
     fetchOvertimeShifts: fetchOvertimeShifts,
-    fetchLateShifts: fetchLateShifts }, dispatch);
+    fetchLateShifts: fetchLateShifts,
+    fetchClients: fetchClients,
+    fetchStaff: fetchStaff}, dispatch);
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+
+
+//implemete notify caregiver overtime
+//implement guide
+//connect late to employees
+//make sure i'm pushing to the status log everywhere

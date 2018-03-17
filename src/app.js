@@ -12,8 +12,9 @@ import thunk from "redux-thunk";
 
 import reducers from "./reducers/index";
 import Dashboard from "./components/dashboard/dashboard";
-import MainStaff from './components/staffView/mainStaff'
-import MainClient from './components/clientView/mainClient'
+import MainStaff from './components/staffView/mainStaff';
+import MainClient from './components/clientView/mainClient';
+import MainGuide from './components/guideView/mainGuide';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -28,6 +29,7 @@ render(
         <Route exact path="/dashboard" component={Dashboard} />
         <Route exact path="/staff" component={MainStaff} />
         <Route exact path="/clients" component={MainClient} />
+        <Route exact path="/guides" component={MainGuide} />
       </div>
       </MuiThemeProvider>
     </BrowserRouter>

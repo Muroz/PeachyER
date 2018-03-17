@@ -29,7 +29,7 @@ class LateTable extends React.Component {
             enableSelectAll: false,
             deselectOnClickaway: false,
             showCheckboxes: false,
-            height: '300px'
+            height: '200px'
 
         }
     }
@@ -37,11 +37,11 @@ class LateTable extends React.Component {
 
     setTableInfo(visit, index){
         return (<TableRow key={index}>
-                  <TableRowColumn ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
-                  <TableRowColumn ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
-                  <TableRowColumn ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): '00:00'} </TableRowColumn>
-                  <TableRowColumn ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): '00:00'} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                 </TableRow>)
     }
 
@@ -61,7 +61,7 @@ class LateTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                A late shift isn't so beautiful
+                Uh-oh... these staff are late!
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>

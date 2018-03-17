@@ -33,6 +33,15 @@ class NavBar extends React.Component {
         <div className="navbar_li navbar_staff">
           <a href="/staff">Staff</a>
         </div>
+        <div className="navbar_li navbar_guides">
+          <a href="/guides">Guides</a>
+        </div>
+        <div className="navbar_li navbar_+">
+          <a href="">+</a>
+        </div>
+        <div className="navbar_li navbar_?">
+          <a href="">?</a>
+        </div>
         {/* <div className="navbar_li navbar_add">
           {" "}
           <a onClick={this.togglePopup.bind(this)}>Add person</a>{" "}

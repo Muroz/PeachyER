@@ -10,15 +10,21 @@ var moment = require('moment-timezone');
 
 // Axios HTTP requests to fetch data from the database
 router.post("/clients", function(req, res) {
-  Client.find({}, function(err, clients) {
+  Client.find({}).sort({name:1}).exec(function(err,clients){
+    if(err){
+      throw err;
+    }
     res.json(clients);
-  });
+  })
 });
 
 router.post("/staff", function(req, res) {
-  Caregiver.find({}, function(err, staff) {
+  Caregiver.find({}).sort({name:1}).exec(function(err,staff){
+    if(err){
+      throw err;
+    }
     res.json(staff);
-  });
+  })
 });
 
 router.post("/visit", function(req, res) {
@@ -98,12 +104,13 @@ router.post("/updateVisit", function(req, res) {
     visit.endTime =  req.body.endTime;
     visit.status = req.body.status;
  
+    visit.statusLog.push(visit.status);
 
     var endTime = new moment(visit.clockOutTime).tz('America/St_Johns');
     var localClockIn = new moment(visit.clockInTime).tz('America/St_Johns')
     var duration = Math.round(endTime.diff(localClockIn,'hours',true));
 
-    visit.duration = duration;
+    visit.duration = 0;
     visit.active = false;
     if (visit.status == 'Completed'){
       Client.findOne({name:visit.clientName}, function(err,client){
@@ -128,7 +135,11 @@ router.post("/updateVisit", function(req, res) {
           visit.save();
           res.json(req.body);
         });
-          }
+      });
+    } else {
+      visit.save();
+      res.json(req.body);
+    }
           
 
 

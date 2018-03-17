@@ -81,7 +81,7 @@ class UnconfirmedTable extends React.Component {
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Client">Client ID</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Duration">Duration (Hrs)</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Duration">Duration (hrs)</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Start">Scheduled start</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="End">Scheduled end</TableHeaderColumn>
                 {/* <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Overtime">Overtime</TableHeaderColumn> */}

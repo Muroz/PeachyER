@@ -68,8 +68,7 @@ router.post("/", function(req, res) {
           checker('This visit has been completed already');
         } 
         else if (visit.active){
-          console.log('visit found');
-          console.log('visit')
+
           communicate('You have just clocked out!')
 
           var endTime = new moment().tz('America/St_Johns');
@@ -82,6 +81,7 @@ router.post("/", function(req, res) {
           visit.active = false;
           if (visit.status != 'Unconfirmed'){
             visit.status = 'Completed ';
+            visit.statusLog.push('Completed');
           }
           Client.findOne({name:visit.clientName}, function(err,client){
             if(err) return err;
@@ -113,6 +113,7 @@ router.post("/", function(req, res) {
           visit.clockInTime= new Date();
           visit.active = true;
           visit.status = 'In process';
+          visit.statusLog.push('In process');
         }
     
         visit.save();

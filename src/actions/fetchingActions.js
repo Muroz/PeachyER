@@ -158,8 +158,6 @@ export function fetchOvertimeShifts() {
 
 // Add client entry
 export function updateVisit(visit,type) {
-  console.log('updating');
-  console.log(visit);
 
   return function(dispatch) {
     axios

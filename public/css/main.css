@@ -412,3 +412,21 @@ html, body, .app {
 .directoryItemBody{
   padding-top: 10px;
 }
+
+.dropdown{
+  color: rgba(0, 0, 0, 0.87); 
+  width:300!important;
+  height: 40px!important; 
+  line-height: 0px!important; 
+  overflow: hidden; 
+  opacity: 1; 
+  text-overflow: ellipsis; 
+  top: 0px; 
+  white-space: nowrap;
+}
+
+.alertMessage{
+  color:red;
+  margin-top: 100px;
+  padding-top: 20px;
+}
