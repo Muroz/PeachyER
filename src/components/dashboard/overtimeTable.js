@@ -39,10 +39,11 @@ class OvertimeTable extends React.Component {
         return (<TableRow key={index} >
                   <TableRowColumn style={{fontSize:'15px'}} ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}} ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
-                  <TableRowColumn style={{fontSize:'15px'}} ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn style={{fontSize:'15px'}} ref={"clockOutTime"+index}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): '00:00'} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}} ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}} ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}} ref={"clockOutTime"+index}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): '00:00'} </TableRowColumn>
+
                 </TableRow>)
     }
 
@@ -66,12 +67,13 @@ class OvertimeTable extends React.Component {
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">Care staff name</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client ID</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockOutTime">Time clocked in</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">HSW</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Start">Scheduled start</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="End">Scheduled end</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
+
             </TableRow>
             </TableHeader>
 

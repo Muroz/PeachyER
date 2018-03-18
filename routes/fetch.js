@@ -106,9 +106,6 @@ router.post("/updateVisit", function(req, res) {
  
     visit.statusLog.push(visit.status);
 
-    var endTime = new moment(visit.clockOutTime).tz('America/St_Johns');
-    var localClockIn = new moment(visit.clockInTime).tz('America/St_Johns')
-    var duration = Math.round(endTime.diff(localClockIn,'hours',true));
 
     visit.duration = 0;
     visit.active = false;
@@ -116,6 +113,10 @@ router.post("/updateVisit", function(req, res) {
       Client.findOne({name:visit.clientName}, function(err,client){
         if(err) return err;
         if(client==null) return 'No client found';
+
+        if(visit.clockInTime != null && visit.clockOutTime != null){
+          visit.duration = Math.round(moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+        }
         client.billedHours += visit.scheduledDuration;
         client.billedVisits.push(visit);
         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){

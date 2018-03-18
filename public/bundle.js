@@ -57707,10 +57707,12 @@ var Dashboard = function (_React$Component) {
         clientName: null,
         clockInTime: null,
         scheduledDuration: '',
+        duration: '',
         clockOutTime: null,
         startTime: null,
         endTime: null,
-        status: '' });
+        status: '',
+        save: false });
       _this.props.updateVisit(visit, _this.state.tabValue);
     }, _this.isSelected = function (index) {
 
@@ -57821,7 +57823,6 @@ var Dashboard = function (_React$Component) {
   _createClass(Dashboard, [{
     key: "componentWillMount",
     value: function componentWillMount() {
-      console.log('mounting');
       this.props.fetchAllShifts();
       this.props.fetchConfirmedShifts();
       this.props.fetchUnconfirmedShifts();
@@ -57886,7 +57887,7 @@ var Dashboard = function (_React$Component) {
       var dialog;
 
       if (this.state.tabValue == 'unconfirmed' || this.state.tabValue == 'allShifts') {
-        var _React$createElement;
+        var _React$createElement, _React$createElement2;
 
         var editVisit = this.props[this.state.tabValue][this.state.selected[0]];
 
@@ -57907,7 +57908,7 @@ var Dashboard = function (_React$Component) {
           _react2.default.createElement(
             "div",
             { className: "row8a" },
-            "Care staff name:     "
+            "HSW name:     "
           ),
           _react2.default.createElement(
             _DropDownMenu2.default,
@@ -57922,7 +57923,7 @@ var Dashboard = function (_React$Component) {
           _react2.default.createElement(
             "div",
             { className: "row8a" },
-            "Client ID:     "
+            "Client name:     "
           ),
           _react2.default.createElement(
             _DropDownMenu2.default,
@@ -58006,7 +58007,7 @@ var Dashboard = function (_React$Component) {
             { className: "row8a" },
             "Status:     "
           ),
-          _react2.default.createElement(
+          this.state.tabValue == 'allShifts' ? _react2.default.createElement(
             _DropDownMenu2.default,
             (_React$createElement = {
               ref: "status", value: this.state.status,
@@ -58022,6 +58023,16 @@ var Dashboard = function (_React$Component) {
             _react2.default.createElement(_MenuItem2.default, { value: 'Notified Manager', primaryText: "Notified Manager" }),
             _react2.default.createElement(_MenuItem2.default, { value: 'In process', primaryText: "In process" }),
             _react2.default.createElement(_MenuItem2.default, { value: 'Scheduled', primaryText: "Scheduled" })
+          ) : _react2.default.createElement(
+            _DropDownMenu2.default,
+            (_React$createElement2 = {
+              ref: "status", value: this.state.status,
+              onChange: this.handleChangeStatus,
+              className: "row8b"
+            }, _defineProperty(_React$createElement2, "className", "dropdown"), _defineProperty(_React$createElement2, "autoWidth", true), _React$createElement2),
+            _react2.default.createElement(_MenuItem2.default, { value: 'Unconfirmed', primaryText: "Unconfirmed" }),
+            _react2.default.createElement(_MenuItem2.default, { value: 'Completed', primaryText: "Completed" }),
+            _react2.default.createElement(_MenuItem2.default, { value: 'Cancelled', primaryText: "Cancelled" })
           ),
           _react2.default.createElement(
             "div",
@@ -84551,16 +84562,16 @@ var UnconfirmedTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
+                    { style: { fontSize: '15px' }, ref: "startTime" + index },
                     " ",
-                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
+                    (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
                     " "
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "clockOutTime" + index },
+                    { style: { fontSize: '15px' }, ref: "endTime" + index },
                     " ",
-                    visit.clockOutTime ? (0, _momentTimezone2.default)(visit.clockOutTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
+                    (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
                     " "
                 ),
                 _react2.default.createElement(
@@ -84572,16 +84583,16 @@ var UnconfirmedTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "startTime" + index },
+                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
                     " ",
-                    (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
+                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
                     " "
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "endTime" + index },
+                    { style: { fontSize: '15px' }, ref: "clockOutTime" + index },
                     " ",
-                    (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
+                    visit.clockOutTime ? (0, _momentTimezone2.default)(visit.clockOutTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
                     " "
                 ),
                 _react2.default.createElement(
@@ -84648,27 +84659,12 @@ var UnconfirmedTable = function (_React$Component) {
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
                                 { style: { fontSize: '15px' }, tooltip: "Employee" },
-                                "Care staff name"
+                                "HSW"
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
                                 { style: { fontSize: '15px' }, tooltip: "Client" },
-                                "Client ID"
-                            ),
-                            _react2.default.createElement(
-                                _Table.TableHeaderColumn,
-                                { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                                "Time clocked in"
-                            ),
-                            _react2.default.createElement(
-                                _Table.TableHeaderColumn,
-                                { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
-                                "Time clocked out"
-                            ),
-                            _react2.default.createElement(
-                                _Table.TableHeaderColumn,
-                                { style: { fontSize: '15px' }, tooltip: "Duration" },
-                                "Duration (hrs)"
+                                "Client"
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
@@ -84679,6 +84675,21 @@ var UnconfirmedTable = function (_React$Component) {
                                 _Table.TableHeaderColumn,
                                 { style: { fontSize: '15px' }, tooltip: "End" },
                                 "Scheduled end"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Duration" },
+                                "Duration (hrs)"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                                "Time clocked in"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
+                                "Time clocked out"
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
@@ -86836,13 +86847,6 @@ var RealtimeTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
-                    " ",
-                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
-                    " "
-                ),
-                _react2.default.createElement(
-                    _Table.TableRowColumn,
                     { style: { fontSize: '15px' }, ref: "startTime" + index },
                     " ",
                     (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
@@ -86853,6 +86857,13 @@ var RealtimeTable = function (_React$Component) {
                     { style: { fontSize: '15px' }, ref: "endTime" + index },
                     " ",
                     (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
+                    " "
+                ),
+                _react2.default.createElement(
+                    _Table.TableRowColumn,
+                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
+                    " ",
+                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
                     " "
                 )
             );
@@ -86891,17 +86902,12 @@ var RealtimeTable = function (_React$Component) {
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "Employee" },
-                            "Care staff name"
+                            "HSW"
                         ),
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "Client" },
-                            "Client ID"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                            "Time clocked in"
+                            "Client"
                         ),
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
@@ -86912,6 +86918,11 @@ var RealtimeTable = function (_React$Component) {
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "End" },
                             "Scheduled end"
+                        ),
+                        _react2.default.createElement(
+                            _Table.TableHeaderColumn,
+                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                            "Time clocked in"
                         )
                     )
                 ),
@@ -87050,16 +87061,16 @@ var AllShiftsTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { ref: "clockInTime" + index, style: { fontSize: '15px' } },
+                    { ref: "startTime" + index, style: { fontSize: '15px' } },
                     " ",
-                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
+                    (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
                     " "
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { ref: "clockOutTime" + index, style: { fontSize: '15px' } },
+                    { ref: "endTime" + index, style: { fontSize: '15px' } },
                     " ",
-                    visit.clockOutTime ? (0, _momentTimezone2.default)(visit.clockOutTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
+                    (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
                     " "
                 ),
                 _react2.default.createElement(
@@ -87071,16 +87082,16 @@ var AllShiftsTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { ref: "startTime" + index, style: { fontSize: '15px' } },
+                    { ref: "clockInTime" + index, style: { fontSize: '15px' } },
                     " ",
-                    (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
+                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
                     " "
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { ref: "endTime" + index, style: { fontSize: '15px' } },
+                    { ref: "clockOutTime" + index, style: { fontSize: '15px' } },
                     " ",
-                    (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
+                    visit.clockOutTime ? (0, _momentTimezone2.default)(visit.clockOutTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
                     " "
                 ),
                 _react2.default.createElement(
@@ -87147,27 +87158,12 @@ var AllShiftsTable = function (_React$Component) {
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
                                 { style: { fontSize: '15px' }, tooltip: "Employee" },
-                                "Care staff name"
+                                "HSW"
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
                                 { style: { fontSize: '15px' }, tooltip: "Client" },
-                                "Client ID"
-                            ),
-                            _react2.default.createElement(
-                                _Table.TableHeaderColumn,
-                                { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                                "Time clocked in"
-                            ),
-                            _react2.default.createElement(
-                                _Table.TableHeaderColumn,
-                                { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
-                                "Time clocked out"
-                            ),
-                            _react2.default.createElement(
-                                _Table.TableHeaderColumn,
-                                { style: { fontSize: '15px' }, tooltip: "Duration" },
-                                "Duration (hrs)"
+                                "Client"
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
@@ -87181,8 +87177,23 @@ var AllShiftsTable = function (_React$Component) {
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Duration" },
+                                "Duration (hrs)"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                                "Time clocked in"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
+                                "Time clocked out"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
                                 { style: { fontSize: '15px' }, tooltip: "Overtime" },
-                                "Overtime (hrs)"
+                                "Actual duration (hrs)"
                             ),
                             _react2.default.createElement(
                                 _Table.TableHeaderColumn,
@@ -87315,13 +87326,6 @@ var LateTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
-                    " ",
-                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : '00:00',
-                    " "
-                ),
-                _react2.default.createElement(
-                    _Table.TableRowColumn,
                     { style: { fontSize: '15px' }, ref: "startTime" + index },
                     " ",
                     (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
@@ -87332,6 +87336,13 @@ var LateTable = function (_React$Component) {
                     { style: { fontSize: '15px' }, ref: "endTime" + index },
                     " ",
                     (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
+                    " "
+                ),
+                _react2.default.createElement(
+                    _Table.TableRowColumn,
+                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
+                    " ",
+                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : '00:00',
                     " "
                 )
             );
@@ -87370,17 +87381,12 @@ var LateTable = function (_React$Component) {
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "Employee" },
-                            "Care staff name"
+                            "HSW"
                         ),
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "Client" },
-                            "Client ID"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                            "Time clocked in"
+                            "Client"
                         ),
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
@@ -87391,6 +87397,11 @@ var LateTable = function (_React$Component) {
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "End" },
                             "Scheduled end"
+                        ),
+                        _react2.default.createElement(
+                            _Table.TableHeaderColumn,
+                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                            "Time clocked in"
                         )
                     )
                 ),
@@ -87498,20 +87509,6 @@ var OvertimeTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
-                    " ",
-                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
-                    " "
-                ),
-                _react2.default.createElement(
-                    _Table.TableRowColumn,
-                    { style: { fontSize: '15px' }, ref: "clockOutTime" + index },
-                    " ",
-                    visit.clockOutTime ? (0, _momentTimezone2.default)(visit.clockOutTime).tz('America/St_Johns').format('h:mm a') : '00:00',
-                    " "
-                ),
-                _react2.default.createElement(
-                    _Table.TableRowColumn,
                     { style: { fontSize: '15px' }, ref: "startTime" + index },
                     " ",
                     (0, _momentTimezone2.default)(visit.startTime).tz('America/St_Johns').format('h:mm a'),
@@ -87522,6 +87519,20 @@ var OvertimeTable = function (_React$Component) {
                     { style: { fontSize: '15px' }, ref: "endTime" + index },
                     " ",
                     (0, _momentTimezone2.default)(visit.endTime).tz('America/St_Johns').format('h:mm a'),
+                    " "
+                ),
+                _react2.default.createElement(
+                    _Table.TableRowColumn,
+                    { style: { fontSize: '15px' }, ref: "clockInTime" + index },
+                    " ",
+                    visit.clockInTime ? (0, _momentTimezone2.default)(visit.clockInTime).tz('America/St_Johns').format('h:mm a') : 'Not available',
+                    " "
+                ),
+                _react2.default.createElement(
+                    _Table.TableRowColumn,
+                    { style: { fontSize: '15px' }, ref: "clockOutTime" + index },
+                    " ",
+                    visit.clockOutTime ? (0, _momentTimezone2.default)(visit.clockOutTime).tz('America/St_Johns').format('h:mm a') : '00:00',
                     " "
                 )
             );
@@ -87560,22 +87571,12 @@ var OvertimeTable = function (_React$Component) {
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "Employee" },
-                            "Care staff name"
+                            "HSW"
                         ),
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "Client" },
-                            "Client ID"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                            "Time clocked in"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
-                            "Time clocked in"
+                            "Client"
                         ),
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
@@ -87586,6 +87587,16 @@ var OvertimeTable = function (_React$Component) {
                             _Table.TableHeaderColumn,
                             { style: { fontSize: '15px' }, tooltip: "End" },
                             "Scheduled end"
+                        ),
+                        _react2.default.createElement(
+                            _Table.TableHeaderColumn,
+                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                            "Time clocked in"
+                        ),
+                        _react2.default.createElement(
+                            _Table.TableHeaderColumn,
+                            { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
+                            "Time clocked out"
                         )
                     )
                 ),

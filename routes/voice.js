@@ -56,7 +56,7 @@ router.post("/", function(req, res) {
   // If the user entered digits, process their request
   if (req.body.Digits) {
 
-     if(req.body.Digits.length == 5){
+     if(req.body.Digits.length >= 4){
       Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
         if(err) return err;
         

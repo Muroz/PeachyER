@@ -346,8 +346,14 @@ var late = later.setInterval(function(){
         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
           if(carer==null) return
           console.log(carer.name);
+          var vid = ''
+          if(visit.shiftNumber == 1){
+            vid = client.phoneNumber+carer.employeeId
+          } else {
+            vid = client.phoneNumber+carer.employeeId+visit.shiftNumber
+          }
           Visit.create({
-            visitId:client.phoneNumber+carer.employeeId+visit.shiftNumber,
+            visitId:vid,
             caregiverName: carer.name,
             clientName:client.name,
             date:new moment().tz('America/St_Johns'),

@@ -118,15 +118,16 @@ class Dashboard extends React.Component {
       clientName:null,
       clockInTime: null,
       scheduledDuration:'',
+      duration:'',
       clockOutTime : null,
       startTime: null,
       endTime: null,
-      status: '',});
+      status: '',
+      save:false});
     this.props.updateVisit(visit,this.state.tabValue);
   }
 
   componentWillMount(){
-    console.log('mounting')
     this.props.fetchAllShifts();
     this.props.fetchConfirmedShifts();
     this.props.fetchUnconfirmedShifts();
@@ -339,7 +340,7 @@ class Dashboard extends React.Component {
           defaultValue={this.state.caregiverName}
           onChange={this.handleTextChange}
         /> */}
-        <div className="row8a">Care staff name:     </div> 
+        <div className="row8a">HSW name:     </div> 
         <DropDownMenu 
           ref="caregiverName" value={this.state.caregiverName} 
           onChange={this.handleChangeCaregiver}  
@@ -349,7 +350,7 @@ class Dashboard extends React.Component {
           {this.props.staff.map(this.setStaff,this)}
         </DropDownMenu>
 
-        <div className="row8a">Client ID:     </div> 
+        <div className="row8a">Client name:     </div> 
         <DropDownMenu 
           ref="clientName" value={this.state.clientName} 
           onChange={this.handleChangeClient}  
@@ -416,22 +417,40 @@ class Dashboard extends React.Component {
           onChange={this.handleChangeTimeChange.bind(this,'endTime')}
         />
         <div className="row8a">Status:     </div> 
+        {this.state.tabValue == 'allShifts' ?
         <DropDownMenu 
           ref="status" value={this.state.status} 
           onChange={this.handleChangeStatus}  
           className="row8b"
           className="dropdown"
           autoWidth={true}>
-          <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
-          <MenuItem value={'Completed'} primaryText="Completed" />
-          <MenuItem value={'Cancelled'} primaryText="Cancelled" />
-          <MenuItem value={'Late'} primaryText="Late" />
-          <MenuItem value={'Overtime'} primaryText="Overtime" />
-          <MenuItem value={'Notified Caregiver'} primaryText="Notified Caregiver" />
-          <MenuItem value={'Notified Manager'} primaryText="Notified Manager" />
-          <MenuItem value={'In process'} primaryText="In process" />
-          <MenuItem value={'Scheduled'} primaryText="Scheduled" />
+
+            <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
+            <MenuItem value={'Completed'} primaryText="Completed" />
+            <MenuItem value={'Cancelled'} primaryText="Cancelled" />
+            <MenuItem value={'Late'} primaryText="Late" />
+            <MenuItem value={'Overtime'} primaryText="Overtime" />
+            <MenuItem value={'Notified Caregiver'} primaryText="Notified Caregiver" />
+            <MenuItem value={'Notified Manager'} primaryText="Notified Manager" />
+            <MenuItem value={'In process'} primaryText="In process" />
+            <MenuItem value={'Scheduled'} primaryText="Scheduled" />
+              
         </DropDownMenu>
+        :
+        <DropDownMenu 
+          ref="status" value={this.state.status} 
+          onChange={this.handleChangeStatus}  
+          className="row8b"
+          className="dropdown"
+          autoWidth={true}>
+
+            <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
+            <MenuItem value={'Completed'} primaryText="Completed" />
+            <MenuItem value={'Cancelled'} primaryText="Cancelled" />
+              
+        </DropDownMenu>
+        }
+
 
         <div className='alertMessage'>
           {this.state.messageClock}
