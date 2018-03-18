@@ -64,7 +64,7 @@ router.post("/", function(req, res) {
           gatherAgain();
           return;
         } 
-        else if(visit.status == 'Completed' || visit.status == 'Cancelled' || visit.status == 'Unconfirmed'){
+        else if(visit.status == 'Completed' || visit.status == 'Cancelled'){
           checker('This visit has been completed already');
         } 
         else if (visit.active){
@@ -79,10 +79,10 @@ router.post("/", function(req, res) {
           visit.clockOutTime = endTime;
           visit.duration = duration;
           visit.active = false;
-          if (visit.status != 'Unconfirmed'){
+          //if (visit.status != 'Unconfirmed'){
             visit.status = 'Completed ';
             visit.statusLog.push('Completed');
-          }
+          //}
           Client.findOne({name:visit.clientName}, function(err,client){
             if(err) return err;
             if(client==null) return 'No client found';

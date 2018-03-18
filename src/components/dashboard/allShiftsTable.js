@@ -13,6 +13,11 @@ import {
     TableRowColumn,
   } from 'material-ui/Table';
 
+    import Dialog from 'material-ui/Dialog';
+    import FlatButton from 'material-ui/FlatButton';
+    import RaisedButton from 'material-ui/RaisedButton';
+    import HelpOutline from 'material-ui/svg-icons/action/help-outline';
+
 class AllShiftsTable extends React.Component {
 
     constructor(props){
@@ -29,14 +34,24 @@ class AllShiftsTable extends React.Component {
             enableSelectAll: false,
             deselectOnClickaway: false,
             showCheckboxes: false,
-            height: '600px'
+            height: '600px',
+
+            open:false
 
         }
+
+        this.togglePopup = this.togglePopup.bind(this);
     }
 
     handleRowSelection = (selectedRows) => {
         this.props.handleOpen(selectedRows);
     };
+    
+    togglePopup() {
+        this.setState({
+          open: !this.state.open
+        });
+      }
     
 
     setTableInfo(visit, index){
@@ -54,7 +69,16 @@ class AllShiftsTable extends React.Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              onClick={this.togglePopup}
+            />,
+          ];
+
         return(
+            <div>
             <Table onRowSelection={this.handleRowSelection.bind(this)}          
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
@@ -69,9 +93,11 @@ class AllShiftsTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Scheduled shifts today" className='tableHeader'>
-                    View and edit all shifts scheduled for the day
+                <div className='tabDescription'>
+                    View and edit all of the shifts scheduled for today <HelpOutline onClick={this.togglePopup}/>
+                </div>
                 </TableHeaderColumn>
-            </TableRow>
+            </TableRow>    
             <TableRow>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">Care staff name</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client ID</TableHeaderColumn>
@@ -93,6 +119,21 @@ class AllShiftsTable extends React.Component {
             {this.props.allShifts ?this.props.allShifts.map(this.setTableInfo,this):null}
             </TableBody>
         </Table>
+         <Dialog
+         title="Scheduled shifts today"
+         actions={actions}
+         modal={false}
+         open={this.state.open}
+         onRequestClose={this.togglePopup}
+       >
+         <div className='tabSub'>
+         <p>This tab is where you will view and make changes to the scheduled shifts of the day as your care staff call in sick, change shift times, etc.
+         You can change the scheduled care staff name, scheduled shift start + end time and the shift duration. The live status of the shift is updated 
+         and shown under the 'Status' column. Status options include: scheduled, in process, late (1 min after shift start time), care staff 
+         notified (5 min after shift start time), manager notified (15 min after shift start time), overtime, completed and unconfirmed. </p>
+         </div>
+       </Dialog>
+       </div>
         )
     }
 

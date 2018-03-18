@@ -219,12 +219,12 @@ var t = later.setInterval(function() {
         return;
       }
       visits.forEach(function(visit,index,arr){
+        var currentTime = new moment().tz('America/St_Johns');
+        var localStart = new moment(visit.startTime).tz('America/St_Johns');
+        var localEnd = new moment(visit.endTime).tz('America/St_Johns');
 
         //search for company specifics here
         if(visit.status == 'Scheduled'){
-          var currentTime = new moment().tz('America/St_Johns');
-          var localStart = new moment(visit.startTime).tz('America/St_Johns');
-          var localEnd = new moment(visit.endTime).tz('America/St_Johns');
 
           if (currentTime.diff(localStart,'minutes',true)>1){
             if(currentTime.diff(localEnd)>1){
@@ -240,20 +240,20 @@ var t = later.setInterval(function() {
         }
 
         else if(visit.status == 'In process'){
-          var currentTime = new moment().tz('America/St_Johns');
-          var localEnd = new moment(visit.endTime).tz('America/St_Johns');
           
           if(currentTime.diff(localEnd,'minutes',true)>5){
             visit.status = 'Overtime';
             visit.statusLog.push('Overtime')
           }
         }
-
-        else if(visit.status == 'Late' || visit.status == 'Overtime'){
+        //|| visit.status == 'Overtime'
+        else if(visit.status == 'Late'){
           console.log(visit.status,'messaging');
           // visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
-          visit.status = 'Notified Caregiver';
-          visit.statusLog.push('Notified Caregiver');
+          if( currentTime.diff(localStart,'minutes',true)>5){
+            visit.status = 'Notified Caregiver';
+            visit.statusLog.push('Notified Caregiver');
+          }
           //var visitState = visit.active?'out':'in'
           // var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
           // clientTwilio.messages.create({
@@ -266,8 +266,8 @@ var t = later.setInterval(function() {
         //create overtime notified
         
         else if (visit.status == 'Notified Caregiver'){
-          var currentTime = new moment();
-          if( currentTime.diff(localEnd,'minutes',true)>15){
+          console.log(currentTime.diff(localStart,'minutes',true));
+          if( currentTime.diff(localStart,'minutes',true)>15){
           //if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
             //visit.managerMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
             visit.status = 'Notified Manager';
@@ -286,7 +286,7 @@ var t = later.setInterval(function() {
         
         else if (visit.status == 'Notified Manager'){
           var currentTime = new moment().tz('America/St_Johns');
-          if( currentTime.diff(localEnd,'minutes',true)>30){
+          if( currentTime.diff(localStart,'minutes',true)>30){
           //if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
             visit.status = 'Unconfirmed';
             visit.statusLog.push('Unconfirmed');
@@ -315,7 +315,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on('10:58:00').time();
+var lateSched = later.parse.recur().on('19:43:00').time();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){

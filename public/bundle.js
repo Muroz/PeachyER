@@ -11220,6 +11220,46 @@ var _addButton = __webpack_require__(560);
 
 var _addButton2 = _interopRequireDefault(_addButton);
 
+var _helpOutline = __webpack_require__(737);
+
+var _helpOutline2 = _interopRequireDefault(_helpOutline);
+
+var _groupAdd = __webpack_require__(741);
+
+var _groupAdd2 = _interopRequireDefault(_groupAdd);
+
+var _dashboard = __webpack_require__(739);
+
+var _dashboard2 = _interopRequireDefault(_dashboard);
+
+var _group = __webpack_require__(740);
+
+var _group2 = _interopRequireDefault(_group);
+
+var _list = __webpack_require__(742);
+
+var _list2 = _interopRequireDefault(_list);
+
+var _School = __webpack_require__(743);
+
+var _School2 = _interopRequireDefault(_School);
+
+var _exitToApp = __webpack_require__(744);
+
+var _exitToApp2 = _interopRequireDefault(_exitToApp);
+
+var _Dialog = __webpack_require__(132);
+
+var _Dialog2 = _interopRequireDefault(_Dialog);
+
+var _FlatButton = __webpack_require__(133);
+
+var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+var _RaisedButton = __webpack_require__(615);
+
+var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -11239,6 +11279,7 @@ var NavBar = function (_React$Component) {
     _this.state = {
       showPopup: false
     };
+    _this.togglePopup = _this.togglePopup.bind(_this);
     return _this;
   }
 
@@ -11252,9 +11293,36 @@ var NavBar = function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+
+      var actions = [_react2.default.createElement(_FlatButton2.default, {
+        label: "Ok",
+        primary: true,
+        onClick: this.togglePopup
+      })];
+
       return _react2.default.createElement(
         "div",
         { className: "navbar" },
+        _react2.default.createElement(
+          _Dialog2.default,
+          {
+            title: "Add a new client or employee (hooray!)",
+            actions: actions,
+            modal: false,
+            open: this.state.showPopup,
+            onRequestClose: this.togglePopup
+          },
+          _react2.default.createElement(
+            "div",
+            { className: "dialogText" },
+            "While we are currently building this feature you can follow the link to add a new client or employee.",
+            _react2.default.createElement(
+              "a",
+              null,
+              "Click here"
+            )
+          )
+        ),
         _react2.default.createElement(
           "div",
           { className: "navbar_logo" },
@@ -11268,6 +11336,7 @@ var NavBar = function (_React$Component) {
           _react2.default.createElement(
             "a",
             { href: "/dashboard" },
+            _react2.default.createElement(_dashboard2.default, null),
             "Dashboard"
           )
         ),
@@ -11277,6 +11346,8 @@ var NavBar = function (_React$Component) {
           _react2.default.createElement(
             "a",
             { href: "/clients" },
+            _react2.default.createElement(_group2.default, null),
+            _react2.default.createElement("br", null),
             "Clients"
           )
         ),
@@ -11286,6 +11357,8 @@ var NavBar = function (_React$Component) {
           _react2.default.createElement(
             "a",
             { href: "/staff" },
+            _react2.default.createElement(_list2.default, null),
+            _react2.default.createElement("br", null),
             "Staff"
           )
         ),
@@ -11295,37 +11368,44 @@ var NavBar = function (_React$Component) {
           _react2.default.createElement(
             "a",
             { href: "/guides" },
+            _react2.default.createElement(_School2.default, null),
+            _react2.default.createElement("br", null),
             "Guides"
           )
         ),
         _react2.default.createElement(
           "div",
-          { className: "navbar_li navbar_+" },
+          { className: "navbar_li navbar_add", onClick: this.togglePopup },
           _react2.default.createElement(
             "a",
-            { href: "" },
-            "+"
+            null,
+            _react2.default.createElement(_groupAdd2.default, null),
+            _react2.default.createElement("br", null),
+            " Add"
           )
         ),
         _react2.default.createElement(
           "div",
-          { className: "navbar_li navbar_?" },
+          { className: "navbar_li navbar_help" },
           _react2.default.createElement(
             "a",
-            { href: "" },
-            "?"
+            { href: "https://docs.google.com/forms/d/e/1FAIpQLSccNAn2ySm4UMDskwOHIH44m80CWUex8s-VP2NX-laJnW_zfw/viewform?embedded=true" },
+            _react2.default.createElement(_helpOutline2.default, null),
+            _react2.default.createElement("br", null),
+            " Help"
           )
         ),
         _react2.default.createElement(
           "div",
-          { className: "navbar_li navbar_logout" },
+          { className: "navbar_logout" },
           _react2.default.createElement(
             "a",
             { href: "/logout" },
+            _react2.default.createElement(_exitToApp2.default, null),
+            _react2.default.createElement("br", null),
             " Logout "
           )
-        ),
-        this.state.showPopup ? _react2.default.createElement(_addButton2.default, { closePopup: this.togglePopup.bind(this) }) : null
+        )
       );
     }
   }]);
@@ -57732,9 +57812,9 @@ var Dashboard = function (_React$Component) {
         _this.setState(validState);
       }
     }, _this.handleChangeCaregiver = function (event, index, value) {
-      _this.setState({ caregiverName: value });
+      _this.setState({ caregiverName: value, save: true });
     }, _this.handleChangeClient = function (event, index, value) {
-      _this.setState({ clientName: value });
+      _this.setState({ clientName: value, save: true });
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -57973,6 +58053,86 @@ var Dashboard = function (_React$Component) {
               value: "confirmed",
               className: "tabContainer"
             },
+            _react2.default.createElement(
+              "div",
+              { className: "tabDescription" },
+              "This tab shares live updates on staff that are currently working, late for their shift and working overtime."
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "tabSub" },
+              "Welcome to your first week with Peachy, Tracy! We are excited to start adding value to your business and learn how we can add even more."
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "summaryTable" },
+              _react2.default.createElement(
+                "div",
+                { className: "summaryItem" },
+                _react2.default.createElement(
+                  "div",
+                  { style: { margin: 'auto' } },
+                  _react2.default.createElement(
+                    "p",
+                    { className: "summaryItemTitle" },
+                    this.props.confirmed ? this.props.confirmed.length : '0'
+                  )
+                ),
+                _react2.default.createElement(
+                  "div",
+                  { style: { margin: 'auto' } },
+                  _react2.default.createElement(
+                    "p",
+                    { className: "summaryItemSub" },
+                    "Working"
+                  )
+                )
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "summaryItem" },
+                _react2.default.createElement(
+                  "div",
+                  { style: { margin: 'auto' } },
+                  _react2.default.createElement(
+                    "p",
+                    { className: "summaryItemTitle" },
+                    this.props.late ? this.props.late.length : '0'
+                  )
+                ),
+                _react2.default.createElement(
+                  "div",
+                  { style: { margin: 'auto' } },
+                  _react2.default.createElement(
+                    "p",
+                    { className: "summaryItemSub" },
+                    "Late"
+                  )
+                )
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "summaryItem" },
+                _react2.default.createElement(
+                  "div",
+                  { style: { margin: 'auto' } },
+                  _react2.default.createElement(
+                    "p",
+                    { className: "summaryItemTitle" },
+                    this.props.allShifts ? this.props.overtime.length : '0'
+                  )
+                ),
+                _react2.default.createElement(
+                  "div",
+                  { style: { margin: 'auto' } },
+                  _react2.default.createElement(
+                    "p",
+                    { className: "summaryItemSub" },
+                    "Overtime"
+                  )
+                )
+              )
+            ),
             _react2.default.createElement(_realtimeTable2.default, null),
             _react2.default.createElement(_lateTable2.default, null),
             _react2.default.createElement(_overtimeTable2.default, null)
@@ -57980,7 +58140,7 @@ var Dashboard = function (_React$Component) {
           _react2.default.createElement(
             _Tabs.Tab,
             {
-              label: "Shifts scheduled today",
+              label: "Shifts scheduled today (" + this.props.allShifts.length + ")",
               value: "allShifts",
               className: "tabContainer"
             },
@@ -84307,6 +84467,22 @@ var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
 var _Table = __webpack_require__(71);
 
+var _Dialog = __webpack_require__(132);
+
+var _Dialog2 = _interopRequireDefault(_Dialog);
+
+var _FlatButton = __webpack_require__(133);
+
+var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+var _RaisedButton = __webpack_require__(615);
+
+var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+var _helpOutline = __webpack_require__(737);
+
+var _helpOutline2 = _interopRequireDefault(_helpOutline);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -84324,8 +84500,6 @@ var UnconfirmedTable = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (UnconfirmedTable.__proto__ || Object.getPrototypeOf(UnconfirmedTable)).call(this, props));
 
         _this.handleRowSelection = function (selectedRows) {
-            console.log('selecting row');
-            console.log(selectedRows);
             _this.props.handleOpen(selectedRows);
         };
 
@@ -84340,13 +84514,22 @@ var UnconfirmedTable = function (_React$Component) {
             enableSelectAll: false,
             deselectOnClickaway: false,
             showCheckboxes: false,
-            height: '600px'
+            height: '600px',
 
+            open: false
         };
+        _this.togglePopup = _this.togglePopup.bind(_this);
         return _this;
     }
 
     _createClass(UnconfirmedTable, [{
+        key: "togglePopup",
+        value: function togglePopup() {
+            this.setState({
+                open: !this.state.open
+            });
+        }
+    }, {
         key: "setTableInfo",
         value: function setTableInfo(visit, index) {
             return _react2.default.createElement(
@@ -84419,90 +84602,120 @@ var UnconfirmedTable = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            return _react2.default.createElement(
-                _Table.Table,
-                { onRowSelection: this.handleRowSelection.bind(this),
-                    height: this.state.height,
-                    fixedHeader: this.state.fixedHeader,
-                    fixedFooter: this.state.fixedFooter,
-                    selectable: this.state.selectable,
-                    multiSelectable: this.state.multiSelectable
+            var actions = [_react2.default.createElement(_FlatButton2.default, {
+                label: "Ok",
+                primary: true,
+                onClick: this.togglePopup
+            })];
 
-                },
+            return _react2.default.createElement(
+                "div",
+                null,
                 _react2.default.createElement(
-                    _Table.TableHeader,
-                    {
-                        displaySelectAll: this.state.showCheckboxes,
-                        adjustForCheckbox: this.state.showCheckboxes,
-                        enableSelectAll: this.state.enableSelectAll
+                    _Table.Table,
+                    { onRowSelection: this.handleRowSelection.bind(this),
+                        height: this.state.height,
+                        fixedHeader: this.state.fixedHeader,
+                        fixedFooter: this.state.fixedFooter,
+                        selectable: this.state.selectable,
+                        multiSelectable: this.state.multiSelectable
+
                     },
                     _react2.default.createElement(
-                        _Table.TableRow,
-                        null,
+                        _Table.TableHeader,
+                        {
+                            displaySelectAll: this.state.showCheckboxes,
+                            adjustForCheckbox: this.state.showCheckboxes,
+                            enableSelectAll: this.state.enableSelectAll
+                        },
                         _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { colSpan: "3", tooltip: "Unconfirmed Shifts", className: "tableHeader" },
-                            "View, edit and confirm unconfirmed shifts"
+                            _Table.TableRow,
+                            null,
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { colSpan: "3", tooltip: "Unconfirmed Shifts", className: "tableHeader" },
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "tabDescription" },
+                                    "View, edit and confirm unconfirmed shifts ",
+                                    _react2.default.createElement(_helpOutline2.default, { onClick: this.togglePopup })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _Table.TableRow,
+                            null,
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Employee" },
+                                "Care staff name"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Client" },
+                                "Client ID"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                                "Time clocked in"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
+                                "Time clocked out"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Duration" },
+                                "Duration (hrs)"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Start" },
+                                "Scheduled start"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "End" },
+                                "Scheduled end"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Status" },
+                                "Status"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Date" },
+                                "Date"
+                            )
                         )
                     ),
                     _react2.default.createElement(
-                        _Table.TableRow,
-                        null,
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Employee" },
-                            "Care staff name"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Client" },
-                            "Client ID"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                            "Time clocked in"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
-                            "Time clocked out"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Duration" },
-                            "Duration (hrs)"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Start" },
-                            "Scheduled start"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "End" },
-                            "Scheduled end"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Status" },
-                            "Status"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Date" },
-                            "Date"
-                        )
+                        _Table.TableBody,
+                        { displayRowCheckbox: this.state.showCheckboxes,
+                            deselectOnClickaway: this.state.deselectOnClickaway,
+                            showRowHover: this.state.showRowHover,
+                            stripedRows: this.state.stripedRows
+                        },
+                        this.props.unconfirmed ? this.props.unconfirmed.map(this.setTableInfo, this) : null
                     )
                 ),
                 _react2.default.createElement(
-                    _Table.TableBody,
-                    { displayRowCheckbox: this.state.showCheckboxes,
-                        deselectOnClickaway: this.state.deselectOnClickaway,
-                        showRowHover: this.state.showRowHover,
-                        stripedRows: this.state.stripedRows
+                    _Dialog2.default,
+                    {
+                        title: "Unconfirmed shifts",
+                        actions: actions,
+                        modal: false,
+                        open: this.state.open,
+                        onRequestClose: this.togglePopup
                     },
-                    this.props.unconfirmed ? this.props.unconfirmed.map(this.setTableInfo, this) : null
+                    _react2.default.createElement(
+                        "div",
+                        { className: "tabSub" },
+                        "This tab is where you will see all past scheduled shifts that have been left unconfirmed due to a variance with the shift that actually occurred. This tab is where you will effortlessly ensure that all shift records are up-to-date and accurate, ready for payroll + invoicing. Click on the cell under the 'Status' column to make edits and confirm or cancel the shift. (italisized) Note: shift duration and date cannot be edited."
+                    )
                 )
             );
         }
@@ -86669,7 +86882,7 @@ var RealtimeTable = function (_React$Component) {
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { colSpan: "3", tooltip: "Currently working", className: "tableHeader" },
-                            "This is who's working right now"
+                            "These staff are currently working"
                         )
                     ),
                     _react2.default.createElement(
@@ -86751,6 +86964,22 @@ var _momentTimezone2 = _interopRequireDefault(_momentTimezone);
 
 var _Table = __webpack_require__(71);
 
+var _Dialog = __webpack_require__(132);
+
+var _Dialog2 = _interopRequireDefault(_Dialog);
+
+var _FlatButton = __webpack_require__(133);
+
+var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+var _RaisedButton = __webpack_require__(615);
+
+var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+var _helpOutline = __webpack_require__(737);
+
+var _helpOutline2 = _interopRequireDefault(_helpOutline);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -86782,13 +87011,24 @@ var AllShiftsTable = function (_React$Component) {
             enableSelectAll: false,
             deselectOnClickaway: false,
             showCheckboxes: false,
-            height: '600px'
+            height: '600px',
+
+            open: false
 
         };
+
+        _this.togglePopup = _this.togglePopup.bind(_this);
         return _this;
     }
 
     _createClass(AllShiftsTable, [{
+        key: "togglePopup",
+        value: function togglePopup() {
+            this.setState({
+                open: !this.state.open
+            });
+        }
+    }, {
         key: "setTableInfo",
         value: function setTableInfo(visit, index) {
             return _react2.default.createElement(
@@ -86862,89 +87102,123 @@ var AllShiftsTable = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
+            var actions = [_react2.default.createElement(_FlatButton2.default, {
+                label: "Ok",
+                primary: true,
+                onClick: this.togglePopup
+            })];
+
             return _react2.default.createElement(
-                _Table.Table,
-                { onRowSelection: this.handleRowSelection.bind(this),
-                    height: this.state.height,
-                    fixedHeader: this.state.fixedHeader,
-                    fixedFooter: this.state.fixedFooter,
-                    selectable: this.state.selectable,
-                    multiSelectable: this.state.multiSelectable
-                },
+                "div",
+                null,
                 _react2.default.createElement(
-                    _Table.TableHeader,
-                    {
-                        displaySelectAll: this.state.showCheckboxes,
-                        adjustForCheckbox: this.state.showCheckboxes,
-                        enableSelectAll: this.state.enableSelectAll
+                    _Table.Table,
+                    { onRowSelection: this.handleRowSelection.bind(this),
+                        height: this.state.height,
+                        fixedHeader: this.state.fixedHeader,
+                        fixedFooter: this.state.fixedFooter,
+                        selectable: this.state.selectable,
+                        multiSelectable: this.state.multiSelectable
                     },
                     _react2.default.createElement(
-                        _Table.TableRow,
-                        null,
+                        _Table.TableHeader,
+                        {
+                            displaySelectAll: this.state.showCheckboxes,
+                            adjustForCheckbox: this.state.showCheckboxes,
+                            enableSelectAll: this.state.enableSelectAll
+                        },
                         _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { colSpan: "3", tooltip: "Scheduled shifts today", className: "tableHeader" },
-                            "View and edit all shifts scheduled for the day"
+                            _Table.TableRow,
+                            null,
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { colSpan: "3", tooltip: "Scheduled shifts today", className: "tableHeader" },
+                                _react2.default.createElement(
+                                    "div",
+                                    { className: "tabDescription" },
+                                    "View and edit all of the shifts scheduled for today ",
+                                    _react2.default.createElement(_helpOutline2.default, { onClick: this.togglePopup })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _Table.TableRow,
+                            null,
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Employee" },
+                                "Care staff name"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Client" },
+                                "Client ID"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
+                                "Time clocked in"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
+                                "Time clocked out"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Duration" },
+                                "Duration (hrs)"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Start" },
+                                "Scheduled start"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "End" },
+                                "Scheduled end"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Overtime" },
+                                "Overtime (hrs)"
+                            ),
+                            _react2.default.createElement(
+                                _Table.TableHeaderColumn,
+                                { style: { fontSize: '15px' }, tooltip: "Status" },
+                                "Status"
+                            )
                         )
                     ),
                     _react2.default.createElement(
-                        _Table.TableRow,
-                        null,
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Employee" },
-                            "Care staff name"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Client" },
-                            "Client ID"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockInTime" },
-                            "Time clocked in"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "ClockOutTime" },
-                            "Time clocked out"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Duration" },
-                            "Duration (hrs)"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Start" },
-                            "Scheduled start"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "End" },
-                            "Scheduled end"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Overtime" },
-                            "Overtime (hrs)"
-                        ),
-                        _react2.default.createElement(
-                            _Table.TableHeaderColumn,
-                            { style: { fontSize: '15px' }, tooltip: "Status" },
-                            "Status"
-                        )
+                        _Table.TableBody,
+                        { displayRowCheckbox: this.state.showCheckboxes,
+                            deselectOnClickaway: this.state.deselectOnClickaway,
+                            showRowHover: this.state.showRowHover,
+                            stripedRows: this.state.stripedRows
+                        },
+                        this.props.allShifts ? this.props.allShifts.map(this.setTableInfo, this) : null
                     )
                 ),
                 _react2.default.createElement(
-                    _Table.TableBody,
-                    { displayRowCheckbox: this.state.showCheckboxes,
-                        deselectOnClickaway: this.state.deselectOnClickaway,
-                        showRowHover: this.state.showRowHover,
-                        stripedRows: this.state.stripedRows
+                    _Dialog2.default,
+                    {
+                        title: "Scheduled shifts today",
+                        actions: actions,
+                        modal: false,
+                        open: this.state.open,
+                        onRequestClose: this.togglePopup
                     },
-                    this.props.allShifts ? this.props.allShifts.map(this.setTableInfo, this) : null
+                    _react2.default.createElement(
+                        "div",
+                        { className: "tabSub" },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            "This tab is where you will view and make changes to the scheduled shifts of the day as your care staff call in sick, change shift times, etc. You can change the scheduled care staff name, scheduled shift start + end time and the shift duration. The live status of the shift is updated and shown under the 'Status' column. Status options include: scheduled, in process, late (1 min after shift start time), care staff notified (5 min after shift start time), manager notified (15 min after shift start time), overtime, completed and unconfirmed. "
+                        )
+                    )
                 )
             );
         }
@@ -87087,7 +87361,7 @@ var LateTable = function (_React$Component) {
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { colSpan: "3", tooltip: "Currently working", className: "tableHeader" },
-                            "Uh-oh... these staff are late!"
+                            "Uh-oh, these staff are late!"
                         )
                     ),
                     _react2.default.createElement(
@@ -87277,7 +87551,7 @@ var OvertimeTable = function (_React$Component) {
                         _react2.default.createElement(
                             _Table.TableHeaderColumn,
                             { colSpan: "3", tooltip: "Currently working", className: "tableHeader" },
-                            "These staff are working overtime"
+                            "These eager staff are working overtime!... (or forgot to clock out)"
                         )
                     ),
                     _react2.default.createElement(
@@ -87386,9 +87660,32 @@ var MainStaff = function (_React$Component) {
     value: function componentWillMount() {
       this.props.fetchStaff();
     }
+
+    /**
+    *  Format phone numbers
+    */
+
+  }, {
+    key: "formatPhone",
+    value: function formatPhone(phonenum) {
+      var regexObj = /^(?:\+?1[-. ]?)?(?:\(?([0-9]{3})\)?[-. ]?)?([0-9]{3})[-. ]?([0-9]{4})$/;
+      if (regexObj.test(phonenum)) {
+        var parts = phonenum.match(regexObj);
+        var phone = "";
+        if (parts[1]) {
+          phone += "+1 (" + parts[1] + ") ";
+        }
+        phone += parts[2] + "-" + parts[3];
+        return phone;
+      } else {
+        //invalid phone number
+        return phonenum;
+      }
+    }
   }, {
     key: "setStaff",
     value: function setStaff(caregiver, index) {
+      var phoneNumber = this.formatPhone(caregiver.phoneNumber.substring(2));
       return _react2.default.createElement(
         "div",
         { className: "directoryItem", key: index },
@@ -87401,7 +87698,7 @@ var MainStaff = function (_React$Component) {
           "div",
           { className: "directoryItemBody" },
           "Telephone: ",
-          caregiver.phoneNumber,
+          phoneNumber,
           " "
         ),
         _react2.default.createElement(
@@ -87409,6 +87706,13 @@ var MainStaff = function (_React$Component) {
           { className: "directoryItemBody" },
           " Hours worked: ",
           caregiver.payingHours,
+          " "
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "directoryItemBody" },
+          " Late shifts: ",
+          caregiver.missedVisits,
           " "
         )
       );
@@ -87500,10 +87804,32 @@ var MainClient = function (_React$Component) {
     value: function componentWillMount() {
       this.props.fetchClients();
     }
+
+    /**
+     *  Format phone numbers
+    */
+
+  }, {
+    key: "formatPhone",
+    value: function formatPhone(phonenum) {
+      var regexObj = /^(?:\+?1[-. ]?)?(?:\(?([0-9]{3})\)?[-. ]?)?([0-9]{3})[-. ]?([0-9]{4})$/;
+      if (regexObj.test(phonenum)) {
+        var parts = phonenum.match(regexObj);
+        var phone = "";
+        if (parts[1]) {
+          phone += "+1 (" + parts[1] + ") ";
+        }
+        phone += parts[2] + "-" + parts[3];
+        return phone;
+      } else {
+        //invalid phone number
+        return phonenum;
+      }
+    }
   }, {
     key: "setClients",
     value: function setClients(client, index) {
-
+      var phoneNumber = this.formatPhone(client.phoneNumber.substring(2));
       return _react2.default.createElement(
         "div",
         { className: "directoryItem", key: index },
@@ -87516,7 +87842,7 @@ var MainClient = function (_React$Component) {
           "div",
           { className: "directoryItemBody" },
           "Telephone: ",
-          client.phoneNumber,
+          phoneNumber,
           " "
         ),
         _react2.default.createElement(
@@ -92263,7 +92589,7 @@ exports = module.exports = __webpack_require__(720)(undefined);
 
 
 // module
-exports.push([module.i, ":root{\n  --yellow: #ffc600;\n  /* to use put in code var(--yellow) instead of the actual color name or hex code */\n}\nhtml {\n  /* border-box box model allows us to add padding and border to our elements without increasing their size */\n  box-sizing: border-box;\n  /* A system font stack so things load nice and quick! */\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica,\n    Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\n  font-weight: 900;\n  font-size: 10px;\n  color: var(--black);\n  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);\n\n}\n\nbody{\n  letter-spacing: 1px!important;\n  font-family:Roboto, sans-serif!important;\n  text-shadow: none!important;\n}\na {\n  font-size: 20;\n  font-family:'avenir', sans-serif;\n  color:white;\n\n}\n\na:link, a:visited {\n  color: black;\n  padding: 10px 0px;\n  width: 120;\n  height:50;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n}\n\na:hover, a:active {\n  background-color: peachpuff;\n}\n\n.navbar_li{\n\n}\n\n.navbar_li:hover{\n  background: lightblue;\n}\n/*\n  WAT IS THIS?!\n  We inherit box-sizing: border-box; from our <html> selector\n  Apparently this is a bit better than applying box-sizing: border-box; directly to the * selector\n*/\n*,\n*:before,\n*:after {\n  box-sizing: inherit;\n}\n\nbody {\n  background-size: 340px, auto;\n  min-height: calc(100vh - 100px);\n  margin: 50px;\n  /* background: white; */\n  background-position: fixed;\n  letter-spacing: -1px;\n}\n\n.dashboard_contentBlock {\n  margin-left: 20;\n  margin-right: 20;\n  margin-top: 10;\n  margin-bottom: 20;\n  background: #ffffff;\n  height: 250;\n  text-align: center;\n\n}\n\n.navbar {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, 10%);\n  grid-template-rows: 80px;\n  /* background-color:lightgoldenrodyellow;   */\n  background-color: white;\n  align-items: center;\n  justify-items: center;\n}\n\n.navbar_profile{\n  grid-column: 9 / span 2;\n\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  align-items: center;\n  justify-items: center;\n  /*grid-template-rows: 1fr 1fr 1fr;\n  background: #4CAF50; */\n}\n\n.navbar_logout {\n  grid-column: 9/10;\n}\n\n.navbar_logo {\n\n  grid-column: 1 / span 1;\n  grid-row-start: 1;\n}\n\n.navbar_profile_pic {\n  width: 50;\n  height:50;\n}\n\n.logo {\n  width: 120;\n  height: 60;\n}\n\n\n.dashboard_background{\n background: #A6B2DD;\n width: 100%;\n height: 100%;\n\n align-items: center;\n}\n\n.dashboard_title{\n  margin-left: 10;\n}\n\n\n\n\n.summaryView_container{\n  margin-top:10;\n}\n\n\n\n/* container tryout */\n\n/* Style the container with a rounded border, grey background and some padding and margin */\n.container {\n    border: 2px solid #ccc;\n    background-color: #eee;\n    border-radius: 5px;\n    padding: 16px;\n    display: block;\n    margin: auto;\n    margin-top: 80;\n}\n\n/* Clear floats after containers */\n.container::after {\n    content: \"\";\n    clear: both;\n    display: table;\n}\n\n/* Add media queries for responsiveness. This will center both the text and the image inside the container */\n@media (max-width: 500px) {\n  .container {\n    text-align: center;\n  }\n}\n\n.staffList_container{\n  margin-top: 30;\n}\n\n.clientList_container{\n  margin-top: 30;\n}\n\nh1 {\n  margin: 0;\n  padding: 0;\n}\nhtml, body, .app {\n  margin: 0;\n  padding: 0;\n  width: 100%;\n  height: 100%;\n}\n.addButton_overlay {\n\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  margin: auto;\n  background-color: rgba(0,0,0, 0.5);\n  z-index:10;\n  position:relative\n}\n.addButton_popup {\n  position: absolute;\n  left: 25%;\n  right: 25%;\n  top: 25%;\n  bottom: 25%;\n  margin: auto;\n  background: white;\n}\n\n.clientProfile_scheduleView {\n}\n\n.clientProfile_cell {\n  border: 1px solid black;\n}\n\n.timeColumn_container{\n  display: grid;\n  grid-template-columns: [left-side] 100px [center-side] 500px [right-side] 200fr [end-side]; /* also repeat (5, 100px 2fr); also 25%  fr gets whatever is left after everything is drawn also auto depends on the item with the biggest content on it */\n  grid-template-rows: 100px 200px 300px;\n  grid-auto-rows: 200px; /* passing extra values here is buggy on firefox, but not in chrome */\n  grid-gap: 20px;\n  grid-auto-columns: 150px;\n  grid-auto-flow: row; /* could also be column */\n  /* autofill is used at repeat(auto-fill, 150px) to set up the number of columns depending on the available content */\n  /* similar to autofill, auto-fit set depending on the number of columns, but doesnt expand if moved */\n  /* minmax(minval, maxval) instead of giving a size for the column */\n  /* fitcontent(maxval) sets the maximum size instead of using auto */\n  /* grid-template-area : \"name1 name2 name3\" \"undername1 undername2 undername3\" or \"here here2 .\" . means nothing */\n  /* can also use namearea-start or namearea-end instead of numbers to delimit ranges */\n  /* grid-auto-flow dense to fill all the gaps */\n  /* adding !important at the end of anything overwrites anything else */\n}\n \n /*cool stuff\n  item:nth-child(6n) {\n\n  }\n  adds css to any item multiple of 6 i.e. item6 item 12 etc */\n\n.timeColum_item {\n  /* We center the contents of these items. You can also do this with flexbox too! */\n  display: grid;\n  justify-content: center;\n  align-items: center;\n  border: 5px solid rgba(0, 0, 0, 0.03);\n  border-radius: 3px;\n  font-size: 35px;\n  background-color: var(--yellow); /* best colour */\n  /*grid-column: span 2;\n  grid-row: span 2;\n  grid-column-start: 2;\n  grid-column-end:5; or grid-column:2/5;  == -1 gets it to the end to get 100% witdh\n  same with grid-row\n  grid-area: footer would move it there*/\n}\n\n.timeColum_item p {\n  margin: 0 0 5px 0;\n}\n\n/*@media (max-width: 700px){\n  .container{\n    grid-template-areas:\n      \"content content content\"\n      \"stuff stuff stuff\"\n      \"so so so\"\n  }\n}*/\n\n\n.tabContainer { \n    /* color: #000000 !important; */\n    background: rgb(184, 221, 233) !important;\n    font-weight: bold!important;\n    font-size: 18!important;\n    font-family: 'avenir', BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif!important;\n}\n\n/* .tabContainer:active,\n.tabContainer:focus,\n*/\n.tabContainer:hover{\n  background: peachpuff!important\n} \n\n.dialogWindow{\n  /* margin:auto;\n  width:100%!important; */\n  display: grid;\n  grid-template-columns: repeat(1, 1fr 1fr);\n  grid-template-rows: repeat(12,40px); \n  align-items: center;\n}\n\n/* .row1a{\n  grid-column: 1/2;\n  grid-row:1/2;\n}\n.row1b{\n  grid-column: 2/3;\n  grid-row:1/2;\n}\n\n.row2a{\n  grid-column: 1/2;\n  grid-row:2/3;\n}\n.row2b{\n  grid-column: 2/3;\n  grid-row:2/3;\n} */\n\n.row3a{\n  grid-column: 1/2;\n  grid-row:3/4;\n}\n.row3b{\n  grid-column: 2/3;\n  grid-row:3/4;\n}\n\n.row4a{\n  grid-column: 1/2;\n  grid-row:4/5;\n}\n.row4b{\n  grid-column: 2/3;\n  grid-row: 4/5;\n\n}\n\n.row5a{\n  grid-column: 1/2;\n  grid-row:7/8;\n}\n.row5b{\n  grid-column: 2/3;\n  grid-row:7/8;\n}\n/* \n.row6a{\n  grid-column: 1/2;\n  grid-row:6/7;\n}\n.row6b{\n  grid-column: 2/3;\n  grid-row:6/7;\n}\n\n.row7a{\n  grid-column: 1/2;\n  grid-row:7/8;\n}\n.row7b{\n  grid-column: 2/3;\n  grid-row:7/8;\n}\n\n.row8a{\n  grid-column: 1/2;\n  grid-row:8/9;\n}\n.row8b{\n  grid-column: 2/3;\n  grid-row:8/9;\n} */\n\n\n.tableHeader {\n  color:black!important;\n  font-size: 18!important;\n}\n\n.directoryBody{\n  padding: 50px;\n}\n\n.directoryTitle{\n  font-size: 50;\n  color: lightskyblue;\n  border-bottom: 1px solid lightskyblue;\n}\n\n.directoryList{\n  display: grid;\n  grid-template-columns: repeat(1,1fr);\n\n}\n\n.directoryItem{\n  margin: 10px;\n  padding:30;\n  border: 1px solid lightblue;\n  background: rgb(212, 239, 255);\n  font-size: 20;\n  color:rgb(112, 112, 112);\n  display: grid;\n  grid-template-columns: repeat(2,1fr);\n}\n\n.directoryItemTitle{\n  grid-column: 1/-1;\n  border-bottom: 1px solid rgb(112, 112, 112);\n  font-size: 30;\n}\n\n.directoryItemBody{\n  padding-top: 10px;\n}\n\n.dropdown{\n  color: rgba(0, 0, 0, 0.87); \n  width:300!important;\n  height: 40px!important; \n  line-height: 0px!important; \n  overflow: hidden; \n  opacity: 1; \n  text-overflow: ellipsis; \n  top: 0px; \n  white-space: nowrap;\n}\n\n.alertMessage{\n  color:red;\n  margin-top: 100px;\n  padding-top: 20px;\n}", ""]);
+exports.push([module.i, ":root{\n  --yellow: #ffc600;\n  /* to use put in code var(--yellow) instead of the actual color name or hex code */\n}\nhtml {\n  /* border-box box model allows us to add padding and border to our elements without increasing their size */\n  box-sizing: border-box;\n  /* A system font stack so things load nice and quick! */\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica,\n    Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\n  font-weight: 900;\n  font-size: 10px;\n  color: var(--black);\n  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);\n\n}\n\nbody{\n  letter-spacing: 1px!important;\n  font-family:Roboto, sans-serif!important;\n  text-shadow: none!important;\n}\na {\n  font-size: 20;\n  font-family:'avenir', sans-serif;\n  color:white;\n  color: black;\n  padding: 00px 0px;\n  width: 120;\n  height:50;\n  text-align: center;\n  text-decoration: none!important;\n  display: inline-block;\n}\n\na:link, a:visited {\n  color: black;\n  padding: 00px 0px;\n  width: 120;\n  height:50;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n}\n\na:hover, a:active {\n  background-color: peachpuff;\n}\n\n.navbar_li{\n\n}\n\n.navbar_li:hover{\n  background: lightblue;\n}\n/*\n  WAT IS THIS?!\n  We inherit box-sizing: border-box; from our <html> selector\n  Apparently this is a bit better than applying box-sizing: border-box; directly to the * selector\n*/\n*,\n*:before,\n*:after {\n  box-sizing: inherit;\n}\n\nbody {\n  background-size: 340px, auto;\n  min-height: calc(100vh - 100px);\n  margin: 50px;\n  /* background: white; */\n  background-position: fixed;\n  letter-spacing: -1px;\n}\n\n.dashboard_contentBlock {\n  margin-left: 20;\n  margin-right: 20;\n  margin-top: 10;\n  margin-bottom: 20;\n  background: #ffffff;\n  height: 250;\n  text-align: center;\n\n}\n\n.navbar {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, 10%);\n  grid-template-rows: 80px;\n  /* background-color:lightgoldenrodyellow;   */\n  background-color: white;\n  align-items: center;\n  justify-items: center;\n}\n\n.navbar_profile{\n  grid-column: 9 / span 2;\n\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  align-items: center;\n  justify-items: center;\n  /*grid-template-rows: 1fr 1fr 1fr;\n  background: #4CAF50; */\n}\n\n.navbar_logout {\n\n  grid-column: 10/11;\n}\n.navbar_help{\n  grid-column: 9/10;\n}\n\n.navbar_logo {\n\n  grid-column: 1 / span 1;\n  grid-row-start: 1;\n}\n\n.navbar_profile_pic {\n  width: 50;\n  height:50;\n}\n\n.logo {\n  width: 120;\n  height: 60;\n}\n\n\n.dashboard_background{\n background: #A6B2DD;\n width: 100%;\n height: 100%;\n\n align-items: center;\n}\n\n.dashboard_title{\n  margin-left: 10;\n}\n\n\n\n\n.summaryView_container{\n  margin-top:10;\n}\n\n\n\n/* container tryout */\n\n/* Style the container with a rounded border, grey background and some padding and margin */\n.container {\n    border: 2px solid #ccc;\n    background-color: #eee;\n    border-radius: 5px;\n    padding: 16px;\n    display: block;\n    margin: auto;\n    margin-top: 80;\n}\n\n/* Clear floats after containers */\n.container::after {\n    content: \"\";\n    clear: both;\n    display: table;\n}\n\n/* Add media queries for responsiveness. This will center both the text and the image inside the container */\n@media (max-width: 500px) {\n  .container {\n    text-align: center;\n  }\n}\n\n.staffList_container{\n  margin-top: 30;\n}\n\n.clientList_container{\n  margin-top: 30;\n}\n\nh1 {\n  margin: 0;\n  padding: 0;\n}\nhtml, body, .app {\n  margin: 0;\n  padding: 0;\n  width: 100%;\n  height: 100%;\n}\n.addButton_overlay {\n\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  margin: auto;\n  background-color: rgba(0,0,0, 0.5);\n  z-index:10;\n  position:relative\n}\n.addButton_popup {\n  position: absolute;\n  left: 25%;\n  right: 25%;\n  top: 25%;\n  bottom: 25%;\n  margin: auto;\n  background: white;\n}\n\n.clientProfile_scheduleView {\n}\n\n.clientProfile_cell {\n  border: 1px solid black;\n}\n\n.timeColumn_container{\n  display: grid;\n  grid-template-columns: [left-side] 100px [center-side] 500px [right-side] 200fr [end-side]; /* also repeat (5, 100px 2fr); also 25%  fr gets whatever is left after everything is drawn also auto depends on the item with the biggest content on it */\n  grid-template-rows: 100px 200px 300px;\n  grid-auto-rows: 200px; /* passing extra values here is buggy on firefox, but not in chrome */\n  grid-gap: 20px;\n  grid-auto-columns: 150px;\n  grid-auto-flow: row; /* could also be column */\n  /* autofill is used at repeat(auto-fill, 150px) to set up the number of columns depending on the available content */\n  /* similar to autofill, auto-fit set depending on the number of columns, but doesnt expand if moved */\n  /* minmax(minval, maxval) instead of giving a size for the column */\n  /* fitcontent(maxval) sets the maximum size instead of using auto */\n  /* grid-template-area : \"name1 name2 name3\" \"undername1 undername2 undername3\" or \"here here2 .\" . means nothing */\n  /* can also use namearea-start or namearea-end instead of numbers to delimit ranges */\n  /* grid-auto-flow dense to fill all the gaps */\n  /* adding !important at the end of anything overwrites anything else */\n}\n \n /*cool stuff\n  item:nth-child(6n) {\n\n  }\n  adds css to any item multiple of 6 i.e. item6 item 12 etc */\n\n.timeColum_item {\n  /* We center the contents of these items. You can also do this with flexbox too! */\n  display: grid;\n  justify-content: center;\n  align-items: center;\n  border: 5px solid rgba(0, 0, 0, 0.03);\n  border-radius: 3px;\n  font-size: 35px;\n  background-color: var(--yellow); /* best colour */\n  /*grid-column: span 2;\n  grid-row: span 2;\n  grid-column-start: 2;\n  grid-column-end:5; or grid-column:2/5;  == -1 gets it to the end to get 100% witdh\n  same with grid-row\n  grid-area: footer would move it there*/\n}\n\n.timeColum_item p {\n  margin: 0 0 5px 0;\n}\n\n/*@media (max-width: 700px){\n  .container{\n    grid-template-areas:\n      \"content content content\"\n      \"stuff stuff stuff\"\n      \"so so so\"\n  }\n}*/\n\n\n.tabContainer { \n    /* color: #000000 !important; */\n    background: rgb(184, 221, 233) !important;\n    font-weight: bold!important;\n    font-size: 18!important;\n    font-family: 'avenir', BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif!important;\n}\n\n/* .tabContainer:active,\n.tabContainer:focus,\n*/\n.tabContainer:hover{\n  background: peachpuff!important\n} \n\n.dialogWindow{\n  /* margin:auto;\n  width:100%!important; */\n  display: grid;\n  grid-template-columns: repeat(1, 1fr 1fr);\n  grid-template-rows: repeat(12,40px); \n  align-items: center;\n}\n\n/* .row1a{\n  grid-column: 1/2;\n  grid-row:1/2;\n}\n.row1b{\n  grid-column: 2/3;\n  grid-row:1/2;\n}\n\n.row2a{\n  grid-column: 1/2;\n  grid-row:2/3;\n}\n.row2b{\n  grid-column: 2/3;\n  grid-row:2/3;\n} */\n\n.row3a{\n  grid-column: 1/2;\n  grid-row:3/4;\n}\n.row3b{\n  grid-column: 2/3;\n  grid-row:3/4;\n}\n\n.row4a{\n  grid-column: 1/2;\n  grid-row:4/5;\n}\n.row4b{\n  grid-column: 2/3;\n  grid-row: 4/5;\n\n}\n\n.row5a{\n  grid-column: 1/2;\n  grid-row:7/8;\n}\n.row5b{\n  grid-column: 2/3;\n  grid-row:7/8;\n}\n/* \n.row6a{\n  grid-column: 1/2;\n  grid-row:6/7;\n}\n.row6b{\n  grid-column: 2/3;\n  grid-row:6/7;\n}\n\n.row7a{\n  grid-column: 1/2;\n  grid-row:7/8;\n}\n.row7b{\n  grid-column: 2/3;\n  grid-row:7/8;\n}\n\n.row8a{\n  grid-column: 1/2;\n  grid-row:8/9;\n}\n.row8b{\n  grid-column: 2/3;\n  grid-row:8/9;\n} */\n\n\n.tableHeader {\n  color:black!important;\n  font-size: 17!important;\n  font-weight: bold!important;\n}\n\n.directoryBody{\n  padding: 50px;\n  font-size:20;\n}\n\n.directoryBody a{\n  background-color: peachpuff!important;\n}\n.directoryTitle{\n  font-size: 50;\n  color: lightskyblue;\n  border-bottom: 1px solid lightskyblue;\n}\n\n.directoryList{\n  display: grid;\n  grid-template-columns: repeat(1,1fr);\n\n}\n\n.directoryItem{\n  margin: 10px;\n  padding:30;\n  border: 1px solid lightblue;\n  background: rgb(212, 239, 255);\n  font-size: 20;\n  color:rgb(112, 112, 112);\n  display: grid;\n  grid-template-columns: repeat(2,1fr);\n}\n\n.directoryItemTitle{\n  grid-column: 1/-1;\n  border-bottom: 1px solid rgb(112, 112, 112);\n  font-size: 30;\n}\n\n.guideTitle{\n  grid-column: 1/-1;\n  font-size: 30;\n  margin-top: 30px;\n}\n\n.guideTitle:hover{\n  margin-top: 30px;\n  background: peachpuff;\n}\n\n.directoryItemBody{\n  padding-top: 10px;\n}\n\n.summaryTable{\n  margin: auto;\n  margin-top:40;\n  padding:10;\n\n  font-size: 20;\n  color:rgb(112, 112, 112);\n  display: grid;\n  grid-template-columns: repeat(3,1fr);\n}\n\n.summaryItem{\n  border: 1px solid lightblue;\n  background: rgb(212, 239, 255);\n  margin: 20px;\n  justify-content: center;\n  display: grid;\n\n  grid-template-columns: repeat(1,1fr);\n  grid-template-rows: repeat(1,2fr 1fr);\n }\n\n.summaryItemTitle{\n  font-size:40;\n  color:black;\n  font-family: 'avenir';\n  margin-bottom: -20px;\n}\n\n.summaryItemSub{\n  font-size:15;\n}\n.dropdown{\n  color: rgba(0, 0, 0, 0.87); \n  width:300!important;\n  height: 40px!important; \n  line-height: 0px!important; \n  overflow: hidden; \n  opacity: 1; \n  text-overflow: ellipsis; \n  top: 0px; \n  white-space: nowrap;\n}\n\n.alertMessage{\n  color:red;\n  margin-top: 100px;\n  padding-top: 20px;\n}\n\n.formDivFrame {\n  margin-top:200px;\n  display: grid;\n  grid-template-columns: repeat(1,1fr 3fr 1fr);\n  text-align: center;\n}\n\niframe{\n  grid-column:2/3;\n  display: inline-block;\n}\n\n.tabDescription{\n  font-weight: bold;\n  margin-top:20px;\n  margin-left:10px;\n  font-size:20px;\n  color:black\n}\n\n.tabSub{\n  margin-top:10px;\n  margin-left:28px;\n  margin-right:28px;\n  margin-bottom: -40px;\n  font-size:14;\n  color:black;\n  font-weight:lighter;\n}\n\n.dialogText{\n  font-size: 16;\n}", ""]);
 
 // exports
 
@@ -92875,7 +93201,7 @@ var MainGuide = function (_React$Component) {
 
             _this.setState({
                 stepIndex: stepIndex + 1,
-                finished: stepIndex >= 2
+                finished: stepIndex >= 4
             });
         };
 
@@ -92887,9 +93213,15 @@ var MainGuide = function (_React$Component) {
             }
         };
 
+        _this.handleChange = function () {
+            var change = !_this.state.open;
+            _this.setState({ open: change });
+        };
+
         _this.state = {
             finished: false,
-            stepIndex: 0
+            stepIndex: 0,
+            open: true
         };
         return _this;
     }
@@ -92899,11 +93231,64 @@ var MainGuide = function (_React$Component) {
         value: function getStepContent(stepIndex) {
             switch (stepIndex) {
                 case 0:
-                    return 'Select the visit by clicking on the table';
+                    return _react2.default.createElement(
+                        "div",
+                        { style: { background: '#00000' } },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            "Select the visit by clicking on the table."
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement("img", { style: { width: '900px' }, src: "/images/guide1.png", className: "guide1" })
+                    );
                 case 1:
-                    return 'Modify the visit information by changing the fields as desired';
+                    return _react2.default.createElement(
+                        "div",
+                        { style: { background: '#00000' } },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            "Modify the visit information by changing the fields as desired."
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement("img", { style: { width: '900px' }, src: "/images/guide2a.png", className: "guide1" })
+                    );
                 case 2:
-                    return 'Save the changes!';
+                    return _react2.default.createElement(
+                        "div",
+                        { style: { background: '#00000' } },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            "For example you can change the name of the care staff that worked that shift from a given list."
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement("img", { style: { width: '900px' }, src: "/images/guide2b.png", className: "guide1" })
+                    );
+                case 3:
+                    return _react2.default.createElement(
+                        "div",
+                        { style: { background: '#00000' } },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            "You can also change the times of the shift. Just keep in mind that you are not able to provide an ending time that is earlier than the starting time and vice versa."
+                        ),
+                        _react2.default.createElement("img", { style: { width: '900px' }, src: "/images/guide2c.png", className: "guide1" })
+                    );
+                case 4:
+                    return _react2.default.createElement(
+                        "div",
+                        { style: { background: '#00000' } },
+                        _react2.default.createElement(
+                            "p",
+                            null,
+                            "Save the changes!"
+                        ),
+                        _react2.default.createElement("br", null),
+                        _react2.default.createElement("img", { style: { width: '900px' }, src: "/images/guide3.png", className: "guide1" })
+                    );
                 default:
                     return 'You\'re a long way from home sonny jim!';
             }
@@ -92919,6 +93304,99 @@ var MainGuide = function (_React$Component) {
 
             var contentStyle = { margin: '0 16px' };
 
+            var stepper = _react2.default.createElement(
+                "div",
+                { style: { width: '100%', maxWidth: 1000, margin: 'auto' } },
+                _react2.default.createElement(
+                    _Stepper.Stepper,
+                    { activeStep: stepIndex },
+                    _react2.default.createElement(
+                        _Stepper.Step,
+                        null,
+                        _react2.default.createElement(
+                            _Stepper.StepLabel,
+                            null,
+                            "Select visit"
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _Stepper.Step,
+                        null,
+                        _react2.default.createElement(
+                            _Stepper.StepLabel,
+                            null,
+                            "Modify visit"
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _Stepper.Step,
+                        null,
+                        _react2.default.createElement(
+                            _Stepper.StepLabel,
+                            null,
+                            "Example"
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _Stepper.Step,
+                        null,
+                        _react2.default.createElement(
+                            _Stepper.StepLabel,
+                            null,
+                            "Another option"
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _Stepper.Step,
+                        null,
+                        _react2.default.createElement(
+                            _Stepper.StepLabel,
+                            null,
+                            "Save"
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    "div",
+                    { style: contentStyle },
+                    finished ? _react2.default.createElement(
+                        "p",
+                        null,
+                        _react2.default.createElement(
+                            "a",
+                            {
+                                href: "#",
+                                onClick: function onClick(event) {
+                                    event.preventDefault();
+                                    _this2.setState({ stepIndex: 0, finished: false });
+                                }
+                            },
+                            "Click here"
+                        ),
+                        " to review the guide."
+                    ) : _react2.default.createElement(
+                        "div",
+                        null,
+                        this.getStepContent(stepIndex),
+                        _react2.default.createElement(
+                            "div",
+                            { style: { marginTop: 12 } },
+                            _react2.default.createElement(_FlatButton2.default, {
+                                label: "Back",
+                                disabled: stepIndex === 0,
+                                onClick: this.handlePrev,
+                                style: { marginRight: 12 }
+                            }),
+                            _react2.default.createElement(_RaisedButton2.default, {
+                                label: stepIndex === 4 ? 'Finish' : 'Next',
+                                primary: true,
+                                onClick: this.handleNext
+                            })
+                        )
+                    )
+                )
+            );
+
             return _react2.default.createElement(
                 "div",
                 null,
@@ -92930,85 +93408,19 @@ var MainGuide = function (_React$Component) {
                         "h1",
                         { className: "directoryTitle" },
                         " Guides "
-                    )
-                ),
-                _react2.default.createElement(
-                    "div",
-                    { style: { width: '100%', maxWidth: 700, margin: 'auto' } },
+                    ),
+                    "We are currently growing our guide section to help you use Peachy the best you can! In the mean time, you can ask specific questions by clicking the help icon. If there is a guide you wish to request you can do so by following the link.  ",
                     _react2.default.createElement(
-                        _Stepper.Stepper,
-                        { activeStep: stepIndex },
-                        _react2.default.createElement(
-                            _Stepper.Step,
-                            null,
-                            _react2.default.createElement(
-                                _Stepper.StepLabel,
-                                null,
-                                "Select visit"
-                            )
-                        ),
-                        _react2.default.createElement(
-                            _Stepper.Step,
-                            null,
-                            _react2.default.createElement(
-                                _Stepper.StepLabel,
-                                null,
-                                "Modify visit"
-                            )
-                        ),
-                        _react2.default.createElement(
-                            _Stepper.Step,
-                            null,
-                            _react2.default.createElement(
-                                _Stepper.StepLabel,
-                                null,
-                                "Save"
-                            )
-                        )
+                        "a",
+                        null,
+                        " Click here "
                     ),
                     _react2.default.createElement(
                         "div",
-                        { style: contentStyle },
-                        finished ? _react2.default.createElement(
-                            "p",
-                            null,
-                            _react2.default.createElement(
-                                "a",
-                                {
-                                    href: "#",
-                                    onClick: function onClick(event) {
-                                        event.preventDefault();
-                                        _this2.setState({ stepIndex: 0, finished: false });
-                                    }
-                                },
-                                "Click here"
-                            ),
-                            " to review the guide."
-                        ) : _react2.default.createElement(
-                            "div",
-                            null,
-                            _react2.default.createElement(
-                                "p",
-                                null,
-                                this.getStepContent(stepIndex)
-                            ),
-                            _react2.default.createElement(
-                                "div",
-                                { style: { marginTop: 12 } },
-                                _react2.default.createElement(_FlatButton2.default, {
-                                    label: "Back",
-                                    disabled: stepIndex === 0,
-                                    onClick: this.handlePrev,
-                                    style: { marginRight: 12 }
-                                }),
-                                _react2.default.createElement(_RaisedButton2.default, {
-                                    label: stepIndex === 2 ? 'Finish' : 'Next',
-                                    primary: true,
-                                    onClick: this.handleNext
-                                })
-                            )
-                        )
-                    )
+                        { className: "guideTitle" },
+                        "1. How to modify visit information"
+                    ),
+                    this.state.open ? stepper : null
                 )
             );
         }
@@ -94478,6 +94890,276 @@ StepConnector.contextTypes = contextTypes;
 exports.PlainStepConnector = StepConnector;
 exports.default = (0, _pure2.default)(StepConnector);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+
+/***/ }),
+/* 734 */,
+/* 735 */,
+/* 736 */,
+/* 737 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ActionHelpOutline = function ActionHelpOutline(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z' })
+  );
+};
+ActionHelpOutline = (0, _pure2.default)(ActionHelpOutline);
+ActionHelpOutline.displayName = 'ActionHelpOutline';
+ActionHelpOutline.muiName = 'SvgIcon';
+
+exports.default = ActionHelpOutline;
+
+/***/ }),
+/* 738 */,
+/* 739 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ActionDashboard = function ActionDashboard(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z' })
+  );
+};
+ActionDashboard = (0, _pure2.default)(ActionDashboard);
+ActionDashboard.displayName = 'ActionDashboard';
+ActionDashboard.muiName = 'SvgIcon';
+
+exports.default = ActionDashboard;
+
+/***/ }),
+/* 740 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SocialGroup = function SocialGroup(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z' })
+  );
+};
+SocialGroup = (0, _pure2.default)(SocialGroup);
+SocialGroup.displayName = 'SocialGroup';
+SocialGroup.muiName = 'SvgIcon';
+
+exports.default = SocialGroup;
+
+/***/ }),
+/* 741 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SocialGroupAdd = function SocialGroupAdd(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M8 10H5V7H3v3H0v2h3v3h2v-3h3v-2zm10 1c1.66 0 2.99-1.34 2.99-3S19.66 5 18 5c-.32 0-.63.05-.91.14.57.81.9 1.79.9 2.86s-.34 2.04-.9 2.86c.28.09.59.14.91.14zm-5 0c1.66 0 2.99-1.34 2.99-3S14.66 5 13 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm6.62 2.16c.83.73 1.38 1.66 1.38 2.84v2h3v-2c0-1.54-2.37-2.49-4.38-2.84zM13 13c-2 0-6 1-6 3v2h12v-2c0-2-4-3-6-3z' })
+  );
+};
+SocialGroupAdd = (0, _pure2.default)(SocialGroupAdd);
+SocialGroupAdd.displayName = 'SocialGroupAdd';
+SocialGroupAdd.muiName = 'SvgIcon';
+
+exports.default = SocialGroupAdd;
+
+/***/ }),
+/* 742 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ActionList = function ActionList(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z' })
+  );
+};
+ActionList = (0, _pure2.default)(ActionList);
+ActionList.displayName = 'ActionList';
+ActionList.muiName = 'SvgIcon';
+
+exports.default = ActionList;
+
+/***/ }),
+/* 743 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SocialSchool = function SocialSchool(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z' })
+  );
+};
+SocialSchool = (0, _pure2.default)(SocialSchool);
+SocialSchool.displayName = 'SocialSchool';
+SocialSchool.muiName = 'SvgIcon';
+
+exports.default = SocialSchool;
+
+/***/ }),
+/* 744 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ActionExitToApp = function ActionExitToApp(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z' })
+  );
+};
+ActionExitToApp = (0, _pure2.default)(ActionExitToApp);
+ActionExitToApp.displayName = 'ActionExitToApp';
+ActionExitToApp.muiName = 'SvgIcon';
+
+exports.default = ActionExitToApp;
 
 /***/ })
 /******/ ]);

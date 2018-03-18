@@ -61,7 +61,7 @@ class LateTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                Uh-oh... these staff are late!
+                Uh-oh, these staff are late!
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>

@@ -10,11 +10,29 @@ class MainClient extends React.Component {
     this.props.fetchClients()
   }
 
-  setClients(client, index){
+    /**
+     *  Format phone numbers
+    */
+    formatPhone(phonenum) {
+      var regexObj = /^(?:\+?1[-. ]?)?(?:\(?([0-9]{3})\)?[-. ]?)?([0-9]{3})[-. ]?([0-9]{4})$/;
+      if (regexObj.test(phonenum)) {
+          var parts = phonenum.match(regexObj);
+          var phone = "";
+          if (parts[1]) { phone += "+1 (" + parts[1] + ") "; }
+          phone += parts[2] + "-" + parts[3];
+          return phone;
+      }
+      else {
+          //invalid phone number
+          return phonenum;
+      }
+    }
 
+  setClients(client, index){
+    var phoneNumber = this.formatPhone(client.phoneNumber.substring(2));
     return(<div className='directoryItem' key={index}>
         <div className='directoryItemTitle'>{client.name}</div>
-        <div className='directoryItemBody'>Telephone: {client.phoneNumber} </div>
+        <div className='directoryItemBody'>Telephone: {phoneNumber} </div>
         <div className='directoryItemBody'> Billed hours: {client.billedHours} </div>
       </div>
     )

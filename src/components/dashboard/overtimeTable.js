@@ -62,7 +62,7 @@ class OvertimeTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                These staff are working overtime
+                These eager staff are working overtime!... (or forgot to clock out) 
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>

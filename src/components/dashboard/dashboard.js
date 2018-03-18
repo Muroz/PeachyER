@@ -276,7 +276,7 @@ class Dashboard extends React.Component {
 
 
   handleChangeCaregiver = (event, index, value) => {
-    this.setState({caregiverName:value});
+    this.setState({caregiverName:value, save:true});
   }
 
   setStaff(staff,index){
@@ -285,7 +285,7 @@ class Dashboard extends React.Component {
   }
 
   handleChangeClient = (event, index, value) => {
-    this.setState({clientName:value});
+    this.setState({clientName:value, save:true});
   }
 
   setClients(client,index){
@@ -458,14 +458,34 @@ class Dashboard extends React.Component {
           label="Currently working" 
           value="confirmed"
           className='tabContainer'
-        >
+        > 
+          <div className='tabDescription'>
+          This tab shares live updates on staff that are currently working, late for their shift and working overtime.  
+          </div>
+          <div className='tabSub'>
+            Welcome to your first week with Peachy, Tracy! We are excited to start adding value to your business and learn how we can add even more. 
+          </div>
+          <div className='summaryTable'>
+          <div className='summaryItem'>
+            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.confirmed? this.props.confirmed.length:'0'}</p></div>
+            <div style={{margin:'auto'}}><p className='summaryItemSub'>Working</p></div>
+          </div>
+          <div className='summaryItem'>
+            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.late ? this.props.late.length:'0'}</p></div>
+            <div style={{margin:'auto'}}><p className='summaryItemSub'>Late</p></div>
+          </div>
+          <div className='summaryItem'>
+            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.allShifts ? this.props.overtime.length:'0'}</p></div>
+            <div style={{margin:'auto'}}><p className='summaryItemSub'>Overtime</p></div>
+          </div>
+          </div>  
           <RealtimeTable/>
           <LateTable />
           <OvertimeTable/>
 
         </Tab>
         <Tab 
-          label="Shifts scheduled today" 
+          label={"Shifts scheduled today ("+this.props.allShifts.length+")"}
           value="allShifts"
           className='tabContainer'
         >

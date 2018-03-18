@@ -60,7 +60,7 @@ class RealtimeTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                This is who's working right now
+                These staff are currently working
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>

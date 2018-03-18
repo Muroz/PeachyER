@@ -13,6 +13,11 @@ import {
     TableRowColumn,
   } from 'material-ui/Table';
 
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import HelpOutline from 'material-ui/svg-icons/action/help-outline';
+
 class UnconfirmedTable extends React.Component {
 
     constructor(props){
@@ -29,16 +34,22 @@ class UnconfirmedTable extends React.Component {
             enableSelectAll: false,
             deselectOnClickaway: false,
             showCheckboxes: false,
-            height: '600px'
+            height: '600px',
 
+            open:false
         }
+        this.togglePopup = this.togglePopup.bind(this);
     }
 
     handleRowSelection = (selectedRows) => {
-        console.log('selecting row');
-        console.log(selectedRows);
         this.props.handleOpen(selectedRows);
     };
+
+    togglePopup() {
+        this.setState({
+          open: !this.state.open
+        });
+      }
     
 
     setTableInfo(visit, index){
@@ -57,7 +68,16 @@ class UnconfirmedTable extends React.Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+              label="Ok"
+              primary={true}
+              onClick={this.togglePopup}
+            />,
+          ];
+
         return(
+            <div>
             <Table onRowSelection={this.handleRowSelection.bind(this)}          
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
@@ -73,7 +93,9 @@ class UnconfirmedTable extends React.Component {
             >
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Unconfirmed Shifts" className='tableHeader'>
-                    View, edit and confirm unconfirmed shifts
+                <div className='tabDescription' >
+                    View, edit and confirm unconfirmed shifts <HelpOutline onClick={this.togglePopup}/>
+                </div>
                 </TableHeaderColumn>
             </TableRow>
             <TableRow>
@@ -97,7 +119,24 @@ class UnconfirmedTable extends React.Component {
             >
             {this.props.unconfirmed? this.props.unconfirmed.map(this.setTableInfo,this):null}
             </TableBody>
+
+         
         </Table>
+        <Dialog
+          title="Unconfirmed shifts"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.togglePopup}
+        >
+           <div className='tabSub'>
+                This tab is where you will see all past scheduled shifts that have been left unconfirmed due to a variance with the shift that actually
+                occurred. This tab is where you will effortlessly ensure that all shift records are up-to-date and accurate, ready for payroll + invoicing.
+                Click on the cell under the 'Status' column to make edits and confirm or cancel the shift. (italisized) Note: shift duration and date cannot
+                be edited. 
+                </div>
+        </Dialog>
+        </div>
         )
     }
 
