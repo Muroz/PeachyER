@@ -75,6 +75,8 @@ router.post("/", function(req, res) {
         } 
         else if(visit.status == 'Completed' || visit.status == 'Cancelled'){
           checker('This visit has been completed already');
+          res.type('text/xml');
+          res.send(twiml.toString());
         } 
         else if (visit.active){
           communicate('You have just clocked out!')
@@ -108,10 +110,10 @@ router.post("/", function(req, res) {
               carer.billedVisits.push(visit);
               carer.visits.push(visit);
     
-              //carer.save();
+              carer.save();
     
               //client.visitsBy[carer.name].push(visit);
-              //client.save();
+              client.save();
             });
           });
         } else {
@@ -124,7 +126,7 @@ router.post("/", function(req, res) {
           visit.statusLog.push('In process');
         }
     
-        //visit.save();
+        visit.save();
       })
      } 
      else {
