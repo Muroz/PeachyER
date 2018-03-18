@@ -14,23 +14,28 @@ var moment = require('moment-timezone');
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
 router.post("/", function(req, res) {
+  console.log('at voice route');
   const twiml = new VoiceResponse();
   //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service!');
   console.log(req.body.Digits);
   /** helper function to set up a <Gather> */
   function gather() {
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
+    const gatherNode = twiml.gather({ numDigits: 4, timeout:6 });
     gatherNode.say('Welcome to the peachy service, please enter your code and wait for confirmation');
+
+
 
     // If the user doesn't enter input, loop
     twiml.redirect('/voice');
   }
 
   function gatherAgain(){
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
+    console.log('is it here');
+    const gatherNode = twiml.gather({ numDigits: 4, timeout:6 });
     gatherNode.say('Sorry, we could not find a visit with the given ID, please check your input');
 
     // If the user doesn't enter input, loop
+
     twiml.redirect('/voice');
   }
 
@@ -62,13 +67,16 @@ router.post("/", function(req, res) {
         
         if(visit==null) {
           gatherAgain();
-          return;
+          
+           // Render the response as XML in reply to the webhook request
+          res.type('text/xml');
+          res.send(twiml.toString());
+
         } 
         else if(visit.status == 'Completed' || visit.status == 'Cancelled'){
           checker('This visit has been completed already');
         } 
         else if (visit.active){
-
           communicate('You have just clocked out!')
 
           var endTime = new moment().tz('America/St_Johns');
@@ -100,10 +108,10 @@ router.post("/", function(req, res) {
               carer.billedVisits.push(visit);
               carer.visits.push(visit);
     
-              carer.save();
+              //carer.save();
     
               //client.visitsBy[carer.name].push(visit);
-              client.save();
+              //client.save();
             });
           });
         } else {
@@ -116,7 +124,7 @@ router.post("/", function(req, res) {
           visit.statusLog.push('In process');
         }
     
-        visit.save();
+        //visit.save();
       })
      } 
      else {
