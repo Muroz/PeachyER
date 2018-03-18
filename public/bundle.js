@@ -11240,9 +11240,9 @@ var _list = __webpack_require__(742);
 
 var _list2 = _interopRequireDefault(_list);
 
-var _School = __webpack_require__(743);
+var _school = __webpack_require__(745);
 
-var _School2 = _interopRequireDefault(_School);
+var _school2 = _interopRequireDefault(_school);
 
 var _exitToApp = __webpack_require__(744);
 
@@ -11368,7 +11368,7 @@ var NavBar = function (_React$Component) {
           _react2.default.createElement(
             "a",
             { href: "/guides" },
-            _react2.default.createElement(_School2.default, null),
+            _react2.default.createElement(_school2.default, null),
             _react2.default.createElement("br", null),
             "Guides"
           )
@@ -95097,44 +95097,7 @@ ActionList.muiName = 'SvgIcon';
 exports.default = ActionList;
 
 /***/ }),
-/* 743 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _pure = __webpack_require__(35);
-
-var _pure2 = _interopRequireDefault(_pure);
-
-var _SvgIcon = __webpack_require__(36);
-
-var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SocialSchool = function SocialSchool(props) {
-  return _react2.default.createElement(
-    _SvgIcon2.default,
-    props,
-    _react2.default.createElement('path', { d: 'M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z' })
-  );
-};
-SocialSchool = (0, _pure2.default)(SocialSchool);
-SocialSchool.displayName = 'SocialSchool';
-SocialSchool.muiName = 'SvgIcon';
-
-exports.default = SocialSchool;
-
-/***/ }),
+/* 743 */,
 /* 744 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -95171,6 +95134,44 @@ ActionExitToApp.displayName = 'ActionExitToApp';
 ActionExitToApp.muiName = 'SvgIcon';
 
 exports.default = ActionExitToApp;
+
+/***/ }),
+/* 745 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _pure = __webpack_require__(35);
+
+var _pure2 = _interopRequireDefault(_pure);
+
+var _SvgIcon = __webpack_require__(36);
+
+var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SocialSchool = function SocialSchool(props) {
+  return _react2.default.createElement(
+    _SvgIcon2.default,
+    props,
+    _react2.default.createElement('path', { d: 'M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z' })
+  );
+};
+SocialSchool = (0, _pure2.default)(SocialSchool);
+SocialSchool.displayName = 'SocialSchool';
+SocialSchool.muiName = 'SvgIcon';
+
+exports.default = SocialSchool;
 
 /***/ })
 /******/ ]);

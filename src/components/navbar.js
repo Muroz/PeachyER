@@ -11,7 +11,7 @@ import GroupAdd from 'material-ui/svg-icons/social/group-add';
 import Dashboard from 'material-ui/svg-icons/action/dashboard';
 import Group from 'material-ui/svg-icons/social/group';
 import List from 'material-ui/svg-icons/action/list';
-import School from 'material-ui/svg-icons/social/School';
+import School from 'material-ui/svg-icons/social/school';
 import ExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 
 
