@@ -19,15 +19,15 @@ router.post("/", function(req, res) {
   console.log(req.body.Digits);
   /** helper function to set up a <Gather> */
   function gather() {
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:10 });
-    gatherNode.say('Welcome to the peachy service, please enter your code');
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
+    gatherNode.say('Welcome to the peachy service, please enter your code and wait for confirmation');
 
     // If the user doesn't enter input, loop
     twiml.redirect('/voice');
   }
 
   function gatherAgain(){
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:10 });
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
     gatherNode.say('Sorry, we could not find a visit with the given ID, please check your input');
 
     // If the user doesn't enter input, loop
