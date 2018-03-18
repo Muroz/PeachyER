@@ -135,8 +135,10 @@ router.post("/", function(req, res) {
           visit.status = 'In process';
           visit.statusLog.push('In process');
         }
-    
-        visit.save();
+        if(visit != null){
+          visit.save();
+        }
+
       })
      } 
      else {
