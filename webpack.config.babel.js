@@ -11,7 +11,7 @@ module.exports = {
   //cache: false,
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
