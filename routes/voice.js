@@ -90,12 +90,11 @@ router.post("/", function(req, res) {
           communicate('You have just clocked out!')
 
           var endTime = new moment().tz('America/St_Johns');
-          var localClockIn = new moment(visit.clockInTime).tz('America/St_Johns')
-          //duration in minutes
-          var duration = Math.round(endTime.diff(localClockIn,'hours',true));
           
           visit.clockOutTime = endTime;
-          visit.duration = duration;
+          if(visit.clockInTime != null && visit.clockOutTime != null){
+            visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+          }
           visit.active = false;
           //if (visit.status != 'Unconfirmed'){
             visit.status = 'Completed ';
@@ -105,7 +104,7 @@ router.post("/", function(req, res) {
             console.log('at client', client);
             if(err) return err;
             if(client==null) return 'No client found';
-            client.billedHours += visit.scheduledDuration;
+            client.billedHours += parseFloat(visit.scheduledDuration);
             client.billedVisits.push(visit);
             //client.schedule[moment().format('dddd')][2]
             Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
@@ -116,7 +115,7 @@ router.post("/", function(req, res) {
                 return 'No caregivers found';
               };
     
-              carer.payingHours += visit.scheduledDuration;
+              carer.payingHours += parseFloat(visit.scheduledDuration);
               carer.billedVisits.push(visit);
               carer.visits.push(visit);
     
@@ -127,6 +126,7 @@ router.post("/", function(req, res) {
             });
           });
         } else {
+
           console.log('at clock in')
           communicate('You have just clocked in!');
           
