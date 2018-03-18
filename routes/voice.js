@@ -17,10 +17,10 @@ router.post("/", function(req, res) {
   console.log('at voice route');
   const twiml = new VoiceResponse();
   //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service!');
-  console.log(req.body.Digits);
   /** helper function to set up a <Gather> */
   function gather() {
-    const gatherNode = twiml.gather({ numDigits: 4, timeout:6 });
+    console.log('gather');
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
     gatherNode.say('Welcome to the peachy service, please enter your code and wait for confirmation');
 
 
@@ -30,8 +30,8 @@ router.post("/", function(req, res) {
   }
 
   function gatherAgain(){
-    console.log('is it here');
-    const gatherNode = twiml.gather({ numDigits: 4, timeout:6 });
+    console.log('gatherAgain');
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
     gatherNode.say('Sorry, we could not find a visit with the given ID, please check your input');
 
     // If the user doesn't enter input, loop
@@ -40,6 +40,7 @@ router.post("/", function(req, res) {
   }
 
   function communicate(sentence){
+    console.log('communicate',sentence);
     twiml.say(sentence);
 
     // Render the response as XML in reply to the webhook request
@@ -49,6 +50,7 @@ router.post("/", function(req, res) {
   }
 
   function checker(sentence){
+    console.log('checker',sentence);
     twiml.say(sentence);
 
     twiml.redirect('/voice');
@@ -60,12 +62,16 @@ router.post("/", function(req, res) {
 
   // If the user entered digits, process their request
   if (req.body.Digits) {
-
+      console.log('at digits');
+      //gotta change the gather functions
      if(req.body.Digits.length >= 4){
+      console.log('4 or more digits');
+      console.log(req.body.Digits);
       Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
         if(err) return err;
         
         if(visit==null) {
+          console.log('at null visit')
           gatherAgain();
           
            // Render the response as XML in reply to the webhook request
@@ -74,11 +80,13 @@ router.post("/", function(req, res) {
 
         } 
         else if(visit.status == 'Completed' || visit.status == 'Cancelled'){
+          console.log('at done visit',visit);
           checker('This visit has been completed already');
           res.type('text/xml');
           res.send(twiml.toString());
         } 
         else if (visit.active){
+          console.log('at active visit', visit);
           communicate('You have just clocked out!')
 
           var endTime = new moment().tz('America/St_Johns');
@@ -94,12 +102,14 @@ router.post("/", function(req, res) {
             visit.statusLog.push('Completed');
           //}
           Client.findOne({name:visit.clientName}, function(err,client){
+            console.log('at client', client);
             if(err) return err;
             if(client==null) return 'No client found';
             client.billedHours += visit.scheduledDuration;
             client.billedVisits.push(visit);
             //client.schedule[moment().format('dddd')][2]
             Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
+              console.log('at caregiver', carer)
               if (err) return err;
               if(carer==null) {
                 //checker('No carer found with the given ID');
@@ -117,9 +127,9 @@ router.post("/", function(req, res) {
             });
           });
         } else {
-
+          console.log('at clock in')
           communicate('You have just clocked in!');
-
+          
           visit.clockInTime= new Date();
           visit.active = true;
           visit.status = 'In process';
