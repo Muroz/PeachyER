@@ -48,13 +48,13 @@ class NavBar extends React.Component {
     return (
       <div className="navbar">
         <Dialog
-          title="Add a new client or employee (hooray!)"
+          title="Add a new client, employee or visit(hooray!)"
           actions={actions}
           modal={false}
           open={this.state.showPopup}
           onRequestClose={this.togglePopup}
         >
-          <div className='dialogText'>While we are currently building this feature you can follow the link to add a new client or employee.<a>Click here</a></div>
+          <div className='dialogText'>While we are currently building this feature you can follow the link to add a new client or employee.<a href='https://docs.google.com/forms/d/e/1FAIpQLSc-tMmZjT3Nk_x0-UYG2sr2SIRz3Vo48u3XU2ioLraQBxkR1A/viewform?usp=sf_link'>Click here</a></div>
         </Dialog>
         <div className="navbar_logo">
           {" "}

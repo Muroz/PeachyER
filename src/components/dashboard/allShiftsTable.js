@@ -60,10 +60,10 @@ class AllShiftsTable extends React.Component {
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"startTime"+index} style={{fontSize:'15px'}}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn ref={"endTime"+index} style={{fontSize:'15px'}}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn ref={"scheduledDuration"+index} style={{fontSize:'15px'}}> {visit.scheduledDuration} </TableRowColumn>
+                  <TableRowColumn ref={"scheduledDuration"+index} style={{fontSize:'15px'}}> {visit.scheduledDuration.substring(0,3)} </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}> {visit.duration} </TableRowColumn>
+                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}> {visit.duration.toFixed(2)} </TableRowColumn>
                   <TableRowColumn ref={"status"+index} style={{fontSize:'15px'}}> {visit.status} </TableRowColumn>
                 </TableRow>)
     }

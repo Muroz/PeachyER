@@ -146,7 +146,7 @@ class MainGuide extends React.Component {
             <Navbar />
             <div className='directoryBody'>
                 <h1 className='directoryTitle'> Guides </h1>
-                We are currently growing our guide section to help you use Peachy the best you can! In the mean time, you can ask specific questions by clicking the help icon. If there is a guide you wish to request you can do so by following the link.  <a> Click here </a>
+                We are currently growing our guide section to help you use Peachy the best you can! In the mean time, you can ask specific questions by clicking the help icon. If there is a guide you wish to request you can do so by following the link.  <a href='https://docs.google.com/forms/d/e/1FAIpQLSf4EmJgK_CxMh6jiuo8_iPM8ZYOpQusdSvEnvtv-auvaIGzlA/viewform?usp=sf_link'> Click here </a>
                 <div className='guideTitle' >
                 {/* onClick={this.handleChange} */}
                     1. How to modify visit information

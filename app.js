@@ -255,12 +255,12 @@ var t = later.setInterval(function() {
             visit.statusLog.push('Notified Caregiver');
           }
           //var visitState = visit.active?'out':'in'
-          // var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
-          // clientTwilio.messages.create({
-          //   from: process.env.TWILIO_PHONE,
-          //   to: visit.replyNumberC,
-          //   body: bodyString
-          // }).then((messsage) => console.log(message.sid));
+          var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
+          clientTwilio.messages.create({
+            from: process.env.TWILIO_PHONE,
+            to: visit.replyNumberC,
+            body: bodyString
+          }).then((messsage) => console.log(message.sid));
         }
 
         //create overtime notified
@@ -315,7 +315,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on('19:43:00').time();
+var lateSched = later.parse.recur().on('8:12:00').time();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
@@ -341,16 +341,22 @@ var late = later.setInterval(function(){
 
         var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2])).tz('America/St_Johns');;
 
-        var duration = Math.round(endTime.diff(startTime,'hours',true));
+        var duration = (endTime.diff(startTime,'hours',true));
 
         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
-          if(carer==null) return
+          var cid = ''
+          if(carer==null) {console.log(visit.caregiverName, 'is NULL');
+                return    
+        }
+          else{
+            cid = carer.employeeId
+          }
           console.log(carer.name);
           var vid = ''
           if(visit.shiftNumber == 1){
-            vid = client.phoneNumber+carer.employeeId
+            vid = client.phoneNumber+cid
           } else {
-            vid = client.phoneNumber+carer.employeeId+visit.shiftNumber
+            vid = client.phoneNumber+cid+visit.shiftNumber
           }
           Visit.create({
             visitId:vid,

@@ -11306,7 +11306,7 @@ var NavBar = function (_React$Component) {
         _react2.default.createElement(
           _Dialog2.default,
           {
-            title: "Add a new client or employee (hooray!)",
+            title: "Add a new client, employee or visit(hooray!)",
             actions: actions,
             modal: false,
             open: this.state.showPopup,
@@ -11318,7 +11318,7 @@ var NavBar = function (_React$Component) {
             "While we are currently building this feature you can follow the link to add a new client or employee.",
             _react2.default.createElement(
               "a",
-              null,
+              { href: "https://docs.google.com/forms/d/e/1FAIpQLSc-tMmZjT3Nk_x0-UYG2sr2SIRz3Vo48u3XU2ioLraQBxkR1A/viewform?usp=sf_link" },
               "Click here"
             )
           )
@@ -87077,7 +87077,7 @@ var AllShiftsTable = function (_React$Component) {
                     _Table.TableRowColumn,
                     { ref: "scheduledDuration" + index, style: { fontSize: '15px' } },
                     " ",
-                    visit.scheduledDuration,
+                    visit.scheduledDuration.substring(0, 3),
                     " "
                 ),
                 _react2.default.createElement(
@@ -87098,7 +87098,7 @@ var AllShiftsTable = function (_React$Component) {
                     _Table.TableRowColumn,
                     { ref: "duration" + index, style: { fontSize: '15px' } },
                     " ",
-                    visit.duration,
+                    visit.duration.toFixed(2),
                     " "
                 ),
                 _react2.default.createElement(
@@ -87703,7 +87703,9 @@ var MainStaff = function (_React$Component) {
         _react2.default.createElement(
           "div",
           { className: "directoryItemTitle" },
-          caregiver.name
+          caregiver.name,
+          "-",
+          caregiver.employeeId
         ),
         _react2.default.createElement(
           "div",
@@ -93423,7 +93425,7 @@ var MainGuide = function (_React$Component) {
                     "We are currently growing our guide section to help you use Peachy the best you can! In the mean time, you can ask specific questions by clicking the help icon. If there is a guide you wish to request you can do so by following the link.  ",
                     _react2.default.createElement(
                         "a",
-                        null,
+                        { href: "https://docs.google.com/forms/d/e/1FAIpQLSf4EmJgK_CxMh6jiuo8_iPM8ZYOpQusdSvEnvtv-auvaIGzlA/viewform?usp=sf_link" },
                         " Click here "
                     ),
                     _react2.default.createElement(

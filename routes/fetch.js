@@ -117,7 +117,7 @@ router.post("/updateVisit", function(req, res) {
         if(visit.clockInTime != null && visit.clockOutTime != null){
           visit.duration = Math.round(moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
         }
-        client.billedHours += visit.scheduledDuration;
+        client.billedHours += parseFloat(visit.scheduledDuration);
         client.billedVisits.push(visit);
         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
           if (err) return err;
@@ -126,7 +126,7 @@ router.post("/updateVisit", function(req, res) {
             return 'No caregivers found';
           };
 
-          carer.payingHours += visit.scheduledDuration;
+          carer.payingHours += parseFloat(visit.scheduledDuration);
           carer.billedVisits.push(visit);
           carer.visits.push(visit);
 

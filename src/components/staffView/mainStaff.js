@@ -31,7 +31,7 @@ class MainStaff extends React.Component {
   setStaff(caregiver,index){
     var phoneNumber = this.formatPhone(caregiver.phoneNumber.substring(2));
     return(<div className='directoryItem' key={index}>
-      <div className='directoryItemTitle'>{caregiver.name}</div>
+      <div className='directoryItemTitle'>{caregiver.name}-{caregiver.employeeId}</div>
       <div className='directoryItemBody'>Telephone: {phoneNumber} </div>
       <div className='directoryItemBody'> Hours worked: {caregiver.payingHours} </div>
       <div className='directoryItemBody'> Late shifts: {caregiver.missedVisits} </div>
