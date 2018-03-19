@@ -255,12 +255,12 @@ var t = later.setInterval(function() {
             visit.statusLog.push('Notified Caregiver');
           }
           //var visitState = visit.active?'out':'in'
-          var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
-          clientTwilio.messages.create({
-            from: process.env.TWILIO_PHONE,
-            to: visit.replyNumberC,
-            body: bodyString
-          }).then((messsage) => console.log(message.sid));
+          // var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
+          // clientTwilio.messages.create({
+          //   from: process.env.TWILIO_PHONE,
+          //   to: visit.replyNumberC,
+          //   body: bodyString
+          // }).then((messsage) => console.log(message.sid));
         }
 
         //create overtime notified
@@ -315,7 +315,7 @@ var t = later.setInterval(function() {
 /////////// Schedules runs at 1am every day
 ////////////////////////////////////////////////////
 
-var lateSched = later.parse.recur().on('8:12:00').time();
+var lateSched = later.parse.recur().on('9:30:00').time();
 var late = later.setInterval(function(){
   console.log('Creating schedules');
   ClientModel.find({},function(err,clients){
