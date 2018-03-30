@@ -15,7 +15,7 @@ var visitSchema = new Schema({
   clockOutTime: Date,
   startTime: Date,
   endTime: Date,
-  scheduledDuration: String,
+  scheduledDuration: {type:Number, default:0},
   duration : {type:Number, default:0},
   timezone: {type:String,default:'Canada'},
   // caregiverMessage:{type:{}, default:{}},

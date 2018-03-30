@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addClient, addStaff } from "./../actions/fetchingActions";
+import { addClient, addStaff, addVisit } from "./../actions/fetchingActions";
 import InputTextField from './inputTextField';
 
 import Dialog from 'material-ui/Dialog';
@@ -47,14 +47,12 @@ class AddButton extends React.Component {
     return(<MenuItem key={index} value={client.name} primaryText={client.name} />)
   }
 
-  handleInputChange = (type,event) => {
-    console.log(type);
-    console.log(event.target.value)
-  }
+  // handleInputChange = (type,event) => {
+  //   console.log(type);
+  //   console.log(event.target.value)
+  // }
 
   handleDropdownChange = (type, event, index, value) => {
-    console.log(type);
-    console.log(value);
     var newState = {};
 
     newState[type] = value;
@@ -63,9 +61,6 @@ class AddButton extends React.Component {
   }
 
   handleChangeTimeChange = (type,event, date) => {
-
-    console.log(type);
-    console.log(moment(date).format('HH:mm'));
 
     var newState = {};
 
@@ -85,6 +80,12 @@ class AddButton extends React.Component {
 
         if(moment(this.state.selectedStart).diff(moment(this.state.selectedEnd),'minutes')<0){
           console.log('saving bro')
+          var newVisit = {};
+          newVisit['caregiverName'] = this.state.selectedStaff;
+          newVisit['clientName'] = this.state.selectedClient;
+          newVisit['startTime'] = this.state.selectedStart;
+          newVisit['endTime'] = this.state.selectedEnd;
+          this.props.addVisit(newVisit);
         } else {
           console.log('cant save bro, times are not logically correct')
         }
@@ -115,21 +116,21 @@ class AddButton extends React.Component {
 
     return (
       <Dialog
-          title="Add a visit"
+          title={"Add a visit ("+currentDate.format('MMM DD')+")"}
           actions={actions}
           modal={false}
           open={this.props.showPopup}
           onRequestClose={this.props.togglePopup}
         >
+        <div className='dialogBody'>
           <div className='dialogText'>Add a visit for today's schedule</div>
-          <br/>
+          <div className="dropdown_title">HSW:</div> 
           <InputDropdown title="Staff name" type='staffName' defaultValue={this.state.selectedStaff} list={this.props.staff} handleChange={this.handleDropdownChange.bind(this,'selectedStaff')}/>
-          <br/>
+          <div className="dropdown_title">Client:</div> 
           <InputDropdown title="Client name" type='clientName' defaultValue={this.state.selectedClient} list={this.props.clients} handleChange={this.handleDropdownChange.bind(this,'selectedClient')}/>
-          <br/>
 
-          <div className="row3a">Time clocked in: </div>  
-          <div className="row3b">
+          <div>Scheduled start: </div>  
+          <div>
             <TimePicker
                //hintText={stringClockIn}
                value={this.state.selectedStart}
@@ -137,8 +138,8 @@ class AddButton extends React.Component {
             />
           </div>
 
-          <div className="row4a">Time clocked out: </div>  
-          <div className="row4b">
+          <div>Scheduled end: </div>  
+          <div>
             <TimePicker
               //hintText={moment(this.state.selectedEnd).format('HH:mm')}
                value={this.state.selectedEnd}
@@ -146,11 +147,7 @@ class AddButton extends React.Component {
             />
           </div>
 
-          <div className="row4a">Date: </div>  
-          <div className="row4b">
-            {currentDate.format('MMM DD')}
-          </div>
-
+        </div>
 
 
         </Dialog>
@@ -167,7 +164,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { addClient: addClient, addStaff: addStaff },
+    { addClient: addClient, addStaff: addStaff, addVisit:addVisit },
     dispatch
   );
 }

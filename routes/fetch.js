@@ -92,7 +92,8 @@ router.post("/getAllShifts", function(req, res){
 
 
 router.post("/updateVisit", function(req, res) {
-
+  console.log('got here safely');
+  console.log(req.body);
   Visit.findOne({ _id: req.body._id }, function(err,visit){
 
     visit.clockInTime = req.body.clockInTime;
@@ -176,7 +177,7 @@ router.post("/addVisit", function(req,res){
 
     Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
 
-      var duration = (visit.endTime.diff(visit.startTime,'hours',true));
+      var duration = (moment(visit.endTime).diff(visit.startTime,'hours',true));
 
       var cid = ''
       if(carer==null) {console.log(visit.caregiverName, 'is NULL');
@@ -191,7 +192,7 @@ router.post("/addVisit", function(req,res){
         visitId:vid,
         caregiverName: carer.name,
         clientName:client.name,
-        date:new moment().tz('America/St_Johns'),
+        date:new moment(),
         startTime: visit.startTime,
         endTime:visit.endTime,
         scheduledDuration:duration,

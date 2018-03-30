@@ -23,15 +23,16 @@ class InputDropdown extends React.Component {
 
     return (
         <div className='dropdown'>
-            <div className="dropdown_title">{this.props.title}</div> 
-            <DropDownMenu 
-            ref={this.props.type}
-            value={this.props.defaultValue} 
-            onChange={this.props.handleChange}  
-            className="dropdown_body"
-            autoWidth={true}>
-            {this.props.list.map(this.setFields,this)}
-            </DropDownMenu>     
+            <div className="dropdown_body">
+                <DropDownMenu 
+                ref={this.props.type}
+                value={this.props.defaultValue} 
+                onChange={this.props.handleChange}  
+
+                autoWidth={true}>
+                {this.props.list.map(this.setFields,this)}
+                </DropDownMenu>     
+            </div>
       </div>
     );
   }

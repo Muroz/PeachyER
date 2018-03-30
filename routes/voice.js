@@ -14,39 +14,26 @@ var moment = require('moment-timezone');
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
 router.post("/", function(req, res) {
-  console.log('post', req.body)
+
   const twiml = new VoiceResponse();
+
   /** helper function to set up a <Gather> */
   function gather() {
-    console.log('gather');
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:3 });
+    const gatherNode = twiml.gather({ numDigits: 6, timeout:3 });
     gatherNode.say('Welcome to the peachy service, please enter your code and wait for confirmation');
-
     // If the user doesn't enter input, loop
     twiml.redirect('/voice');
   }
 
   function gatherAgain(){
-    console.log('gatherAgain');
-    const gatherNode = twiml.gather({ numDigits: 6, timeout:4 });
-    console.log('after', req.body.Digits)
-    gatherNode.say('Sorry, we could not find a visit with the given ID, please check your input');
-
-
-    console.log('input accepted', req.body.Digits)
-    // If the user doesn't enter input, loop
-
-    //twiml.redirect('/voice');
+    twiml.say('Sorry, we could not find a visit with the given ID, please check your input');
   }
 
   function communicate(sentence){
-    console.log('communicate',sentence);
     twiml.say(sentence);
-
     // Render the response as XML in reply to the webhook request
     res.type('text/xml');
     res.send(twiml.toString());
-
   }
 
   function checker(sentence){
@@ -62,33 +49,43 @@ router.post("/", function(req, res) {
 
   // If the user entered digits, process their request
   if (req.body.Digits) {
-     if(req.body.Digits.length >= 4){
+    console.log('at digits', req.body.Digits.slice(-1));
+    if (req.body.Digits.slice(-1) == '*'){
+      console.log('gonna confirm this shit')
+      var input = req.body.Digits.slice(0, -1);
+      Visit.create({
+        visitId:req.body.From+input,
+        caregiverName: input,
+        clientName:req.body.From,
+        clockInTime: new moment(),
+        date:new moment(),
+        startTime: null,
+        endTime:null,
+        scheduledDuration:0,
+        replyNumberC:'Not found',
+        status: 'Unconfirmed',
+        company:'Coombs'
+      });
+    }
+    else if(req.body.Digits.length >= 4){
       Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
         if(err) return err;
-        if (visit==null && confirmed){
-
-        }
         if(visit==null) {
-          console.log('at null visit')
-          gatherAgain();
-          
-           // Render the response as XML in reply to the webhook request
+          gatherAgain();  
+          // Render the response as XML in reply to the webhook request
           res.type('text/xml');
           res.send(twiml.toString());
-
         } 
+
         else if(visit.status == 'Completed' || visit.status == 'Cancelled'){
-          console.log('at done visit',visit);
           checker('This visit has been completed already');
           res.type('text/xml');
           res.send(twiml.toString());
         } 
-        else if (visit.active){
-          console.log('at active visit', visit);
-          communicate('You have just clocked out!')
 
+        else if (visit.active){
+          communicate('You have just clocked out!')
           var endTime = new moment().tz('America/St_Johns');
-          
           visit.clockOutTime = endTime;
           if(visit.clockInTime != null && visit.clockOutTime != null){
             visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
@@ -112,20 +109,16 @@ router.post("/", function(req, res) {
                 //checker('No carer found with the given ID');
                 return 'No caregivers found';
               };
-    
               carer.payingHours += parseFloat(visit.scheduledDuration);
               carer.billedVisits.push(visit);
               carer.visits.push(visit);
-    
               carer.save();
-    
               //client.visitsBy[carer.name].push(visit);
               client.save();
             });
           });
-        } else {
 
-          console.log('at clock in')
+        } else {
           communicate('You have just clocked in!');
           
           visit.clockInTime= new Date();
@@ -133,6 +126,7 @@ router.post("/", function(req, res) {
           visit.status = 'In process';
           visit.statusLog.push('In process');
         }
+
         if(visit != null){
           visit.save();
         }
@@ -149,8 +143,6 @@ router.post("/", function(req, res) {
   } else {
     // If no input was sent, use the <Gather> verb to collect user input
     gather();
-
-
     // Render the response as XML in reply to the webhook request
     res.type('text/xml');
     res.send(twiml.toString());
