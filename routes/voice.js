@@ -19,7 +19,7 @@ router.post("/", function(req, res) {
   /** helper function to set up a <Gather> */
   function gather() {
     console.log('gather');
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:5 });
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:3 });
     gatherNode.say('Welcome to the peachy service, please enter your code and wait for confirmation');
 
     // If the user doesn't enter input, loop
@@ -28,13 +28,15 @@ router.post("/", function(req, res) {
 
   function gatherAgain(){
     console.log('gatherAgain');
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:5 });
-    console.log('after', req.body)
+    const gatherNode = twiml.gather({ numDigits: 6, timeout:4 });
+    console.log('after', req.body.Digits)
     gatherNode.say('Sorry, we could not find a visit with the given ID, please check your input');
 
+
+    console.log('input accepted', req.body.Digits)
     // If the user doesn't enter input, loop
 
-    twiml.redirect('/voice');
+    //twiml.redirect('/voice');
   }
 
   function communicate(sentence){
@@ -60,14 +62,12 @@ router.post("/", function(req, res) {
 
   // If the user entered digits, process their request
   if (req.body.Digits) {
-      console.log('at digits');
-      //gotta change the gather functions
      if(req.body.Digits.length >= 4){
-      console.log('4 or more digits');
-      console.log(req.body.Digits);
       Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
         if(err) return err;
-        
+        if (visit==null && confirmed){
+
+        }
         if(visit==null) {
           console.log('at null visit')
           gatherAgain();
