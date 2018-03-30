@@ -15,9 +15,7 @@ import School from 'material-ui/svg-icons/social/school';
 import ExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 
 
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+
 
 
 
@@ -36,26 +34,12 @@ class NavBar extends React.Component {
   }
   render() {
 
-    const actions = [
-      <FlatButton
-        label="Ok"
-        primary={true}
-        onClick={this.togglePopup}
-      />,
-    ];
+
 
 
     return (
       <div className="navbar">
-        <Dialog
-          title="Add a new client, employee or visit(hooray!)"
-          actions={actions}
-          modal={false}
-          open={this.state.showPopup}
-          onRequestClose={this.togglePopup}
-        >
-          <div className='dialogText'>While we are currently building this feature you can follow the link to add a new client or employee.<a href='https://docs.google.com/forms/d/e/1FAIpQLSc-tMmZjT3Nk_x0-UYG2sr2SIRz3Vo48u3XU2ioLraQBxkR1A/viewform?usp=sf_link'>Click here</a></div>
-        </Dialog>
+     
         <div className="navbar_logo">
           {" "}
           <img src="/images/peachy_logo.png" className="logo" />{" "}
@@ -84,11 +68,10 @@ class NavBar extends React.Component {
         </div> */}
         <div className="navbar_logout" >
           <a href="/logout" ><ExitToApp/><br/> Logout </a>
-        </div>
-{/* 
-        {this.state.showPopup ? (
-          <AddButton closePopup={this.togglePopup.bind(this)} />
-        ) : null} */}
+        </div> 
+         {this.state.showPopup ? (
+           <AddButton togglePopup={this.togglePopup} showPopup={this.state.showPopup} />
+         ) : null}
       </div>
     );
   }

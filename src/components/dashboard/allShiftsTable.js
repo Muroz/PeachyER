@@ -42,10 +42,6 @@ class AllShiftsTable extends React.Component {
 
         this.togglePopup = this.togglePopup.bind(this);
     }
-
-    handleRowSelection = (selectedRows) => {
-        this.props.handleOpen(selectedRows);
-    };
     
     togglePopup() {
         this.setState({
@@ -79,7 +75,7 @@ class AllShiftsTable extends React.Component {
 
         return(
             <div>
-            <Table onRowSelection={this.handleRowSelection.bind(this)}          
+            <Table onRowSelection={this.props.handleOpen}          
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
             fixedFooter={this.state.fixedFooter}

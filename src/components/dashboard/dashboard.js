@@ -52,7 +52,9 @@ class Dashboard extends React.Component {
   };
 
   handleOpen = (selectedRows) => {
+
     if(selectedRows.length == 0){
+      console.log('this is still a thing');
       selectedRows = this.state.selected;    
     }
 

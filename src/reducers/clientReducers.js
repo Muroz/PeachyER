@@ -1,7 +1,7 @@
 "use strict";
 
 export function clientReducers(
-  state = { clients: [], staff: [], activity: [], allShifts:[], unconfirmed:[],late:[],overtime:[],confimed:[],allShifts:[], selectedRow:-1 },
+  state = { clients: [], staff: [], activity: [], allShifts:[], unconfirmed:[],late:[],overtime:[],confimed:[],allShifts:[], selectedRow:-1,selectedVisit:{} },
   action
 ) {
   switch (action.type) {
@@ -19,6 +19,9 @@ export function clientReducers(
       break;
     case "ADD_STAFF":
       return { ...state, staff: [...state.staff, ...action.payload] };
+      break;
+    case "ADD_VISIT":
+      return { ...state, allShifts: [...state.allShifts, ...action.payload]};
       break;
     case "GET_ALL_SHIFTS":
       return {...state, allShifts: action.payload};

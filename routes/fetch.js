@@ -141,52 +141,10 @@ router.post("/updateVisit", function(req, res) {
       visit.save();
       res.json(req.body);
     }
-          
-
-
-    /*
-
-          var endTime = new moment().tz('America/St_Johns');
-          var localClockIn = new moment(visit.clockInTime).tz('America/St_Johns')
-          //duration in minutes
-          var duration = Math.round(endTime.diff(localClockIn,'hours',true));
-          
-          visit.clockOutTime = endTime;
-          visit.duration = duration;
-          visit.active = false;
-          if (visit.status != 'Unconfirmed'){
-            visit.status = 'Completed ';
-          }
-          Client.findOne({name:visit.clientName}, function(err,client){
-            if(err) return err;
-            if(client==null) return 'No client found';
-            client.billedHours += visit.scheduledDuration;
-            client.billedVisits.push(visit);
-            //client.schedule[moment().format('dddd')][2]
-            Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
-              if (err) return err;
-              if(carer==null) {
-                //checker('No carer found with the given ID');
-                return 'No caregivers found';
-              };
-    
-              carer.payingHours += visit.scheduledDuration;
-              carer.billedVisits.push(visit);
-              carer.visits.push(visit);
-    
-              carer.save();
-    
-              //client.visitsBy[carer.name].push(visit);
-              client.save();
-            });
-
-
-
-
-    */
 
   });
 });
+
 
 
 router.post("/activity", function(req, res) {
@@ -203,6 +161,51 @@ router.post("/addStaff", function(req, res) {
     }
     res.json(staff);
   });
+});
+
+router.post("/addVisit", function(req,res){
+  var visit = req.body;
+
+  Client.findOne({name:visit.clientName}, function(err,client){
+    if (err){
+      return err;
+    }
+    if(client == null){
+      return 'no client found'
+    }
+
+    Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
+
+      var duration = (visit.endTime.diff(visit.startTime,'hours',true));
+
+      var cid = ''
+      if(carer==null) {console.log(visit.caregiverName, 'is NULL');
+        return    
+      }
+      else{
+        cid = carer.employeeId
+      }
+      var vid = client.phoneNumber+cid
+
+      Visit.create({
+        visitId:vid,
+        caregiverName: carer.name,
+        clientName:client.name,
+        date:new moment().tz('America/St_Johns'),
+        startTime: visit.startTime,
+        endTime:visit.endTime,
+        scheduledDuration:duration,
+        replyNumberC:carer.phoneNumber,
+        company:client.company
+      }, function(err, newVisit){
+        if (err) {
+          throw err;
+        }
+        res.json(newVisit)
+      });
+  
+    })
+  })
 });
 
 router.post("/addClient", function(req, res) {

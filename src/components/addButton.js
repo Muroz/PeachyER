@@ -1,147 +1,168 @@
 "use strict";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  MenuItem,
-  InputGroup,
-  DropdownButton,
-  Image,
-  Col,
-  Row,
-  Well,
-  Panel,
-  FormControl,
-  FormGroup,
-  ControlLabel,
-  Button
-} from "react-bootstrap";
 import { bindActionCreators } from "redux";
-import { findDOMNode } from "react-dom";
 import { addClient, addStaff } from "./../actions/fetchingActions";
+import InputTextField from './inputTextField';
+
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
+import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import TimePicker from 'material-ui/TimePicker';
+import MenuItem from 'material-ui/MenuItem';
+import InputDropdown from "./inputDropdown";
+
+import moment from 'moment-timezone';
 
 class AddButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formType: "client"
+      clientState: "",
+      staffState:"",
+      stage:0,
+      saved:[false,false,false,false],
+
+      selectedStaff: null,
+      selectedClient: null,
+      selectedStart: null,
+      selectedEnd: null,
+      selectedDate: new moment()
     };
-    this.setForm = this.setForm.bind(this);
+
   }
 
-  setForm(e, formType) {
-    this.setState({ formType: formType });
+  setNewVal = (value,type) => {
+    var newState = {}
+    newState[type] = value
+    this.setState(newState);
   }
 
-  handleSubmitClient() {
-    const client = [
-      {
-        name: findDOMNode(this.refs.name).value,
-        id: findDOMNode(this.refs.id).value
+  setClients(client,index){
+
+    return(<MenuItem key={index} value={client.name} primaryText={client.name} />)
+  }
+
+  handleInputChange = (type,event) => {
+    console.log(type);
+    console.log(event.target.value)
+  }
+
+  handleDropdownChange = (type, event, index, value) => {
+    console.log(type);
+    console.log(value);
+    var newState = {};
+
+    newState[type] = value;
+
+    this.setState(newState);
+  }
+
+  handleChangeTimeChange = (type,event, date) => {
+
+    console.log(type);
+    console.log(moment(date).format('HH:mm'));
+
+    var newState = {};
+
+    newState[type] = date;
+
+    this.setState(newState);
+
+  }
+
+  handleSave = () => {
+    console.log('saving');
+    
+    if (this.state.selectedClient != null && this.state.selectedStaff != null){
+      console.log('valid people');
+
+      if (this.state.selectedStart != null && this.state.selectedEnd != null){
+
+        if(moment(this.state.selectedStart).diff(moment(this.state.selectedEnd),'minutes')<0){
+          console.log('saving bro')
+        } else {
+          console.log('cant save bro, times are not logically correct')
+        }
+      } else {
+        console.log('info not filled')
       }
-    ];
-    this.props.addClient(client);
+    } else {
+      console.log('info not filled');
+    }
   }
 
-  handleSubmitStaff() {
-    const staff = [
-      {
-        name: findDOMNode(this.refs.name).value
-      }
-    ];
-    this.props.addStaff(staff);
-  }
-
-  resetForm() {
-    //RESET THE Button
-    //this.props.resetButton();
-
-    findDOMNode(this.refs.title).value = "";
-    findDOMNode(this.refs.description).value = "";
-    findDOMNode(this.refs.price).value = "";
-  }
   render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.props.togglePopup}
+      />,
+      <FlatButton
+      label="Save"
+      primary={true}
+      onClick={this.handleSave}
+  />
+    ];
+
+    
+    var currentDate = new moment();
+
     return (
-      <div className="addButton_overlay">
-        <div className="addButton_popup">
-          <Well>
-            <Button onClick={e => this.setForm(e, "client")}>
-              {" "}
-              Add Client{" "}
-            </Button>
-            <Button onClick={e => this.setForm(e, "staff")}> Add Staff </Button>
-            <Button onClick={this.props.closePopup}>Close</Button>
-            {this.state.formType == "client" ? (
-              <Panel>
-                <FormGroup
-                  controlId="name"
-                  validationState={this.props.validation}
-                >
-                  <ControlLabel>Name</ControlLabel>
-                  <FormControl
-                    type="text"
-                    placeholder="Enter Name"
-                    ref="name"
-                  />
-                  <FormControl.Feedback />
-                </FormGroup>
-                <FormGroup
-                  controlId="id"
-                  validationState={this.props.validation}
-                >
-                  <ControlLabel>ID</ControlLabel>
-                  <FormControl
-                    type="text"
-                    placeholder="Enter the identification number"
-                    ref="id"
-                  />
-                  <FormControl.Feedback />
-                </FormGroup>
-                <Button
-                  onClick={
-                    !this.props.msg
-                      ? this.handleSubmitClient.bind(this)
-                      : this.resetForm.bind(this)
-                  }
-                >
-                  {" "}
-                  Add
-                </Button>
-              </Panel>
-            ) : (
-              <Panel>
-                <FormGroup
-                  controlId="name"
-                  validationState={this.props.validation}
-                >
-                  <ControlLabel>Name</ControlLabel>
-                  <FormControl
-                    type="text"
-                    placeholder="Enter Name"
-                    ref="name"
-                  />
-                  <FormControl.Feedback />
-                </FormGroup>
-                <Button
-                  onClick={
-                    !this.props.msg
-                      ? this.handleSubmitStaff.bind(this)
-                      : this.resetForm.bind(this)
-                  }
-                >
-                  {" "}
-                  Add
-                </Button>
-              </Panel>
-            )}
-          </Well>
-        </div>
-      </div>
+      <Dialog
+          title="Add a visit"
+          actions={actions}
+          modal={false}
+          open={this.props.showPopup}
+          onRequestClose={this.props.togglePopup}
+        >
+          <div className='dialogText'>Add a visit for today's schedule</div>
+          <br/>
+          <InputDropdown title="Staff name" type='staffName' defaultValue={this.state.selectedStaff} list={this.props.staff} handleChange={this.handleDropdownChange.bind(this,'selectedStaff')}/>
+          <br/>
+          <InputDropdown title="Client name" type='clientName' defaultValue={this.state.selectedClient} list={this.props.clients} handleChange={this.handleDropdownChange.bind(this,'selectedClient')}/>
+          <br/>
+
+          <div className="row3a">Time clocked in: </div>  
+          <div className="row3b">
+            <TimePicker
+               //hintText={stringClockIn}
+               value={this.state.selectedStart}
+               onChange={this.handleChangeTimeChange.bind(this,'selectedStart')}
+            />
+          </div>
+
+          <div className="row4a">Time clocked out: </div>  
+          <div className="row4b">
+            <TimePicker
+              //hintText={moment(this.state.selectedEnd).format('HH:mm')}
+               value={this.state.selectedEnd}
+               onChange={this.handleChangeTimeChange.bind(this,'selectedEnd')}
+            />
+          </div>
+
+          <div className="row4a">Date: </div>  
+          <div className="row4b">
+            {currentDate.format('MMM DD')}
+          </div>
+
+
+
+        </Dialog>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    staff:state.clientReducers.staff,
+    clients:state.clientReducers.clients
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -152,3 +173,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddButton);
+
+

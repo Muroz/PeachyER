@@ -41,10 +41,6 @@ class UnconfirmedTable extends React.Component {
         this.togglePopup = this.togglePopup.bind(this);
     }
 
-    handleRowSelection = (selectedRows) => {
-        this.props.handleOpen(selectedRows);
-    };
-
     togglePopup() {
         this.setState({
           open: !this.state.open
@@ -78,7 +74,7 @@ class UnconfirmedTable extends React.Component {
 
         return(
             <div>
-            <Table onRowSelection={this.handleRowSelection.bind(this)}          
+            <Table onRowSelection={this.props.handleOpen}          
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
             fixedFooter={this.state.fixedFooter}

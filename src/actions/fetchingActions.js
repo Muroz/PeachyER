@@ -69,6 +69,20 @@ export function addClient(client) {
   };
 }
 
+// Add visit entry
+export function addVisit(visit) {
+  return function(dispatch) {
+    axios
+      .post("/fetch/addVisit", visit)
+      .then(function(response) {
+        dispatch({ type: "ADD_VISIT", payload: response.data });
+      })
+      .catch(function(err) {
+        dispatch({ type: "ADD_VISIT_REJECTED", payload: err });
+      });
+  };
+}
+
 
 // Fetch activity information
 export function fetchActivity() {
