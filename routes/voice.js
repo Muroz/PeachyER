@@ -14,16 +14,13 @@ var moment = require('moment-timezone');
 // Create a route that will handle Twilio webhook requests, sent as an
 // HTTP POST to /voice in our application
 router.post("/", function(req, res) {
-  console.log('at voice route');
+  console.log('post', req.body)
   const twiml = new VoiceResponse();
-  //twiml.say({ voice: 'alice' }, 'Welcome to the Peachy service!');
   /** helper function to set up a <Gather> */
   function gather() {
     console.log('gather');
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:5 });
     gatherNode.say('Welcome to the peachy service, please enter your code and wait for confirmation');
-
-
 
     // If the user doesn't enter input, loop
     twiml.redirect('/voice');
@@ -31,7 +28,8 @@ router.post("/", function(req, res) {
 
   function gatherAgain(){
     console.log('gatherAgain');
-    const gatherNode = twiml.gather({ numDigits: 5, timeout:6 });
+    const gatherNode = twiml.gather({ numDigits: 5, timeout:5 });
+    console.log('after', req.body)
     gatherNode.say('Sorry, we could not find a visit with the given ID, please check your input');
 
     // If the user doesn't enter input, loop
@@ -53,7 +51,7 @@ router.post("/", function(req, res) {
     console.log('checker',sentence);
     twiml.say(sentence);
 
-    twiml.redirect('/voice');
+    //twiml.redirect('/voice');
     // Render the response as XML in reply to the webhook request
     res.type('text/xml');
     res.send(twiml.toString());

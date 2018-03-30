@@ -114,12 +114,13 @@ app.use(function(err, req, res, next) {
 });
 
 
-fs.createReadStream(path.join(__dirname,'public',"./PeachyShifts.csv"))
+//read spreadsheet data
+fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
     .pipe(csv())
     .on("data", function(data){
         //console.log(data);
-        console.log('name');
-        console.log(data[0])
+        //console.log('staff');
+        //console.log(data)
 
     })
     .on("end", function(){
@@ -127,7 +128,7 @@ fs.createReadStream(path.join(__dirname,'public',"./PeachyShifts.csv"))
 });
 
 
-
+//change schedule info to day number 
 
 //////////////////////////////////////////////////////
 ////////////Helper functions
