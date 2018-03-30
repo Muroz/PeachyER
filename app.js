@@ -115,17 +115,17 @@ app.use(function(err, req, res, next) {
 
 
 //read spreadsheet data
-fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
-    .pipe(csv())
-    .on("data", function(data){
-        //console.log(data);
-        //console.log('staff');
-        //console.log(data)
+// fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
+//     .pipe(csv())
+//     .on("data", function(data){
+//         //console.log(data);
+//         //console.log('staff');
+//         //console.log(data)
 
-    })
-    .on("end", function(){
-        console.log("done");
-});
+//     })
+//     .on("end", function(){
+//         console.log("done");
+// });
 
 
 //change schedule info to day number 
