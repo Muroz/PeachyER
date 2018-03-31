@@ -115,18 +115,74 @@ app.use(function(err, req, res, next) {
 
 
 //read spreadsheet data
-// fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
+// fs.createReadStream(path.join(__dirname,'public',"./clientInfo.csv"))
 //     .pipe(csv())
 //     .on("data", function(data){
-//         //console.log(data);
-//         //console.log('staff');
-//         //console.log(data)
-
+//         console.log('staff');
+//         console.log(data[1]+" "+data[2])
+//         console.log(data[3])
+//         Caregiver.create({
+//           name: data[1]+" "+data[2],
+//           employeeId: data[4],
+//           phoneNumber:'+1709'+data[3],
+//           company:'Coombs'
+//         })
+//         ClientModel.create({
+//           name: data[1]+" "+data[2],
+//           id: data[3],
+//           phoneNumber:'+1709'+data[3],
+//           company:'Coombs'
+//         })
+        
 //     })
 //     .on("end", function(){
 //         console.log("done");
 // });
 
+// Caregiver.create({
+//   name: 'Diego',
+//   employeeId: '0001',
+//   phoneNumber:'+17097692872'
+// })
+// ClientModel.create({
+//   name: 'Dieg',
+//   id: '7692872',
+//   phoneNumber:'+17097692872',
+//   company:'Josecare'
+// })
+
+// ClientModel.findOne({id:'7692872'}).remove().exec();
+
+// ClientModel.findOne({id:'7692872'}, function(err, client){
+//   console.log('found it');
+//   console.log(client);
+
+//   console.log(client.schedule['Saturday']);
+
+//   Caregiver.findOne({employeeId:'0001'}, function(err, carer){
+//     console.log(carer);
+
+//     var counter = 1;
+//     for (var i = 0; i < client.schedule['Saturday'].length; i++) {
+//       console.log(client.schedule['Saturday'][i]);
+//       var visit = client.schedule['Saturday'][i]
+
+//       if (visit.caregiverName == carer.name && visit.date == '01-April'){
+//         counter += 1;
+//       }
+//     }
+//     var visit = {
+//       start : '16:00',
+//       end : '17:00',
+//       caregiverName: carer.name,
+//       shiftNumber: counter,
+//       date:'01-April'
+//     }
+
+//     client.schedule['Saturday']=[visit];
+//     client.save();
+//   })
+// })
 
 //change schedule info to day number 
 
@@ -337,20 +393,20 @@ var t = later.setInterval(function() {
 
 //         var startString = visit.start.split(':');
 
-//         if (!startString.length == 3){
-//           //implement error handling for erroneous schedules
-//           return 'Problem with the input start'
-//         }
+//         // if (!startString.length == 3){
+//         //   //implement error handling for erroneous schedules
+//         //   return 'Problem with the input start'
+//         // }
 
-//         var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).seconds(parseInt(startString[2])).tz('America/St_Johns');;
+//         var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).tz('America/St_Johns');;
 
 //         var endString = visit.end.split(':');
 
-//         if (!endString.length == 3){
-//           return 'Problem with the input end'
-//         }
+//         // if (!endString.length == 3){
+//         //   return 'Problem with the input end'
+//         // }
 
-//         var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).seconds(parseInt(endString[2])).tz('America/St_Johns');;
+//         var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).tz('America/St_Johns');;
 
 //         var duration = (endTime.diff(startTime,'hours',true));
 

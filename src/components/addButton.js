@@ -85,7 +85,9 @@ class AddButton extends React.Component {
           newVisit['clientName'] = this.state.selectedClient;
           newVisit['startTime'] = this.state.selectedStart;
           newVisit['endTime'] = this.state.selectedEnd;
+          this.props.togglePopup();
           this.props.addVisit(newVisit);
+
         } else {
           console.log('cant save bro, times are not logically correct')
         }

@@ -131,6 +131,9 @@ router.post("/updateVisit", function(req, res) {
           carer.billedVisits.push(visit);
           carer.visits.push(visit);
 
+          visit.vid = client.phoneNumber+carer.employeeId
+          visit.replyNumberC = carer.phoneNumber;
+
           carer.save();
           client.save();
 
