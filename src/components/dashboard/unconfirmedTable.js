@@ -49,16 +49,31 @@ class UnconfirmedTable extends React.Component {
     
 
     setTableInfo(visit, index){
+        console.log(visit.scheduledDuration);
+        var suffix = 'hrs';
+        var scheduledDurationHour = Math.floor(visit.scheduledDuration);
+        var scheduledDifference = Math.round((visit.scheduledDuration - scheduledDurationHour)*60);
+
+        var DurationHour = Math.floor(visit.duration);
+        var durationDifference = Math.round((visit.duration - DurationHour)*60);
+
+        var difference = visit.duration - visit.scheduledDuration
+
+        if (Math.abs(difference)<1){
+            difference = difference * 60;
+            suffix = 'mins';
+        }
+
+
         return (<TableRow key={index} selected={this.props.isSelected(index)}>
                   <TableRowColumn style={{fontSize:'15px'}}  tooltip={visit.caregiverName} ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn style={{fontSize:'15px'}}  ref={"scheduledDuration"+index}> {visit.scheduledDuration} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}}  ref={"scheduledDuration"+index}> {scheduledDurationHour+'.'+scheduledDifference+' '+suffix} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"clockOutTime"+index}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  {/* <TableRowColumn style={{fontSize:'15px'}}  ref={"duration"+index}> {visit.duration} </TableRowColumn> */}
-                  <TableRowColumn style={{fontSize:'15px'}}  ref={"status"+index}> {visit.status} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}}  ref={"duration"+index}> {DurationHour+'.'+durationDifference+' '+suffix} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"date"+index}>{visit.date? moment(visit.date).tz('America/St_Johns').format('MMMM Do'): 'Not available'} </TableRowColumn>
                 </TableRow>)
     }
@@ -99,11 +114,11 @@ class UnconfirmedTable extends React.Component {
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Client">Client</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Start">Scheduled start</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="End">Scheduled end</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Duration">Duration (hrs)</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="(hr.min)">Duration (hrs)</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
                 {/* <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Overtime">Overtime</TableHeaderColumn> */}
-                <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Status">Status</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Status">Shift variation</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}}  tooltip="Date">Date</TableHeaderColumn>
             </TableRow>
             </TableHeader>

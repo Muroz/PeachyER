@@ -79,7 +79,6 @@ class AddButton extends React.Component {
       if (this.state.selectedStart != null && this.state.selectedEnd != null){
 
         if(moment(this.state.selectedStart).diff(moment(this.state.selectedEnd),'minutes')<0){
-          console.log('saving bro')
           var newVisit = {};
           newVisit['caregiverName'] = this.state.selectedStaff;
           newVisit['clientName'] = this.state.selectedClient;
@@ -125,7 +124,7 @@ class AddButton extends React.Component {
           onRequestClose={this.props.togglePopup}
         >
         <div className='dialogBody'>
-          <div className='dialogText'>Add a visit for today's schedule</div>
+          <div className='dialogText'>Instantly add a shift for today's schedule</div>
           <div className="dropdown_title">HSW:</div> 
           <InputDropdown title="Staff name" type='staffName' defaultValue={this.state.selectedStaff} list={this.props.staff} handleChange={this.handleDropdownChange.bind(this,'selectedStaff')}/>
           <div className="dropdown_title">Client:</div> 

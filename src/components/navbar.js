@@ -45,7 +45,7 @@ class NavBar extends React.Component {
           <img src="/images/peachy_logo.png" className="logo" />{" "}
         </div>
         <div className="navbar_li navbar_home">
-          <a href="/dashboard"><Dashboard/>Dashboard</a>
+          <a href="/dashboard"><Dashboard/><br/>Dashboard</a>
         </div>
         <div className="navbar_li navbar_client">
           <a href="/clients"><Group/><br/>Clients</a>

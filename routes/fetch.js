@@ -35,7 +35,7 @@ router.post("/visit", function(req, res) {
 
 router.post("/getUnconfirmed", function(req, res){
     //unconfirmed shifts
-    Visit.find({$or:[{status:'Unconfirmed'},{status:'Late'},{status:'Notified Caregiver'},{status:'Notified Manager'},{status:'Overtime'}]}).sort({startTime:1}).exec(function(err,visits){
+    Visit.find({$or:[{status:'Unconfirmed'}]}).sort({startTime:1}).exec(function(err,visits){
       if(err){
         throw err;
       }

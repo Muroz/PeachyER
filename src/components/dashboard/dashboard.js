@@ -211,8 +211,9 @@ class Dashboard extends React.Component {
       //   this.setState({'startTime':date, 'save':false})
       // } else 
       if (this.state.endTime != null) {
-        var difference = Math.round(moment(this.state.endTime).diff(moment(date),'hours',true));
-        if(moment(date).diff(moment(this.state.endTime),'minutes')<0){
+        var currentEnd = moment().hour(moment(this.state.endTime).hour()).minute(moment(this.state.endTime).minute())
+        var difference = (moment(this.state.endTime).diff(moment(date),'hours',true));
+        if(moment(date).diff(currentEnd,'minutes')<0){
           this.setState({'startTime':date, 'save':true, scheduledDuration:difference, messageTime:''})
         } else {
           var message = 'Start time cannot be later than the set end time';
@@ -228,8 +229,11 @@ class Dashboard extends React.Component {
       //   this.setState({'endTime':date, 'save':false})
       // } else 
       if (this.state.startTime != null) {
-        var difference = Math.round(moment(date).diff(moment(this.state.startTime),'hours',true));
-        if(moment(date).diff(moment(this.state.startTime),'minutes')>0){
+        var currentStart = moment().hour(moment(this.state.startTime).hour()).minute(moment(this.state.startTime).minute())
+        var difference = (moment(date).diff(moment(this.state.startTime),'hours',true));
+        if(moment(date).diff(currentStart,'minutes')>0){
+          console.log('its changing');
+          console.log(difference)
           this.setState({'endTime':date, 'save':true, scheduledDuration:difference, messageTime:''})
         } else {
           var message = 'End time cannot be earlier than the set start time';
@@ -249,7 +253,7 @@ class Dashboard extends React.Component {
       this.setState({status:value, clockInTime:null,clockOutTime:null, save:true});
       console.log('2 this is ', value);
     } else {
-      this.setState({status:value});
+      this.setState({status:value, save:true});
     }
 
   }
@@ -397,7 +401,7 @@ class Dashboard extends React.Component {
           className="row5b"
           id="scheduledDuration"
           disabled={true}
-          value={this.state.scheduledDuration}
+          value={Number(this.state.scheduledDuration).toFixed(2)}
           onChange={this.handleTextChange}
         />
 

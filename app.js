@@ -153,36 +153,36 @@ app.use(function(err, req, res, next) {
 
 // ClientModel.findOne({id:'7692872'}).remove().exec();
 
-// ClientModel.findOne({id:'7692872'}, function(err, client){
-//   console.log('found it');
-//   console.log(client);
+ClientModel.findOne({id:'7692872'}, function(err, client){
+  console.log('found it');
+  console.log(client);
 
-//   console.log(client.schedule['Saturday']);
+  console.log(client.schedule['Saturday']);
 
-//   Caregiver.findOne({employeeId:'0001'}, function(err, carer){
-//     console.log(carer);
+  Caregiver.findOne({employeeId:'0001'}, function(err, carer){
+    console.log(carer);
 
-//     var counter = 1;
-//     for (var i = 0; i < client.schedule['Saturday'].length; i++) {
-//       console.log(client.schedule['Saturday'][i]);
-//       var visit = client.schedule['Saturday'][i]
+    var counter = 1;
+    for (var i = 0; i < client.schedule['Saturday'].length; i++) {
+      console.log(client.schedule['Saturday'][i]);
+      var visit = client.schedule['Saturday'][i]
 
-//       if (visit.caregiverName == carer.name && visit.date == '01-April'){
-//         counter += 1;
-//       }
-//     }
-//     var visit = {
-//       start : '16:00',
-//       end : '17:00',
-//       caregiverName: carer.name,
-//       shiftNumber: counter,
-//       date:'01-April'
-//     }
+      if (visit.caregiverName == carer.name && visit.date == '01-April'){
+        counter += 1;
+      }
+    }
+    var visit = {
+      start : '16:00',
+      end : '17:00',
+      caregiverName: carer.name,
+      shiftNumber: counter,
+      date:'01-April'
+    }
 
-//     client.schedule['Saturday']=[visit];
-//     client.save();
-//   })
-// })
+    //client.schedule['Saturday'].push(visit);
+    //client.save();
+  })
+})
 
 //change schedule info to day number 
 
