@@ -26,7 +26,8 @@ router.post("/", function(req, res) {
   }
 
   function gatherAgain(){
-    twiml.say('Sorry, we could not find a visit with the given ID, please check your input');
+    twiml.say('Sorry, we could not find a visit with the given ID, please check your input or re-enter your code and add an asterisk at the end to clock in regardless');
+    twiml.redirect('/voice');
   }
 
   function communicate(sentence){
