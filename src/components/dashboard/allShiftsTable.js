@@ -65,12 +65,14 @@ class AllShiftsTable extends React.Component {
             difference = difference * 60;
             suffix = 'mins';
         }
+
+        //issues with the suffix 2.3 mins
         return (<TableRow key={index} selected={this.props.isSelected(index)}>
                   <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'15px'}}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"startTime"+index} style={{fontSize:'15px'}}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn ref={"endTime"+index} style={{fontSize:'15px'}}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn ref={"scheduledDuration"+index} style={{fontSize:'15px'}}> {scheduledDurationHour+'.'+scheduledDifference+' '+suffix}  </TableRowColumn>
+                  <TableRowColumn ref={"scheduledDuration"+index} style={{fontSize:'15px'}}> {scheduledDurationHour+'.'+scheduledDifference+' '}  </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+'.'+durationDifference+' '+suffix}</TableRowColumn>
