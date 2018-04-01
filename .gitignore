@@ -37,3 +37,8 @@ public/bundle.js
 
 #google secret
 client_secret.json
+
+#info
+public/clientInfo.csv
+public/visits.csv
+public/staffInfo.csv

@@ -115,24 +115,30 @@ app.use(function(err, req, res, next) {
 
 
 //read spreadsheet data
-// fs.createReadStream(path.join(__dirname,'public',"./clientInfo.csv"))
+// fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
 //     .pipe(csv())
 //     .on("data", function(data){
-//         console.log('staff');
-//         console.log(data[1]+" "+data[2])
-//         console.log(data[3])
 //         Caregiver.create({
 //           name: data[1]+" "+data[2],
 //           employeeId: data[4],
 //           phoneNumber:'+1709'+data[3],
-//           company:'Coombs'
+//           company:'Coombs',
+//           visits:[],
+//           billedVisits:[],
+//           payingHours:0,
+//           missedVisits:0,
+//           lateVisits:0,
+//           missedClockInsOuts:0
 //         })
-//         ClientModel.create({
-//           name: data[1]+" "+data[2],
-//           id: data[3],
-//           phoneNumber:'+1709'+data[3],
-//           company:'Coombs'
-//         })
+//         // ClientModel.create({
+//         //   name: data[1]+" "+data[2],
+//         //   id: data[3],
+//         //   phoneNumber:'+1709'+data[3],
+//         //   company:'Coombs',
+//         //   billedHours:0,
+//         //   billedVisits:[],
+//         //   visitsBy:[]
+//         // })
         
 //     })
 //     .on("end", function(){
@@ -151,38 +157,68 @@ app.use(function(err, req, res, next) {
 //   company:'Josecare'
 // })
 
-// ClientModel.findOne({id:'7692872'}).remove().exec();
 
-ClientModel.findOne({id:'7692872'}, function(err, client){
-  console.log('found it');
-  console.log(client);
+// fs.createReadStream(path.join(__dirname,'public',"./visits.csv"))
+//     .pipe(csv())
+//     .on("data", function(data){
 
-  console.log(client.schedule['Saturday']);
+//       ClientModel.findOne({id:data[1]}, function(err, client){
+//         console.log(client.name);
+//         Caregiver.findOne({employeeId:data[2]}, function(err, carer){
+//           if(carer == null){
+//             console.log('didnt find it', data[2]);
+//           }
+//           var startString = ''
+//           var endString = ''
+//           if (data[3].length == 3){
+//             startString = data[3].slice(0,1)+':00'+data[3].slice(1,3);
+//           } else if (data[3].length == 4){
+//             startString = data[3].slice(0,2)+':00'+data[3].slice(2,4);
+//           } else {
+//             startString = data[3]
+//           }
 
-  Caregiver.findOne({employeeId:'0001'}, function(err, carer){
-    console.log(carer);
+//           if (data[4].length == 3){
+//             endString = data[4].slice(0,1)+':00'+data[4].slice(1,3);
+//           }else if (data[4].length == 4){
+//             endString = data[4].slice(0,2)+':00'+data[4].slice(2,4);
+//           } else {
+//             endString = data[4]
+//           }
 
-    var counter = 1;
-    for (var i = 0; i < client.schedule['Saturday'].length; i++) {
-      console.log(client.schedule['Saturday'][i]);
-      var visit = client.schedule['Saturday'][i]
+//           //moment().format('dddd')
+//           var date = moment(data[5],'YYYY-MM-DD').toDate();
 
-      if (visit.caregiverName == carer.name && visit.date == '01-April'){
-        counter += 1;
-      }
-    }
-    var visit = {
-      start : '16:00',
-      end : '17:00',
-      caregiverName: carer.name,
-      shiftNumber: counter,
-      date:'01-April'
-    }
+//           var counter = 1;
+//           for (var i = 0; i < client.schedule[moment(date).format('dddd')].length; i++) {
+//             var visit = client.schedule[moment(date).format('dddd')][i]
+      
+//             if (visit.caregiverName == carer.name && visit.date == moment(date).format('YYYY-MM-DD')){
+//               counter += 1;
+//             }
+//           }
+//           var visit = {
+//             start : startString,
+//             end : endString,
+//             caregiverName: carer.name,
+//             shiftNumber: counter,
+//             date:moment(date).format('YYYY-MM-DD')
+//           }
+//           client.schedule[moment(date).format('dddd')].push(visit);
+//           client.save();
+//         })
+//       })
+//     })
+//     .on("end", function(){
+//         console.log("done");
+// });
 
-    //client.schedule['Saturday'].push(visit);
-    //client.save();
-  })
-})
+
+// ClientModel.find({}).remove().exec();
+// Caregiver.find({}).remove().exec();
+
+
+
 
 //change schedule info to day number 
 
@@ -378,74 +414,70 @@ var t = later.setInterval(function() {
 
 
 
-/////////////////////////////////////////////////////
-/////////// Schedules runs at 1am every day
-////////////////////////////////////////////////////
+///////////////////////////////////////////////////
+///////// Schedules runs at 1am every day
+//////////////////////////////////////////////////
 
 // var lateSched = later.parse.recur().on('9:45:00').time();
 // var late = later.setInterval(function(){
 //   console.log('Creating schedules');
-//   ClientModel.find({},function(err,clients){
+  // ClientModel.find({},function(err,clients){
 
-//     clients.forEach(function(client,index,arr){
+  //   clients.forEach(function(client,index,arr){
 
-//       client.schedule[moment().format('dddd')].forEach(function(visit,index,arr){
+  //     client.schedule['Sunday'].forEach(function(visit,index,arr){
 
-//         var startString = visit.start.split(':');
+  //       if(visit.date == '2018-04-01'){
+  //         console.log(visit);
 
-//         // if (!startString.length == 3){
-//         //   //implement error handling for erroneous schedules
-//         //   return 'Problem with the input start'
-//         // }
+  //         var start = moment(visit.start,'hh:mma').toDate();
+  //         start = moment(start).add(1,'day');
+  //         var end = moment(visit.end,'hh:mma').toDate();
+  //         end = moment(end).add(1,'day')
 
-//         var startTime = new moment().hour(parseInt(startString[0])).minute(parseInt(startString[1])).tz('America/St_Johns');;
+  //         var scheduledDuration = moment(end).diff(moment(start),'hours',true);
 
-//         var endString = visit.end.split(':');
+  //         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
+  //           var cid = ''
+  //           if(carer==null) {console.log(visit.caregiverName, 'is NULL');
+  //                 return    
+  //           }
+  //           else{
+  //             cid = carer.employeeId
+  //           }
+  //           console.log(carer.name);
+  //           var vid = ''
+  //           if(visit.shiftNumber == 1){
+  //             vid = client.phoneNumber+cid
+  //           } else {
+  //             vid = client.phoneNumber+cid+visit.shiftNumber
+  //           }
+  //           Visit.create({
+  //             visitId:vid,
+  //             caregiverName: carer.name,
+  //             clientName:client.name,
+  //             date:moment(moment(visit.date,'YYYY-MM-DD').toDate()),
+  //             startTime: start,
+  //             endTime:end,
+  //             scheduledDuration:scheduledDuration,
+  //             replyNumberC:carer.phoneNumber,
+  //             company:client.company
+  //           });
+    
+            
+  //           console.log('visit created');
+  //         });
+  //       }
 
-//         // if (!endString.length == 3){
-//         //   return 'Problem with the input end'
-//         // }
 
-//         var endTime = new moment().hour(parseInt(endString[0])).minute(parseInt(endString[1])).tz('America/St_Johns');;
+       
 
-//         var duration = (endTime.diff(startTime,'hours',true));
-
-//         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
-//           var cid = ''
-//           if(carer==null) {console.log(visit.caregiverName, 'is NULL');
-//                 return    
-//         }
-//           else{
-//             cid = carer.employeeId
-//           }
-//           console.log(carer.name);
-//           var vid = ''
-//           if(visit.shiftNumber == 1){
-//             vid = client.phoneNumber+cid
-//           } else {
-//             vid = client.phoneNumber+cid+visit.shiftNumber
-//           }
-//           Visit.create({
-//             visitId:vid,
-//             caregiverName: carer.name,
-//             clientName:client.name,
-//             date:new moment().tz('America/St_Johns'),
-//             startTime: startTime,
-//             endTime:endTime,
-//             scheduledDuration:duration,
-//             replyNumberC:carer.phoneNumber,
-//             company:client.company
-//           });
-  
-//           console.log('visit created');
-//         });
-
-//       }, this);
+  //     }, this);
 
 
 
-//     },this);
-//   })
+  //   },this);
+  // })
 // }, lateSched);
 
 

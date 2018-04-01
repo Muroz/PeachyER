@@ -212,7 +212,7 @@ class Dashboard extends React.Component {
       // } else 
       if (this.state.endTime != null) {
         var currentEnd = moment().hour(moment(this.state.endTime).hour()).minute(moment(this.state.endTime).minute())
-        var difference = (moment(this.state.endTime).diff(moment(date),'hours',true));
+        var difference = (moment(currentEnd).diff(moment(date),'hours',true));
         if(moment(date).diff(currentEnd,'minutes')<0){
           this.setState({'startTime':date, 'save':true, scheduledDuration:difference, messageTime:''})
         } else {
@@ -230,10 +230,8 @@ class Dashboard extends React.Component {
       // } else 
       if (this.state.startTime != null) {
         var currentStart = moment().hour(moment(this.state.startTime).hour()).minute(moment(this.state.startTime).minute())
-        var difference = (moment(date).diff(moment(this.state.startTime),'hours',true));
+        var difference = (moment(date).diff(moment(currentStart),'hours',true));
         if(moment(date).diff(currentStart,'minutes')>0){
-          console.log('its changing');
-          console.log(difference)
           this.setState({'endTime':date, 'save':true, scheduledDuration:difference, messageTime:''})
         } else {
           var message = 'End time cannot be earlier than the set start time';

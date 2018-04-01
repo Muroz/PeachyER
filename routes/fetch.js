@@ -109,7 +109,12 @@ router.post("/updateVisit", function(req, res) {
 
 
     visit.duration = 0;
-    visit.active = false;
+    if (visit.status == 'In process'){
+      visit.active = true;
+    } else {
+      visit.active = false;
+    }
+
     if (visit.status == 'Completed'){
       Client.findOne({name:visit.clientName}, function(err,client){
         if(err) return err;
@@ -138,12 +143,12 @@ router.post("/updateVisit", function(req, res) {
           client.save();
 
           visit.save();
-          res.json(req.body);
+          res.json(visit);
         });
       });
     } else {
       visit.save();
-      res.json(req.body);
+      res.json(visit);
     }
 
   });
@@ -190,23 +195,28 @@ router.post("/addVisit", function(req,res){
         cid = carer.employeeId
       }
       var vid = client.phoneNumber+cid
-
-      Visit.create({
-        visitId:vid,
-        caregiverName: carer.name,
-        clientName:client.name,
-        date:new moment(),
-        startTime: visit.startTime,
-        endTime:visit.endTime,
-        scheduledDuration:duration,
-        replyNumberC:carer.phoneNumber,
-        company:client.company
-      }, function(err, newVisit){
-        if (err) {
-          throw err;
+      Visit.findOne({ visitId:vid}, function(err,duplicatedVisit){
+        if(duplicatedVisit !=null){
+          vid = vid+'2'
         }
-        res.json(newVisit)
-      });
+        Visit.create({
+          visitId:vid,
+          caregiverName: carer.name,
+          clientName:client.name,
+          date:new moment(),
+          startTime: visit.startTime,
+          endTime:visit.endTime,
+          scheduledDuration:duration,
+          replyNumberC:carer.phoneNumber,
+          company:client.company
+        }, function(err, newVisit){
+          if (err) {
+            throw err;
+          }
+          res.json(newVisit)
+        });
+      })
+     
   
     })
   })

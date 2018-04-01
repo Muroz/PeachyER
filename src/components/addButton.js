@@ -31,7 +31,9 @@ class AddButton extends React.Component {
       selectedClient: null,
       selectedStart: null,
       selectedEnd: null,
-      selectedDate: new moment()
+      selectedDate: new moment(),
+
+      message:''
     };
 
   }
@@ -84,17 +86,21 @@ class AddButton extends React.Component {
           newVisit['clientName'] = this.state.selectedClient;
           newVisit['startTime'] = this.state.selectedStart;
           newVisit['endTime'] = this.state.selectedEnd;
+          this.setState({message:''})
           this.props.togglePopup();
           this.props.addVisit(newVisit);
 
         } else {
           console.log('cant save bro, times are not logically correct')
+          this.setState({message:'Start time cannot be after the end time'})
         }
       } else {
         console.log('info not filled')
+        this.setState({message:'Not all of the fields have been filled'})
       }
     } else {
       console.log('info not filled');
+      this.setState({message:'Not all of the fields have been filled'})
     }
   }
 
@@ -146,6 +152,10 @@ class AddButton extends React.Component {
                value={this.state.selectedEnd}
                onChange={this.handleChangeTimeChange.bind(this,'selectedEnd')}
             />
+          </div>
+
+          <div className='alertMessage'>
+          {this.state.message}
           </div>
 
         </div>
