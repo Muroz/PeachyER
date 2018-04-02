@@ -50,32 +50,79 @@ router.post("/", function(req, res) {
 
   // If the user entered digits, process their request
   if (req.body.Digits) {
-    console.log('at digits', req.body.Digits.slice(-1));
-    if (req.body.Digits.slice(-1) == '*'){
-      console.log('gonna confirm this shit')
-      var input = req.body.Digits.slice(0, -1);
-      Visit.create({
-        visitId:req.body.From+input,
-        caregiverName: input,
-        clientName:req.body.From,
-        clockInTime: new moment(),
-        date:new moment(),
-        startTime: null,
-        endTime:null,
-        scheduledDuration:0,
-        replyNumberC:'Not found',
-        status: 'Unconfirmed',
-        company:'Coombs'
-      });
-    }
-    else if(req.body.Digits.length >= 4){
-      Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err, visit){
+    // console.log('at digits', req.body.Digits.slice(-1));
+    // if (req.body.Digits.slice(-1) == '*'){
+    //   console.log('gonna confirm this shit')
+    //   var input = req.body.Digits.slice(0, -1);
+    //   Visit.create({
+    //     visitId:req.body.From+input,
+    //     caregiverName: input,
+    //     clientName:req.body.From,
+    //     clockInTime: new moment(),
+    //     date:new moment(),
+    //     startTime: null,
+    //     endTime:null,
+    //     scheduledDuration:0,
+    //     replyNumberC:'Not found',
+    //     status: 'Unconfirmed',
+    //     company:'Coombs'
+    //   });
+    // }
+    // else 
+    if(req.body.Digits.length >= 4){
+      Visit.findOne({visitId: req.body.From+req.body.Digits, 'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}, function(err, visit){
         if(err) return err;
         if(visit==null) {
-          gatherAgain();  
-          // Render the response as XML in reply to the webhook request
-          res.type('text/xml');
-          res.send(twiml.toString());
+
+          var input;
+          if (req.body.Digits.length == 5){
+            input = req.body.Digits.slice(0,-1);
+          } else {
+            input = req.body.Digits
+          }
+
+          Client.findOne({id:req.body.From}, function(err,client){
+            var clientName = req.body.From
+
+            if (client != null){
+              clientName = client.name
+            }
+
+            Caregiver.findOne({employeeId:input}, function(err, carer){
+
+              var replyNumber = ''
+              var carerName = req.body.Digits;
+              if (carer != null){
+                carerName = carer.name
+                replyNumber = carer.phoneNumber
+              }
+
+              Visit.create({
+                visitId:req.body.From+req.body.Digits,
+                caregiverName: carerName,
+                clientName:clientName,
+                clockInTime: new moment(),
+                date:new moment(),
+                startTime: null,
+                endTime:null,
+                scheduledDuration:0,
+                active:true,
+                replyNumberC:replyNumber,
+                status: 'Unconfirmed',
+                statusLog: ['Unconfirmed'],
+                company:'Coombs'
+              });
+              //gatherAgain();  
+
+              communicate('You have just clocked in!');
+              // Render the response as XML in reply to the webhook request
+              // res.type('text/xml');
+              // res.send(twiml.toString());
+
+            })
+          })
+
+
         } 
 
         else if(visit.status == 'Completed' || visit.status == 'Cancelled'){

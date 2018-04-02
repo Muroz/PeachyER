@@ -114,6 +114,8 @@ app.use(function(err, req, res, next) {
 });
 
 
+console.log(moment().startOf('day').tz('America/St_Johns'))
+console.log(moment().startOf('day'))
 //read spreadsheet data
 // fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
 //     .pipe(csv())

@@ -75,7 +75,7 @@ class AllShiftsTable extends React.Component {
                   <TableRowColumn ref={"scheduledDuration"+index} style={{fontSize:'15px'}}> {scheduledDurationHour+'.'+scheduledDifference+' '}  </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+'.'+durationDifference+' '+suffix}</TableRowColumn>
+                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+'.'+durationDifference+' '}</TableRowColumn>
                   <TableRowColumn ref={"status"+index} style={{fontSize:'15px'}}> {visit.status} </TableRowColumn>
                 </TableRow>)
     }

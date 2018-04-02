@@ -70,10 +70,10 @@ class UnconfirmedTable extends React.Component {
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"startTime"+index}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"endTime"+index}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn style={{fontSize:'15px'}}  ref={"scheduledDuration"+index}> {scheduledDurationHour+'.'+scheduledDifference+' '+suffix} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}}  ref={"scheduledDuration"+index}> {scheduledDurationHour+'.'+scheduledDifference+' '} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"clockOutTime"+index}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn style={{fontSize:'15px'}}  ref={"duration"+index}> {DurationHour+'.'+durationDifference+' '+suffix} </TableRowColumn>
+                  <TableRowColumn style={{fontSize:'15px'}}  ref={"duration"+index}> {DurationHour+'.'+durationDifference+' '} </TableRowColumn>
                   <TableRowColumn style={{fontSize:'15px'}}  ref={"date"+index}>{visit.date? moment(visit.date).tz('America/St_Johns').format('MMMM Do'): 'Not available'} </TableRowColumn>
                 </TableRow>)
     }
