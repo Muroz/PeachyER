@@ -79,13 +79,13 @@ router.post("/getOvertime", function(req, res){
           });
 })
 
-
 router.post("/getAllShifts", function(req, res){
   //all shifts
   Visit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
     if(err){
       throw err;
     }
+    
     res.json(visits);
   })
 })
