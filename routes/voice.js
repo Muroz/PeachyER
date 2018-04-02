@@ -81,9 +81,8 @@ router.post("/", function(req, res) {
             input = req.body.Digits
           }
 
-          Client.findOne({id:req.body.From}, function(err,client){
+          Client.findOne({phoneNumber:req.body.From}, function(err,client){
             var clientName = req.body.From
-
             if (client != null){
               clientName = client.name
             }
@@ -139,30 +138,32 @@ router.post("/", function(req, res) {
             visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
           }
           visit.active = false;
-          //if (visit.status != 'Unconfirmed'){
+          if (visit.status != 'Unconfirmed'){
             visit.status = 'Completed ';
             visit.statusLog.push('Completed');
-          //}
+          }
           Client.findOne({name:visit.clientName}, function(err,client){
             console.log('at client', client);
             if(err) return err;
-            if(client==null) return 'No client found';
-            client.billedHours += parseFloat(visit.scheduledDuration);
-            client.billedVisits.push(visit);
+            if(client!=null){
+              client.billedHours += parseFloat(visit.scheduledDuration);
+              client.billedVisits.push(visit);
+              client.save();
+            }
             //client.schedule[moment().format('dddd')][2]
             Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
               console.log('at caregiver', carer)
               if (err) return err;
-              if(carer==null) {
+              if(carer!=null) {
+                carer.payingHours += parseFloat(visit.scheduledDuration);
+                carer.billedVisits.push(visit);
+                carer.visits.push(visit);
+                carer.save();
+                //client.visitsBy[carer.name].push(visit);
                 //checker('No carer found with the given ID');
-                return 'No caregivers found';
               };
-              carer.payingHours += parseFloat(visit.scheduledDuration);
-              carer.billedVisits.push(visit);
-              carer.visits.push(visit);
-              carer.save();
-              //client.visitsBy[carer.name].push(visit);
-              client.save();
+
+
             });
           });
 

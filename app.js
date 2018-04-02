@@ -427,9 +427,9 @@ var t = later.setInterval(function() {
 
   //   clients.forEach(function(client,index,arr){
 
-  //     client.schedule['Sunday'].forEach(function(visit,index,arr){
+  //     client.schedule['Monday'].forEach(function(visit,index,arr){
 
-  //       if(visit.date == '2018-04-01'){
+  //       if(visit.date == '2018-04-02'){
   //         console.log(visit);
 
   //         var start = moment(visit.start,'hh:mma').toDate();
@@ -458,7 +458,7 @@ var t = later.setInterval(function() {
   //             visitId:vid,
   //             caregiverName: carer.name,
   //             clientName:client.name,
-  //             date:moment(moment(visit.date,'YYYY-MM-DD').toDate()),
+  //             date:moment(moment(visit.date+' 9:00 am','YYYY-MM-DD h:mm a').toDate()),
   //             startTime: start,
   //             endTime:end,
   //             scheduledDuration:scheduledDuration,
@@ -479,7 +479,7 @@ var t = later.setInterval(function() {
 
 
   //   },this);
-  // })
+  //  })
 // }, lateSched);
 
 
