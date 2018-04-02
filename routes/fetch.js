@@ -46,7 +46,7 @@ router.post("/getUnconfirmed", function(req, res){
 router.post("/getConfirmed", function(req, res){
   //confirmed shifts
   Visit.find({$and:[
-            {status:'In process'}, {'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}
+            {status:'In process'}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
           ]}).sort({startTime:1}).exec(function(err,visits){
             if(err){
               throw err;
@@ -58,7 +58,7 @@ router.post("/getConfirmed", function(req, res){
 router.post("/getLate", function(req, res){
   //confirmed shifts
   Visit.find({$and:[
-    {$or:[{status:'Late'},{status:'Notified Caregiver'},{status:'Notified Manager'}]}, {'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}
+    {$or:[{status:'Late'},{status:'Notified Caregiver'},{status:'Notified Manager'}]}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
           ]}).sort({startTime:1}).exec(function(err,visits){
             if(err){
               throw err;
@@ -70,7 +70,7 @@ router.post("/getLate", function(req, res){
 router.post("/getOvertime", function(req, res){
   //confirmed shifts
   Visit.find({$and:[
-            {status:'Overtime'}, {'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}
+            {status:'Overtime'}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
           ]}).sort({startTime:1}).exec(function(err,visits){
             if(err){
               throw err;
@@ -82,7 +82,7 @@ router.post("/getOvertime", function(req, res){
 
 router.post("/getAllShifts", function(req, res){
   //all shifts
-  Visit.find({'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}).sort({startTime:1}).exec(function(err,visits){
+  Visit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
     if(err){
       throw err;
     }
@@ -237,7 +237,7 @@ router.post("/addClient", function(req, res) {
 //todo
     //all shifts
 
-    //Visit.find({'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}, function(err,visits){
+    //Visit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}, function(err,visits){
 
 
         //unconfirmed shifts
@@ -246,6 +246,6 @@ router.post("/addClient", function(req, res) {
 
 
           // Visit.find({$and:[
-          //   {$or:[{status:'Completed'},{status:'In process'}]}, {'date':{"$gte": new moment().startOf('day').tz('America/St_Johns'), "$lt": new moment().endOf('day').tz('America/St_Johns')}}
+          //   {$or:[{status:'Completed'},{status:'In process'}]}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
           // ]}, function(err,visits){
 module.exports = router;
