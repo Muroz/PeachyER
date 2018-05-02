@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { fetchStaff, fetchClients } from "../../actions/fetchingActions";
 import Navbar from "../navbar";
 import {formatPhone} from '../../helper'
+import DirectoryItem from './directoryItem'
 
 
 //props to pass
@@ -20,13 +21,8 @@ class Directory extends React.Component {
   }
 
   setItems(item,index){
-    console.log(item);
-    var phoneNumber = formatPhone(item.phoneNumber.substring(2));
-    return(<div className='directoryItem' key={index}>
-      <div className='directoryItemTitle'>{item.name}-{item.employeeId || item.id}</div>
-      <div className='directoryItemBody'>Telephone: {phoneNumber} </div>
-      <div className='directoryItemBody'> Hours worked: {item.payingHours || item.billedHours || '0'} </div>
-    </div>
+    return(
+        <DirectoryItem item={item} key={index}/>
     )
   }
   render() {
