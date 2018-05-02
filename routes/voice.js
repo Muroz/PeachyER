@@ -139,7 +139,7 @@ router.post("/", function(req, res) {
           }
           visit.active = false;
           if (visit.status != 'Unconfirmed'){
-            visit.status = 'Completed ';
+            visit.status = 'Completed';
             visit.statusLog.push('Completed');
           }
           Client.findOne({name:visit.clientName}, function(err,client){

@@ -114,8 +114,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-console.log(moment().startOf('day').tz('America/St_Johns'))
-console.log(moment().startOf('day'))
 //read spreadsheet data
 // fs.createReadStream(path.join(__dirname,'public',"./staffInfo.csv"))
 //     .pipe(csv())
@@ -403,18 +401,125 @@ var t = later.setInterval(function() {
     })
   }, visitSched);
 
+Visit.find({},function(err,visits){
+  // visits.forEach(function(visit){
+  //   //console.log(visit)
+  // })
+  console.log('All visits');
+  console.log(visits.length);
+    
+});
+
+Visit.find({status:'Completed'},function(err,visits){
+  // visits.forEach(function(visit){
+  //   //console.log(visit)
+  // })
+  console.log('Total completed visits');
+  console.log(visits.length);
+  
+});
+
+Visit.find({status:'Unconfirmed'},function(err,visits){
+  // visits.forEach(function(visit){
+  //   //console.log(visit)
+  // })
+  console.log('Total unconfirmed visits');
+  console.log(visits.length);
+  
+});
+
+Visit.find({'date':{"$gte": moment("April 1st, 2018", "MMM-DD-YYYY").startOf('day'), "$lt": moment("April 14st, 2018", "MMM-DD-YYYY").endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
+  var completedArr = [];
+  var unconfirmedArr = [];
+  var other = [];
+  var falsePositives = [];
+  var actualUnconfirmed = [];
+
+  visits.forEach(function(visit){
+    //console.log(visit)
+    if(visit.status == 'Completed'){
+      completedArr.push(visit);
+    } else if (visit.status == 'Unconfirmed'){
+      unconfirmedArr.push(visit);
+    } else {
+      other.push(visit)
+    }
+  });
+  console.log('Scheduled visits');
+  console.log(visits.length);
+
+  console.log('Scheduled completed visits',completedArr.length);
+  console.log('%: ',(completedArr.length/visits.length) * 100);
+
+  console.log('Scheduled unconfirmed visits',unconfirmedArr.length );
+  console.log('%: ',(unconfirmedArr.length/visits.length) * 100 );
+
+  unconfirmedArr.forEach(function(unconfirmed){
+    if (unconfirmed.clockInTime != null && unconfirmed.clockOutTime != null){
+      falsePositives.push(unconfirmed);
+    } else {
+      actualUnconfirmed.push(unconfirmed);
+    }
+  })
+
+  console.log('Scheduled false positives visits',falsePositives.length );
+  console.log('%: ',(falsePositives.length/unconfirmedArr.length) * 100 );
+
+  console.log('Scheduled actual unconfirmed visits',actualUnconfirmed.length );
+  console.log('%: ',(actualUnconfirmed.length/unconfirmedArr.length) * 100 );
+
+  console.log('Scheduled other visits: ',other.length);
+  console.log('%: ',(other.length/visits.length) * 100);
 
 
+})
+
+Visit.find({'date':{"$gte": moment("April 15st, 2018", "MMM-DD-YYYY").startOf('day'), "$lt": moment("April 29st, 2018", "MMM-DD-YYYY").endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
+  var completedArr = [];
+  var unconfirmedArr = [];
+  var other = [];
+  var falsePositives = [];
+  var actualUnconfirmed = [];
+
+  visits.forEach(function(visit){
+    //console.log(visit)
+    if(visit.status == 'Completed'){
+      completedArr.push(visit);
+    } else if (visit.status == 'Unconfirmed'){
+      unconfirmedArr.push(visit);
+    } else {
+      other.push(visit)
+    }
+  })
+  console.log('Non-scheduled visits');
+  console.log(visits.length);
+
+  console.log('Non-scheduled completed visits',completedArr.length);
+  console.log('%: ',(completedArr.length/visits.length) * 100);
+
+  console.log('Non-scheduled unconfirmed visits',unconfirmedArr.length );
+  console.log('%: ',(unconfirmedArr.length/visits.length) * 100 );
+
+  unconfirmedArr.forEach(function(unconfirmed){
+    if (unconfirmed.clockInTime != null && unconfirmed.clockOutTime != null){
+      falsePositives.push(unconfirmed);
+    } else {
+      actualUnconfirmed.push(unconfirmed);
+    }
+  })
+
+  console.log('Non-scheduled false positives visits',falsePositives.length );
+  console.log('%: ',(falsePositives.length/unconfirmedArr.length) * 100 );
+
+  console.log('Non-scheduled actual unconfirmed visits',actualUnconfirmed.length );
+  console.log('%: ',(actualUnconfirmed.length/unconfirmedArr.length) * 100 );
+
+  console.log('Non-scheduled other visits: ',other.length);
+  console.log('%: ',(other.length/visits.length) * 100);
+})
 
 
-
-
-
-
-
-
-
-
+console.log(moment("April 15st, 2018", "MMM-DD-YYYY").fromNow(true));
 
 ///////////////////////////////////////////////////
 ///////// Schedules runs at 1am every day
@@ -427,9 +532,9 @@ var t = later.setInterval(function() {
 
   //   clients.forEach(function(client,index,arr){
 
-  //     client.schedule['Monday'].forEach(function(visit,index,arr){
+  //     client.schedule['Saturday'].forEach(function(visit,index,arr){
 
-  //       if(visit.date == '2018-04-02'){
+  //       if(visit.date == '2018-04-14'){
   //         console.log(visit);
 
   //         var start = moment(visit.start,'hh:mma').toDate();
