@@ -1,8 +1,10 @@
 var express = require('express');
+var compression = require('compression')
 var path = require('path');
 var favicon = require('serve-favicon');
 var passport = require('passport');
 var flash    = require('connect-flash');
+var helmet = require('helmet')
 
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -33,7 +35,10 @@ var mongoose = require('mongoose');
 var ClientModel = require('./models/client');
 var Caregiver = require('./models/caregiver');
 var Visit = require('./models/visit');
+var TestVisit = require('./models/testerVisit');
 
+//Security measure
+app.use(helmet())
 
 //google spreadsheets
 var fs = require('fs');
@@ -90,6 +95,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
+app.use(compression());
 require('./routes/main.js')(app, passport); // load our routes and pass in our app and fully configured passport
 app.use('/voice', voice);
 app.use('/fetch', fetch);
@@ -296,19 +302,6 @@ function storeToken(token) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 /////////////////////////////////////////////////////
 /////////// Late runs every minutes
 ////////////////////////////////////////////////////
@@ -401,125 +394,46 @@ var t = later.setInterval(function() {
     })
   }, visitSched);
 
-Visit.find({},function(err,visits){
-  // visits.forEach(function(visit){
-  //   //console.log(visit)
-  // })
-  console.log('All visits');
-  console.log(visits.length);
-    
-});
+//TestVisit.find({}).remove().exec();
+// Visit.find({},function(err,visits){
 
-Visit.find({status:'Completed'},function(err,visits){
-  // visits.forEach(function(visit){
-  //   //console.log(visit)
-  // })
-  console.log('Total completed visits');
-  console.log(visits.length);
-  
-});
+//   visits.forEach(function(visit){
+//     var status = ''
+//     var duration = 0
+//     if (visit.clockInTime != null && visit.clockOutTime != null){
+//       status = 'Completed'
+//       duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+//     } else if(moment().isSame(visit.date, 'day')){
+//       status = 'In process';
+//     }
+//     else {
+//       status = 'Unconfirmed'
+//     }
+//     var payPeriod = moment(visit.date).week()
+//     console.log(payPeriod);
+//     TestVisit.create({
+//       visitId:visit.visitId,
+//       caregiverName: visit.caregiverName,
+//       clientName:visit.clientName,
+//       status: status,
+//       clockInTime: visit.clockInTime,
+//       clockOutTime: visit.clockOutTime,
+//       duration: duration,
+//       date:visit.date,
+//       company:visit.company,
+//       timezone: 'Canada',
+//       payPeriod: payPeriod
+//     }) 
+//   })
+// })
 
-Visit.find({status:'Unconfirmed'},function(err,visits){
-  // visits.forEach(function(visit){
-  //   //console.log(visit)
-  // })
-  console.log('Total unconfirmed visits');
-  console.log(visits.length);
-  
-});
+// TestVisit.find({}, function(err,visits){
+//   visits.forEach(function(visit){
+//     console.log(visit);
+//     console.log(visit.payPeriod);
+//   })
+// })
 
-Visit.find({'date':{"$gte": moment("April 1st, 2018", "MMM-DD-YYYY").startOf('day'), "$lt": moment("April 14st, 2018", "MMM-DD-YYYY").endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
-  var completedArr = [];
-  var unconfirmedArr = [];
-  var other = [];
-  var falsePositives = [];
-  var actualUnconfirmed = [];
-
-  visits.forEach(function(visit){
-    //console.log(visit)
-    if(visit.status == 'Completed'){
-      completedArr.push(visit);
-    } else if (visit.status == 'Unconfirmed'){
-      unconfirmedArr.push(visit);
-    } else {
-      other.push(visit)
-    }
-  });
-  console.log('Scheduled visits');
-  console.log(visits.length);
-
-  console.log('Scheduled completed visits',completedArr.length);
-  console.log('%: ',(completedArr.length/visits.length) * 100);
-
-  console.log('Scheduled unconfirmed visits',unconfirmedArr.length );
-  console.log('%: ',(unconfirmedArr.length/visits.length) * 100 );
-
-  unconfirmedArr.forEach(function(unconfirmed){
-    if (unconfirmed.clockInTime != null && unconfirmed.clockOutTime != null){
-      falsePositives.push(unconfirmed);
-    } else {
-      actualUnconfirmed.push(unconfirmed);
-    }
-  })
-
-  console.log('Scheduled false positives visits',falsePositives.length );
-  console.log('%: ',(falsePositives.length/unconfirmedArr.length) * 100 );
-
-  console.log('Scheduled actual unconfirmed visits',actualUnconfirmed.length );
-  console.log('%: ',(actualUnconfirmed.length/unconfirmedArr.length) * 100 );
-
-  console.log('Scheduled other visits: ',other.length);
-  console.log('%: ',(other.length/visits.length) * 100);
-
-
-})
-
-Visit.find({'date':{"$gte": moment("April 15st, 2018", "MMM-DD-YYYY").startOf('day'), "$lt": moment("April 29st, 2018", "MMM-DD-YYYY").endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
-  var completedArr = [];
-  var unconfirmedArr = [];
-  var other = [];
-  var falsePositives = [];
-  var actualUnconfirmed = [];
-
-  visits.forEach(function(visit){
-    //console.log(visit)
-    if(visit.status == 'Completed'){
-      completedArr.push(visit);
-    } else if (visit.status == 'Unconfirmed'){
-      unconfirmedArr.push(visit);
-    } else {
-      other.push(visit)
-    }
-  })
-  console.log('Non-scheduled visits');
-  console.log(visits.length);
-
-  console.log('Non-scheduled completed visits',completedArr.length);
-  console.log('%: ',(completedArr.length/visits.length) * 100);
-
-  console.log('Non-scheduled unconfirmed visits',unconfirmedArr.length );
-  console.log('%: ',(unconfirmedArr.length/visits.length) * 100 );
-
-  unconfirmedArr.forEach(function(unconfirmed){
-    if (unconfirmed.clockInTime != null && unconfirmed.clockOutTime != null){
-      falsePositives.push(unconfirmed);
-    } else {
-      actualUnconfirmed.push(unconfirmed);
-    }
-  })
-
-  console.log('Non-scheduled false positives visits',falsePositives.length );
-  console.log('%: ',(falsePositives.length/unconfirmedArr.length) * 100 );
-
-  console.log('Non-scheduled actual unconfirmed visits',actualUnconfirmed.length );
-  console.log('%: ',(actualUnconfirmed.length/unconfirmedArr.length) * 100 );
-
-  console.log('Non-scheduled other visits: ',other.length);
-  console.log('%: ',(other.length/visits.length) * 100);
-})
-
-
-console.log(moment("April 15st, 2018", "MMM-DD-YYYY").fromNow(true));
 
 ///////////////////////////////////////////////////
 ///////// Schedules runs at 1am every day

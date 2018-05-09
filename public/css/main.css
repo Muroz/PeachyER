@@ -418,6 +418,9 @@ html, body, .app {
   grid-template-columns: repeat(2,1fr);
 }
 
+.directoryItem:hover{
+  border: 5px solid peachpuff;
+}
 .directoryItemTitle{
   grid-column: 1/-1;
   border-bottom: 1px solid rgb(112, 112, 112);
@@ -543,4 +546,27 @@ iframe{
 
 .dropdown_body{
   grid-column: 2/3;
+}
+
+.visitlogBody{
+ 
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+
+.directoryItemVisitLog{
+  grid-column: 1/3;
+  padding-top: 10px;
+}
+.visitlogEntry{
+  display: grid;
+  padding: 5px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  background: white;
+}
+
+.visitlogEntry:hover{
+  border: 5px solid peachpuff;
 }

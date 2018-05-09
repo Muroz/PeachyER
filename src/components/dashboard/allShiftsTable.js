@@ -41,20 +41,22 @@ class AllShiftsTable extends React.Component {
         }
 
         this.togglePopup = this.togglePopup.bind(this);
+        this.selectRow = this.selectRow.bind(this);
     }
     
     togglePopup() {
         this.setState({
           open: !this.state.open
         });
-      }
+    }
+
+    selectRow(visit) {
+        console.log('this is selected')
+        console.log(visit);
+    }
     
 
     setTableInfo(visit, index){
-        console.log(visit.scheduledDuration);
-        var suffix = 'hrs';
-        var scheduledDurationHour = Math.floor(visit.scheduledDuration);
-        var scheduledDifference = Math.round((visit.scheduledDuration - scheduledDurationHour)*60);
 
         var DurationHour = Math.floor(visit.duration);
         var durationDifference = Math.round((visit.duration - DurationHour)*60);
@@ -63,16 +65,11 @@ class AllShiftsTable extends React.Component {
 
         if (Math.abs(difference)<1){
             difference = difference * 60;
-            suffix = 'mins';
         }
 
-        //issues with the suffix 2.3 mins
-        return (<TableRow key={index} selected={this.props.isSelected(index)}>
+        return (<TableRow key={index} selected={this.props.isSelected(index)} onClick={this.selectRow.bind(this,visit)}>
                   <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'15px'}}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
-                  <TableRowColumn ref={"startTime"+index} style={{fontSize:'15px'}}> {moment(visit.startTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn ref={"endTime"+index} style={{fontSize:'15px'}}> {moment(visit.endTime).tz('America/St_Johns').format('h:mm a')} </TableRowColumn>
-                  <TableRowColumn ref={"scheduledDuration"+index} style={{fontSize:'15px'}}> {scheduledDurationHour+'.'+scheduledDifference+' '}  </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+'.'+durationDifference+' '}</TableRowColumn>
@@ -113,9 +110,6 @@ class AllShiftsTable extends React.Component {
             <TableRow>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">HSW</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Start">Scheduled start</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="End">Scheduled end</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="(hr.min)">Duration (hrs)</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Overtime">Actual duration (hrs)</TableHeaderColumn>
@@ -132,7 +126,7 @@ class AllShiftsTable extends React.Component {
             </TableBody>
         </Table>
          <Dialog
-         title="Scheduled shifts today"
+         title="Shifts happening today"
          actions={actions}
          modal={false}
          open={this.state.open}

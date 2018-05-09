@@ -169,12 +169,8 @@ export function fetchOvertimeShifts() {
   };
 }
 
-
 // Add client entry
 export function updateVisit(visit,type) {
-  console.log('got here');
-  console.log(visit);
-  console.log(type);
   return function(dispatch) {
     axios
       .post("/fetch/updateVisit", visit)
@@ -192,6 +188,3 @@ export function updateVisit(visit,type) {
 
 }
 
-export function checkIn(id) {
-  return function(dispatch) {};
-}

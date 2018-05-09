@@ -16,7 +16,8 @@ var testerVisitSchema = new Schema({
   timezone: {type:String,default:'Canada'},
   caregiverName: {type:String, default:'Not available'},
   clientName: {type:String, default:'Not available'},
-  company: String
+  company: String,
+  payPeriod: String
 
 });
 

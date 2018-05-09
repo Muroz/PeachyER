@@ -7,6 +7,7 @@ var Caregiver = require("./../models/caregiver");
 var Activity = require("./../models/recentActivity");
 var Visit = require("./../models/visit");
 var moment = require('moment-timezone');
+var TestVisit = require('./../models/testerVisit');
 
 // Axios HTTP requests to fetch data from the database
 router.post("/clients", function(req, res) {
@@ -28,14 +29,14 @@ router.post("/staff", function(req, res) {
 });
 
 router.post("/visit", function(req, res) {
-  Visit.find({}, function(err, visits) {
+  TestVisit.find({}, function(err, visits) {
     res.json(visits);
   });
 });
 
 router.post("/getUnconfirmed", function(req, res){
     //unconfirmed shifts
-    Visit.find({$or:[{status:'Unconfirmed'}]}).sort({startTime:1}).exec(function(err,visits){
+    TestVisit.find({$or:[{status:'Unconfirmed'}]}).sort({date:1}).exec(function(err,visits){
       if(err){
         throw err;
       }
@@ -45,7 +46,7 @@ router.post("/getUnconfirmed", function(req, res){
 
 router.post("/getConfirmed", function(req, res){
   //confirmed shifts
-  Visit.find({$and:[
+  TestVisit.find({$and:[
             {status:'In process'}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
           ]}).sort({startTime:1}).exec(function(err,visits){
             if(err){
@@ -55,33 +56,10 @@ router.post("/getConfirmed", function(req, res){
           });
 })
 
-router.post("/getLate", function(req, res){
-  //confirmed shifts
-  Visit.find({$and:[
-    {$or:[{status:'Late'},{status:'Notified Caregiver'},{status:'Notified Manager'}]}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
-          ]}).sort({startTime:1}).exec(function(err,visits){
-            if(err){
-              throw err;
-            }
-            res.json(visits);
-          })
-});
-
-router.post("/getOvertime", function(req, res){
-  //confirmed shifts
-  Visit.find({$and:[
-            {status:'Overtime'}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
-          ]}).sort({startTime:1}).exec(function(err,visits){
-            if(err){
-              throw err;
-            }
-            res.json(visits);
-          });
-})
 
 router.post("/getAllShifts", function(req, res){
   //all shifts
-  Visit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
+  TestVisit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
     if(err){
       throw err;
     }
@@ -91,10 +69,9 @@ router.post("/getAllShifts", function(req, res){
 })
 
 
+
 router.post("/updateVisit", function(req, res) {
-  console.log('got here safely');
-  console.log(req.body);
-  Visit.findOne({ _id: req.body._id }, function(err,visit){
+  TestVisit.findOne({ _id: req.body._id }, function(err,visit){
 
     visit.clockInTime = req.body.clockInTime;
     visit.clockOutTime = req.body.clockOutTime;
@@ -195,11 +172,11 @@ router.post("/addVisit", function(req,res){
         cid = carer.employeeId
       }
       var vid = client.phoneNumber+cid
-      Visit.findOne({ visitId:vid}, function(err,duplicatedVisit){
+      TestVisit.findOne({ visitId:vid}, function(err,duplicatedVisit){
         if(duplicatedVisit !=null){
           vid = vid+'2'
         }
-        Visit.create({
+        TestVisit.create({
           visitId:vid,
           caregiverName: carer.name,
           clientName:client.name,
@@ -233,7 +210,33 @@ router.post("/addClient", function(req, res) {
 });
 
 
-
+router.post("/fetchVisitLog", function(req,res){
+  var period = moment().week()
+  var extraPeriod = 0
+  if(period % 2 == 0)
+  {
+    extraPeriod = period + 1
+  }
+  else
+  {
+    extraPeriod = period - 1
+  }
+  if (req.body['type'] == 'Clients'){
+    TestVisit.find( {$and: [
+        { clientName:req.body['name'] },
+        { $or: [{payPeriod: period}, {payPeriod: extraPeriod}] }
+      ]}).sort({date:1}).exec(function(err,visits){
+        res.json(visits)
+    })
+  } else {
+    TestVisit.find( {$and: [
+      { caregiverName:req.body['name'] },
+      { $or: [{payPeriod: period}, {payPeriod: extraPeriod}] }
+    ]}).sort({date:1}).exec(function(err,visits){
+      res.json(visits)
+  })
+  }
+})
 //todo
     //all shifts
 
