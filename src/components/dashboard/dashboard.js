@@ -417,7 +417,7 @@ class Dashboard extends React.Component {
     if(this.state.tabValue == 'unconfirmed' || this.state.tabValue == 'allShifts'){
       var editVisit = this.props[this.state.tabValue][this.state.selected[0]]
 
-      dialog = <Popup visit={editVisit} tabValue={this.state.tabValue} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
+      dialog = <Popup visit={editVisit || {}} tabValue={this.state.tabValue} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
     } else {
       dialog = null;
     }
@@ -441,7 +441,7 @@ class Dashboard extends React.Component {
           This tab shares live updates on staff that are currently working, late for their shift and working overtime.  
           </div>
           <div className='tabSub'>
-            Welcome to your first week with Peachy, Tracy! We are excited to start adding value to your business and learn how we can add even more. 
+          Welcome to your first week with Peachy, Tracy! We are excited to start adding value to your business and learn how we can add even more. 
           </div>
           <div className='summaryTable'>
           <div className='summaryItem'>
@@ -458,8 +458,6 @@ class Dashboard extends React.Component {
           </div>
           </div>  
           <RealtimeTable/>
-          <LateTable />
-          <OvertimeTable/>
 
         </Tab>
         <Tab 

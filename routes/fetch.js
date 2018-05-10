@@ -77,21 +77,9 @@ router.post("/updateVisit", function(req, res) {
     visit.clockOutTime = req.body.clockOutTime;
     visit.caregiverName = req.body.caregiverName;
     visit.clientName = req.body.clientName;
-    visit.scheduledDuration = req.body.scheduledDuration;
-    visit.startTime = req.body.startTime;
-    visit.endTime =  req.body.endTime;
+
     visit.status = req.body.status;
- 
-    visit.statusLog.push(visit.status);
-
-
     visit.duration = 0;
-    if (visit.status == 'In process'){
-      visit.active = true;
-    } else {
-      visit.active = false;
-    }
-
     if (visit.status == 'Completed'){
       Client.findOne({name:visit.clientName}, function(err,client){
         if(err) return err;
@@ -105,7 +93,6 @@ router.post("/updateVisit", function(req, res) {
         Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
           if (err) return err;
           if(carer==null) {
-            //checker('No carer found with the given ID');
             return 'No caregivers found';
           };
 
@@ -113,8 +100,8 @@ router.post("/updateVisit", function(req, res) {
           carer.billedVisits.push(visit);
           carer.visits.push(visit);
 
+          //implement logic for change of staff for updating visit id
           visit.vid = client.phoneNumber+carer.employeeId
-          visit.replyNumberC = carer.phoneNumber;
 
           carer.save();
           client.save();

@@ -5,7 +5,6 @@ var router = express.Router();
 const VoiceResponse = require("twilio").twiml.VoiceResponse;
 var Caregiver = require("./../models/caregiver");
 var Client = require("./../models/client");
-var Activity = require("./../models/recentActivity");
 var TestVisit = require('./../models/testerVisit');
 
 //import moment
@@ -70,11 +69,9 @@ router.post("/", function(req, res) {
 
             Caregiver.findOne({employeeId:input}, function(err, carer){
 
-              var replyNumber = ''
               var carerName = req.body.Digits;
               if (carer != null){
                 carerName = carer.name
-                replyNumber = carer.phoneNumber
               }
 
               TestVisit.create({
@@ -106,14 +103,14 @@ router.post("/", function(req, res) {
           Client.findOne({name:visit.clientName}, function(err,client){
             if(err) return err;
             if(client!=null){
-              client.billedHours += parseFloat(visit.scheduledDuration);
+              client.billedHours += parseFloat(visit.duration);
               client.billedVisits.push(visit);
               client.save();
             }
             Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
               if (err) return err;
               if(carer!=null) {
-                carer.payingHours += parseFloat(visit.scheduledDuration);
+                carer.payingHours += parseFloat(visit.duration);
                 carer.billedVisits.push(visit);
                 carer.visits.push(visit);
                 carer.save();

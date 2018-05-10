@@ -298,88 +298,6 @@ html, body, .app {
   background: peachpuff!important
 } 
 
-.dialogWindow{
-  /* margin:auto;
-  width:100%!important; */
-  display: grid;
-  grid-template-columns: repeat(1, 1fr 1fr);
-  grid-template-rows: repeat(12,40px); 
-  align-items: center;
-}
-
-/* .row1a{
-  grid-column: 1/2;
-  grid-row:1/2;
-}
-.row1b{
-  grid-column: 2/3;
-  grid-row:1/2;
-}
-
-.row2a{
-  grid-column: 1/2;
-  grid-row:2/3;
-}
-.row2b{
-  grid-column: 2/3;
-  grid-row:2/3;
-} */
-
-.row3a{
-  grid-column: 1/2;
-  grid-row:3/4;
-}
-.row3b{
-  grid-column: 2/3;
-  grid-row:3/4;
-}
-
-.row4a{
-  grid-column: 1/2;
-  grid-row:4/5;
-}
-.row4b{
-  grid-column: 2/3;
-  grid-row: 4/5;
-
-}
-
-.row5a{
-  grid-column: 1/2;
-  grid-row:7/8;
-}
-.row5b{
-  grid-column: 2/3;
-  grid-row:7/8;
-}
-/* 
-.row6a{
-  grid-column: 1/2;
-  grid-row:6/7;
-}
-.row6b{
-  grid-column: 2/3;
-  grid-row:6/7;
-}
-
-.row7a{
-  grid-column: 1/2;
-  grid-row:7/8;
-}
-.row7b{
-  grid-column: 2/3;
-  grid-row:7/8;
-}
-
-.row8a{
-  grid-column: 1/2;
-  grid-row:8/9;
-}
-.row8b{
-  grid-column: 2/3;
-  grid-row:8/9;
-} */
-
 
 .tableHeader {
   color:black!important;
@@ -408,7 +326,7 @@ html, body, .app {
 }
 
 .directoryItem{
-  margin: 10px;
+  margin: 5px;
   padding:30;
   border: 1px solid lightblue;
   background: rgb(212, 239, 255);
@@ -476,7 +394,7 @@ html, body, .app {
 }
 .dropdown{
   color: rgba(0, 0, 0, 0.87); 
-  width:300!important;
+  width:300px!important;
   height: 40px!important; 
   line-height: 0px!important; 
   overflow: hidden; 
@@ -557,9 +475,25 @@ iframe{
 
 .directoryItemVisitLog{
   grid-column: 1/3;
+  padding: 10px;
   padding-top: 10px;
 }
+
+.directoryItemHead{
+  margin: 20px;
+  padding:1;
+  border: 1px solid lightblue;
+  background: rgb(212, 239, 255);
+  font-size: 20;
+  color:rgb(112, 112, 112);
+}
+
+.directoryItemHead:hover{
+  border: 1px solid peachpuff;
+}
+
 .visitlogEntry{
+  margin-top:10px;
   display: grid;
   padding: 5px;
   grid-template-columns: 1fr 1fr 1fr;
@@ -567,6 +501,62 @@ iframe{
   background: white;
 }
 
+.visitlogTitle{
+  font-size: 30;
+  border-bottom: 1px solid rgb(112, 112, 112);
+}
+
 .visitlogEntry:hover{
   border: 5px solid peachpuff;
 }
+
+.dialogTitle{
+
+  font-size: 40!important;
+  font-weight: bold!important;
+  border-bottom: 1px solid rgb(112, 112, 112);
+  margin: 20px!important;
+  padding-bottom: 10px;
+}
+
+.dialogWindow{
+  /* margin:auto;
+  width:100%!important; */
+  display: grid!important;
+  grid-gap:10px!important;
+  grid-template-columns: repeat(1, 1fr 1fr)!important;
+  grid-template-rows: repeat(12,40px)!important; 
+  align-items: center!important;
+  
+}
+
+.rowItem{
+  margin-left:23px!important;
+}
+/* .row3a{
+  grid-column: 1/2;
+  grid-row:3/4;
+}
+.row3b{
+  grid-column: 2/3;
+  grid-row:3/4;
+}
+
+.row4a{
+  grid-column: 1/2;
+  grid-row:4/5;
+}
+.row4b{
+  grid-column: 2/3;
+  grid-row: 4/5;
+
+}
+
+.row5a{
+  grid-column: 1/2;
+  grid-row:7/8;
+}
+.row5b{
+  grid-column: 2/3;
+  grid-row:7/8;
+} */

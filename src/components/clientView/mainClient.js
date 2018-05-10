@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { fetchClients } from "../../actions/fetchingActions";
+import { fetchClients, fetchStaff } from "../../actions/fetchingActions";
 import Navbar from "../navbar";
 import {formatPhone} from '../../helper';
 import Directory from '../directory/directory'
@@ -11,6 +11,7 @@ class MainClient extends React.Component {
 
   componentWillMount(){
     this.props.fetchClients();
+    this.props.fetchStaff();
   }
   render() {
     return (<div>
@@ -22,11 +23,11 @@ class MainClient extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {clients:state.clientReducers.clients};
+  return {staff:state.clientReducers.staff, clients:state.clientReducers.clients};
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchClients: fetchClients }, dispatch);
+  return bindActionCreators({ fetchStaff: fetchStaff, fetchClients: fetchClients }, dispatch);
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(MainClient);

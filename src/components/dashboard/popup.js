@@ -81,7 +81,7 @@ import {updateVisit} from '../../actions/fetchingActions';
             date: null,
             timezone:null});
         this.props.updateVisit(visit,this.props.tabValue);
-        //this.props.handleClose()
+        this.props.handleClose()
       }
     
     //   isSelected = (index) => {
@@ -147,7 +147,6 @@ import {updateVisit} from '../../actions/fetchingActions';
       }
     
     render() {
-
         const actions = [
             <FlatButton
               label="Save"
@@ -159,18 +158,18 @@ import {updateVisit} from '../../actions/fetchingActions';
             label="Cancel"
             primary={false}
             keyboardFocused={false}
-            onClick={this.handleClose}
+            onClick={this.props.handleClose}
           />
           
           ];
         
-        console.log('popup in there')
         var stringClockIn = this.props.visit? this.props.visit.clockInTime? moment(this.props.visit.clockInTime).format('H:mm a'):"Not Available" :"Not available"
         var stringClockOut =  this.props.visit? this.props.visit.clockOutTime? moment(this.props.visit.clockOutTime).format('H:mm a'):"Not Available" :"Not available"
         return(
             <div>
             <Dialog
             title="Update information"
+            titleClassName='dialogTitle'
             actions={actions}
             modal={false}
             open={this.props.open}
@@ -199,9 +198,8 @@ import {updateVisit} from '../../actions/fetchingActions';
             </DropDownMenu>
     
             <div className="row3a">Time clocked in: </div>  
-            <div className="row3b">
+            <div className="rowItem">
             <TimePicker
-              ref="clockInTime"
               hintText={stringClockIn}
               value={this.props.visit.clockInTime}
               onChange={this.handleChangeTimeChange.bind(this,'clockInTime')}
@@ -209,7 +207,7 @@ import {updateVisit} from '../../actions/fetchingActions';
             </div>
     
             <div className="row4a">Time clocked out: </div>  
-            <div className="row4b">
+            <div className="rowItem">
             <TimePicker
               ref="clockOutTime"
               hintText={stringClockOut}
@@ -221,7 +219,7 @@ import {updateVisit} from '../../actions/fetchingActions';
             <div className="row5a">Shift duration: </div>  
             <TextField
               ref="scheduledDuration"
-              className="row5b"
+              className="rowItem"
               id="scheduledDuration"
               disabled={true}
               value={Number(this.props.visit.duration).toFixed(2)}
@@ -256,6 +254,7 @@ import {updateVisit} from '../../actions/fetchingActions';
                 <MenuItem value={'Cancelled'} primaryText="Cancelled" />
                   
             </DropDownMenu>
+
             }
     
             <div className='alertMessage'>
