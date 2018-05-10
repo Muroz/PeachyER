@@ -368,13 +368,15 @@ html, body, .app {
   font-size: 20;
   color:rgb(112, 112, 112);
   display: grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(1,1fr);
 }
 
 .summaryItem{
   border: 1px solid lightblue;
   background: rgb(212, 239, 255);
-  margin: 20px;
+  width: 30%;
+  margin:auto;
+  margin-top: 10px;
   justify-content: center;
   display: grid;
 
@@ -527,7 +529,7 @@ iframe{
   grid-template-columns: repeat(1, 1fr 1fr)!important;
   grid-template-rows: repeat(12,40px)!important; 
   align-items: center!important;
-  
+
 }
 
 .rowItem{

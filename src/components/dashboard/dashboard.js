@@ -448,14 +448,14 @@ class Dashboard extends React.Component {
             <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.confirmed? this.props.confirmed.length:'0'}</p></div>
             <div style={{margin:'auto'}}><p className='summaryItemSub'>Working</p></div>
           </div>
-          <div className='summaryItem'>
+          {/* <div className='summaryItem'>
             <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.late ? this.props.late.length:'0'}</p></div>
             <div style={{margin:'auto'}}><p className='summaryItemSub'>Late</p></div>
           </div>
           <div className='summaryItem'>
             <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.allShifts ? this.props.overtime.length:'0'}</p></div>
             <div style={{margin:'auto'}}><p className='summaryItemSub'>Overtime</p></div>
-          </div>
+          </div> */}
           </div>  
           <RealtimeTable/>
 

@@ -306,134 +306,93 @@ function storeToken(token) {
 /////////// Late runs every minutes
 ////////////////////////////////////////////////////
 
-var visitSched = later.parse.recur().every(1).minute();
-var t = later.setInterval(function() {
-    console.log('Checking for late people');
-    Visit.find({}, function(err,visits){
+// var visitSched = later.parse.recur().every(1).minute();
+// var t = later.setInterval(function() {
+//     console.log('Checking for late people');
+//     Visit.find({}, function(err,visits){
 
-      if (visits == undefined){
-        return;
-      }
-      visits.forEach(function(visit,index,arr){
-        var currentTime = new moment().tz('America/St_Johns');
-        var localStart = new moment(visit.startTime).tz('America/St_Johns');
-        var localEnd = new moment(visit.endTime).tz('America/St_Johns');
+//       if (visits == undefined){
+//         return;
+//       }
+//       visits.forEach(function(visit,index,arr){
+//         var currentTime = new moment().tz('America/St_Johns');
+//         var localStart = new moment(visit.startTime).tz('America/St_Johns');
+//         var localEnd = new moment(visit.endTime).tz('America/St_Johns');
 
-        //search for company specifics here
-        if(visit.status == 'Scheduled'){
+//         //search for company specifics here
+//         if(visit.status == 'Scheduled'){
 
-          if (currentTime.diff(localStart,'minutes',true)>1){
-            if(currentTime.diff(localEnd)>1){
-              visit.status = 'Unconfirmed'
-              visit.statusLog.push('Unconfirmed');
-            } else {
-              visit.status = 'Late';
-              visit.statusLog.push('late');
-            }
-            visit.save();
-          }
+//           if (currentTime.diff(localStart,'minutes',true)>1){
+//             if(currentTime.diff(localEnd)>1){
+//               visit.status = 'Unconfirmed'
+//               visit.statusLog.push('Unconfirmed');
+//             } else {
+//               visit.status = 'Late';
+//               visit.statusLog.push('late');
+//             }
+//             visit.save();
+//           }
 
-        }
+//         }
 
-        else if(visit.status == 'In process'){
+//         else if(visit.status == 'In process'){
           
-          if(currentTime.diff(localEnd,'minutes',true)>5){
-            visit.status = 'Overtime';
-            visit.statusLog.push('Overtime')
-          }
-        }
-        //|| visit.status == 'Overtime'
-        else if(visit.status == 'Late'){
-          console.log(visit.status,'messaging');
-          // visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
-          if( currentTime.diff(localStart,'minutes',true)>5){
-            visit.status = 'Notified Caregiver';
-            visit.statusLog.push('Notified Caregiver');
-          }
-          //var visitState = visit.active?'out':'in'
-          // var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
-          // clientTwilio.messages.create({
-          //   from: process.env.TWILIO_PHONE,
-          //   to: visit.replyNumberC,
-          //   body: bodyString
-          // }).then((messsage) => console.log(message.sid));
-        }
+//           if(currentTime.diff(localEnd,'minutes',true)>5){
+//             visit.status = 'Overtime';
+//             visit.statusLog.push('Overtime')
+//           }
+//         }
+//         //|| visit.status == 'Overtime'
+//         else if(visit.status == 'Late'){
+//           console.log(visit.status,'messaging');
+//           // visit.caregiverMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
+//           if( currentTime.diff(localStart,'minutes',true)>5){
+//             visit.status = 'Notified Caregiver';
+//             visit.statusLog.push('Notified Caregiver');
+//           }
+//           //var visitState = visit.active?'out':'in'
+//           // var bodyString = "Hi from Peachy. Reminder: you haven't clocked in/out for your scheduled shift. There is no need to reply to this message. Thanks!";
+//           // clientTwilio.messages.create({
+//           //   from: process.env.TWILIO_PHONE,
+//           //   to: visit.replyNumberC,
+//           //   body: bodyString
+//           // }).then((messsage) => console.log(message.sid));
+//         }
 
-        //create overtime notified
+//         //create overtime notified
         
-        else if (visit.status == 'Notified Caregiver'){
-          console.log(currentTime.diff(localStart,'minutes',true));
-          if( currentTime.diff(localStart,'minutes',true)>15){
-          //if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
-            //visit.managerMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
-            visit.status = 'Notified Manager';
-            visit.statusLog.push('Notified Manager');
-            //var visitState = visit.active?'out':'in'
-            // var bodyString = "Hi Tracy, this is Peachy letting you know that "+visit.caregiverName+" is late for their shift. There is no need to reply to this message. Thanks!";
+//         else if (visit.status == 'Notified Caregiver'){
+//           console.log(currentTime.diff(localStart,'minutes',true));
+//           if( currentTime.diff(localStart,'minutes',true)>15){
+//           //if (currentTime.diff(visit.caregiverMessage.sentTime,'minutes',true)>10){
+//             //visit.managerMessage = { state:'sent', sentTime: new moment().tz('America/St_Johns'), reply:''}
+//             visit.status = 'Notified Manager';
+//             visit.statusLog.push('Notified Manager');
+//             //var visitState = visit.active?'out':'in'
+//             // var bodyString = "Hi Tracy, this is Peachy letting you know that "+visit.caregiverName+" is late for their shift. There is no need to reply to this message. Thanks!";
 
-            // clientTwilio.messages.create({
-            //   from: process.env.TWILIO_PHONE,
-            //   to: visit.replyNumberM,
-            //   body: bodyString
-            // }).then((messsage) => console.log(message.sid));
+//             // clientTwilio.messages.create({
+//             //   from: process.env.TWILIO_PHONE,
+//             //   to: visit.replyNumberM,
+//             //   body: bodyString
+//             // }).then((messsage) => console.log(message.sid));
           
-          }
-        } 
+//           }
+//         } 
         
-        else if (visit.status == 'Notified Manager'){
-          var currentTime = new moment().tz('America/St_Johns');
-          if( currentTime.diff(localStart,'minutes',true)>30){
-          //if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
-            visit.status = 'Unconfirmed';
-            visit.statusLog.push('Unconfirmed');
-          }
+//         else if (visit.status == 'Notified Manager'){
+//           var currentTime = new moment().tz('America/St_Johns');
+//           if( currentTime.diff(localStart,'minutes',true)>30){
+//           //if (currentTime.diff(visit.managerMessage.sentTime,'minutes',true)>10){
+//             visit.status = 'Unconfirmed';
+//             visit.statusLog.push('Unconfirmed');
+//           }
 
-        }
-        visit.save();
-      },this);
-    })
-  }, visitSched);
-
-//TestVisit.find({}).remove().exec();
-// Visit.find({},function(err,visits){
-
-//   visits.forEach(function(visit){
-//     var status = ''
-//     var duration = 0
-//     if (visit.clockInTime != null && visit.clockOutTime != null){
-//       status = 'Completed'
-//       duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
-//     } else if(moment().isSame(visit.date, 'day')){
-//       status = 'In process';
-//     }
-//     else {
-//       status = 'Unconfirmed'
-//     }
-//     var payPeriod = moment(visit.date).week()
-//     console.log(payPeriod);
-//     TestVisit.create({
-//       visitId:visit.visitId,
-//       caregiverName: visit.caregiverName,
-//       clientName:visit.clientName,
-//       status: status,
-//       clockInTime: visit.clockInTime,
-//       clockOutTime: visit.clockOutTime,
-//       duration: duration,
-//       date:visit.date,
-//       company:visit.company,
-//       timezone: 'Canada',
-//       payPeriod: payPeriod
-//     }) 
-//   })
-// })
-
-// TestVisit.find({}, function(err,visits){
-//   visits.forEach(function(visit){
-//     console.log(visit);
-//     console.log(visit.payPeriod);
-//   })
-// })
-
+//         }
+//         visit.save();
+//       },this);
+//     })
+//   }, visitSched);
 
 ///////////////////////////////////////////////////
 ///////// Schedules runs at 1am every day

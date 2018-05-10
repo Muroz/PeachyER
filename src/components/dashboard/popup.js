@@ -84,17 +84,6 @@ import {updateVisit} from '../../actions/fetchingActions';
         this.props.handleClose()
       }
     
-    //   isSelected = (index) => {
-
-    //     if (this.state.open){
-    //       return false
-    //     }
-    //     else {
-    //       //return index == this.props.selectedRow
-    //       return this.state.selected.indexOf(index) !== -1;
-    //     }
-    //   };
-    
     
       handleChangeTimeChange = (type,event, date) => {
     
@@ -151,13 +140,13 @@ import {updateVisit} from '../../actions/fetchingActions';
             <FlatButton
               label="Save"
               primary={true}
-              keyboardFocused={true}
+              keyboardFocused={false}
               disabled={!this.state.save}
               onClick={this.handleSave}
             />,<FlatButton
             label="Cancel"
             primary={false}
-            keyboardFocused={false}
+            keyboardFocused={true}
             onClick={this.props.handleClose}
           />
           
