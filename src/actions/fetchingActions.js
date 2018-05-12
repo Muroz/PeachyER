@@ -112,6 +112,23 @@ export function fetchAllShifts() {
   };
 }
 
+//////
+export function fetchAllShiftsFiltered(date) {
+  var dict = {}
+  dict['date'] = date
+  return function(dispatch) {
+    axios
+      .post("/fetch/getAllShiftsFiltered",dict)
+      .then(function(response) {
+        dispatch({ type: "GET_ALLSHIFTS_FILTERED", payload: response.data });
+      })
+      .catch(function(err) {
+        dispatch({ type: "GET_ALLSHIFTS_FILTERED_REJECTED", payload: err });
+      });
+  };
+}
+///////
+
 // Fetch unconfirmed shifts information
 export function fetchUnconfirmedShifts() {
   return function(dispatch) {

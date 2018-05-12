@@ -535,30 +535,8 @@ iframe{
 .rowItem{
   margin-left:23px!important;
 }
-/* .row3a{
-  grid-column: 1/2;
-  grid-row:3/4;
-}
-.row3b{
-  grid-column: 2/3;
-  grid-row:3/4;
-}
 
-.row4a{
-  grid-column: 1/2;
-  grid-row:4/5;
+.allShiftsCalendar {
+  width: 20%;
+  margin-left: 20px;
 }
-.row4b{
-  grid-column: 2/3;
-  grid-row: 4/5;
-
-}
-
-.row5a{
-  grid-column: 1/2;
-  grid-row:7/8;
-}
-.row5b{
-  grid-column: 2/3;
-  grid-row:7/8;
-} */

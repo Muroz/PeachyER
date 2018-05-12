@@ -41,7 +41,6 @@ class AllShiftsTable extends React.Component {
         }
 
         this.togglePopup = this.togglePopup.bind(this);
-        this.selectRow = this.selectRow.bind(this);
     }
     
     togglePopup() {
@@ -50,11 +49,6 @@ class AllShiftsTable extends React.Component {
         });
     }
 
-    selectRow(visit) {
-        console.log('this is selected')
-        console.log(visit);
-    }
-    
 
     setTableInfo(visit, index){
 
@@ -67,7 +61,7 @@ class AllShiftsTable extends React.Component {
             difference = difference * 60;
         }
 
-        return (<TableRow key={index} selected={this.props.isSelected(index)} onClick={this.selectRow.bind(this,visit)}>
+        return (<TableRow key={index} selected={this.props.isSelected(index)}>
                   <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'15px'}}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
@@ -103,7 +97,7 @@ class AllShiftsTable extends React.Component {
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Scheduled shifts today" className='tableHeader'>
                 <div className='tabDescription'>
-                    View and edit all of the shifts scheduled for today <HelpOutline onClick={this.togglePopup}/>
+                    View and edit all of the shifts scheduled for {moment(this.props.selectedDate).format('MMM D')} <HelpOutline onClick={this.togglePopup}/>
                 </div>
                 </TableHeaderColumn>
             </TableRow>    
@@ -122,7 +116,7 @@ class AllShiftsTable extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
             >
-            {this.props.allShifts ?this.props.allShifts.map(this.setTableInfo,this):null}
+            {this.props.allShiftsFiltered ?this.props.allShiftsFiltered.map(this.setTableInfo,this):null}
             </TableBody>
         </Table>
          <Dialog
@@ -146,7 +140,7 @@ class AllShiftsTable extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {allShifts: state.clientReducers.allShifts};
+  return {allShiftsFiltered: state.clientReducers.allShiftsFiltered};
 }
 
 export default connect(mapStateToProps)(AllShiftsTable);

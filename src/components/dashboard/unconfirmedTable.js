@@ -51,10 +51,6 @@ class UnconfirmedTable extends React.Component {
     
 
     setTableInfo(visit, index){
-        console.log(visit.scheduledDuration);
-        var suffix = 'hrs';
-        var scheduledDurationHour = Math.floor(visit.scheduledDuration);
-        var scheduledDifference = Math.round((visit.scheduledDuration - scheduledDurationHour)*60);
 
         var DurationHour = Math.floor(visit.duration);
         var durationDifference = Math.round((visit.duration - DurationHour)*60);

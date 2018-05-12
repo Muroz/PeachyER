@@ -145,11 +145,6 @@ router.post("/", function(req, res) {
 
 });
 
-router.post("/message", function(req,res){
-  console.log('receiving message');
-  //implement handling for errors
-});
-
 module.exports = router;
 
 

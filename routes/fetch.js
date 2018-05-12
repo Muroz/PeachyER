@@ -59,7 +59,18 @@ router.post("/getConfirmed", function(req, res){
 
 router.post("/getAllShifts", function(req, res){
   //all shifts
-  TestVisit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({startTime:1}).exec(function(err,visits){
+  TestVisit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
+    if(err){
+      throw err;
+    }
+    
+    res.json(visits);
+  })
+})
+
+router.post("/getAllShiftsFiltered", function(req, res){
+  //all shifts
+  TestVisit.find({'date':{"$gte": new moment(req.body.date).startOf('day'), "$lt": new moment(req.body.date).endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
     if(err){
       throw err;
     }

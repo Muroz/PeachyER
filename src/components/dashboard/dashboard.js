@@ -232,7 +232,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import NavBar from "./../navbar";
-import {fetchAllShifts,fetchConfirmedShifts,fetchUnconfirmedShifts, updateVisit, selectRow, fetchOvertimeShifts, fetchLateShifts, fetchStaff, fetchClients} from '../../actions/fetchingActions';
+import {fetchAllShifts,fetchConfirmedShifts,fetchUnconfirmedShifts,fetchAllShiftsFiltered, updateVisit, selectRow, fetchOvertimeShifts, fetchLateShifts, fetchStaff, fetchClients} from '../../actions/fetchingActions';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Badge from 'material-ui/Badge';
 import moment from 'moment-timezone';
@@ -277,9 +277,39 @@ class Dashboard extends React.Component {
 
     selectedVisit:null,
 
-    open: false
+    open: false,
+
+    currentDate:new Date()
 
   };
+
+
+  componentWillMount(){
+    //fetch all shifts (pass a date);
+    this.props.fetchAllShiftsFiltered(this.state.currentDate);
+    this.props.fetchAllShifts();
+    this.props.fetchConfirmedShifts();
+    this.props.fetchUnconfirmedShifts();
+    this.props.fetchOvertimeShifts();
+    this.props.fetchLateShifts();
+    this.props.fetchStaff();
+    this.props.fetchClients();
+  }
+  componentDidMount() {
+    setInterval( () => {
+      this.props.fetchAllShiftsFiltered(this.state.currentDate);
+      this.props.fetchAllShifts();
+      this.props.fetchConfirmedShifts();
+      this.props.fetchUnconfirmedShifts();
+      this.props.fetchOvertimeShifts();
+      this.props.fetchLateShifts();
+    },20000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
 
   handleOpen = (selectedRows) => {
     if(selectedRows.length == 0){
@@ -323,57 +353,12 @@ class Dashboard extends React.Component {
       status: null});
   };
 
-  handleSave = () => {
-    //check all values
-    var visit = this.state.selectedVisit;
-    visit.clockInTime = this.state.clockInTime ? moment(this.state.clockInTime) : visit.clockInTime;
-    visit.clockOutTime = this.state.clockOutTime ? moment(this.state.clockOutTime) : visit.clockOutTime;
-    visit.caregiverName = this.state.caregiverName ? this.state.caregiverName : visit.caregiverName;
-    visit.clientName = this.state.clientName ? this.state.clientName : visit.clientName;
-    visit.duration = this.state.duration ? this.state.duration : visit.duration;
-    visit.status = this.state.status ? this.state.status : visit.status;
-
- 
-    this.setState({ 
-        open : false,
-        save: false,
-
-        visitId:null,
-        caregiverName:null,
-        clientName:null,
-        clockInTime: null,
-        duration:null,
-        clockOutTime : null,
-        status: null,
-        company: null,
-        date: null,
-        timezone:null
-      });
-    this.props.updateVisit(visit,this.props.tabValue);
-  }
-
-  componentWillMount(){
-    this.props.fetchAllShifts();
-    this.props.fetchConfirmedShifts();
-    this.props.fetchUnconfirmedShifts();
-    this.props.fetchOvertimeShifts();
-    this.props.fetchLateShifts();
-    this.props.fetchStaff();
-    this.props.fetchClients();
-  }
-  componentDidMount() {
-    setInterval( () => {
-      this.props.fetchAllShifts();
-      this.props.fetchConfirmedShifts();
-      this.props.fetchUnconfirmedShifts();
-      this.props.fetchOvertimeShifts();
-      this.props.fetchLateShifts();
-    },20000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  handleChangeDate = (event, date) => {
+    this.setState({
+      currentDate: date,
+    });
+    this.props.fetchAllShiftsFiltered(date);
+  };
 
   isSelected = (index) => {
 
@@ -448,14 +433,6 @@ class Dashboard extends React.Component {
             <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.confirmed? this.props.confirmed.length:'0'}</p></div>
             <div style={{margin:'auto'}}><p className='summaryItemSub'>Working</p></div>
           </div>
-          {/* <div className='summaryItem'>
-            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.late ? this.props.late.length:'0'}</p></div>
-            <div style={{margin:'auto'}}><p className='summaryItemSub'>Late</p></div>
-          </div>
-          <div className='summaryItem'>
-            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.allShifts ? this.props.overtime.length:'0'}</p></div>
-            <div style={{margin:'auto'}}><p className='summaryItemSub'>Overtime</p></div>
-          </div> */}
           </div>  
           <RealtimeTable/>
 
@@ -465,7 +442,14 @@ class Dashboard extends React.Component {
           value="allShifts"
           className='tabContainer'
         >
-          <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)}/>
+          <div className="allShiftsCalendar">
+          <DatePicker
+            onChange={this.handleChangeDate}
+            floatingLabelText="Shifts on"
+            defaultDate={this.state.currentDate}
+          />
+          </div>
+          <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>
         </Tab>
         <Tab 
           label={"Unconfirmed shifts ("+this.props.unconfirmed.length+")"}
@@ -484,6 +468,7 @@ class Dashboard extends React.Component {
 function mapStateToProps(state) {
   return {
     allShifts: state.clientReducers.allShifts,
+    allShiftsFiltered: state.clientReducers.allShiftsFiltered,
     unconfirmed: state.clientReducers.unconfirmed,
     confirmed: state.clientReducers.confirmed,
     allShifts: state.clientReducers.allShifts,
@@ -507,6 +492,7 @@ function mapDispatchToProps(dispatch) {
     fetchOvertimeShifts: fetchOvertimeShifts,
     fetchLateShifts: fetchLateShifts,
     fetchClients: fetchClients,
-    fetchStaff: fetchStaff}, dispatch);
+    fetchStaff: fetchStaff,
+    fetchAllShiftsFiltered:fetchAllShiftsFiltered}, dispatch);
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
