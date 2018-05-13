@@ -298,6 +298,48 @@ function storeToken(token) {
   console.log('Token stored to ' + TOKEN_PATH);
 }
 
+
+// TestVisit.find({}).remove().exec();
+
+// Visit.find({},function(err,visits){
+
+//   visits.forEach(function(visit){
+
+//     var period =  new moment(visit.date).week()
+//     var status = visit.status
+//     if (visit.clockInTime != null && visit.clockOutTime != null){
+//       status = 'Completed'
+//     }
+//     else if (visit.clockOutTime == null){
+//       if(moment(visit.date) == new moment()){
+//         status = 'In process'
+//       }
+//       else if( period==18 || period==19 ){
+//         status = 'Unconfirmed'
+//       }
+//       else{
+//         status = 'Discarded'
+//       }
+//     }
+//     TestVisit.create({
+//       visitId:visit.visitId,
+//       caregiverName: visit.caregiverName,
+//       clientName:visit.clientName,
+//       status: status,
+//       clockInTime: visit.clockInTime,
+//       clockOutTime: visit.clockOutTime,
+//       date:visit.date,
+//       company:'Coombs',
+//       timezone: 'Canada',
+//       payPeriod: new moment().week()
+//     }) 
+//   })
+// });
+
+
+
+
+
 //scheduled actions
 
 
