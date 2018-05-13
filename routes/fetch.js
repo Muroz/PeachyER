@@ -59,7 +59,7 @@ router.post("/getConfirmed", function(req, res){
 
 router.post("/getAllShifts", function(req, res){
   //all shifts
-  TestVisit.find({'date':{"$gte": new moment().tz('America/St_Johns').startOf('day'), "$lt": new moment().tz('America/St_Johns').endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
+  TestVisit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
     if(err){
       throw err;
     }
@@ -70,7 +70,7 @@ router.post("/getAllShifts", function(req, res){
 
 router.post("/getAllShiftsFiltered", function(req, res){
   //all shifts
-  TestVisit.find({'date':{"$gte": new moment(req.body.date).startOf('day'), "$lt": new moment(req.body.date).endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
+  TestVisit.find({'date':{"$gte": new moment(req.body.date).tz('America/St_Johns').startOf('day'), "$lt": new moment(req.body.date).tz('America/St_Johns').endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
     if(err){
       throw err;
     }
