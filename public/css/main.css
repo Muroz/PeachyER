@@ -126,8 +126,9 @@ body {
 }
 
 .logo {
-  width: 120;
-  height: 60;
+  height: 100%;
+  padding: 15px;
+  width: 200px;
 }
 
 

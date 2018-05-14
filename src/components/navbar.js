@@ -41,8 +41,7 @@ class NavBar extends React.Component {
       <div className="navbar">
      
         <div className="navbar_logo">
-          {" "}
-          <img src="/images/peachy_logo.png" className="logo" />{" "}
+          <img src="/images/peachy_logo_2.png" className="logo" />
         </div>
         <div className="navbar_li navbar_home">
           <a href="/dashboard"><Dashboard/><br/>Dashboard</a>

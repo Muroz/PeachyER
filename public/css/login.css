@@ -18,7 +18,8 @@
     justify-items: center;
 }
 .login_pic {
-    height: 200px;
+ height: 300px;
+ padding-bottom: -40px;
 }
 form {
     display: grid;
