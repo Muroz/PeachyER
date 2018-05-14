@@ -38,7 +38,7 @@ var Visit = require('./models/visit');
 var TestVisit = require('./models/testerVisit');
 
 //Security measure
-//app.use(helmet())
+app.use(helmet())
 
 //google spreadsheets
 var fs = require('fs');
@@ -95,7 +95,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 
-//app.use(compression());
+app.use(compression());
 require('./routes/main.js')(app, passport); // load our routes and pass in our app and fully configured passport
 app.use('/voice', voice);
 app.use('/fetch', fetch);

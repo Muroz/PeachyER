@@ -42,3 +42,7 @@ client_secret.json
 public/clientInfo.csv
 public/visits.csv
 public/staffInfo.csv
+
+#ssl
+mydomain.csr
+private.key
