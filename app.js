@@ -38,7 +38,7 @@ var Visit = require('./models/visit');
 var TestVisit = require('./models/testerVisit');
 
 //Security measure
-app.use(helmet())
+//app.use(helmet())
 
 //google spreadsheets
 var fs = require('fs');
