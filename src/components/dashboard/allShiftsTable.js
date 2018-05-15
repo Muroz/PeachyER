@@ -55,18 +55,14 @@ class AllShiftsTable extends React.Component {
         var DurationHour = Math.floor(visit.duration);
         var durationDifference = Math.round((visit.duration - DurationHour)*60);
 
-        var difference = visit.duration - visit.scheduledDuration
-
-        if (Math.abs(difference)<1){
-            difference = difference * 60;
-        }
-
+        
+        ('0' + durationDifference).slice(-2)
         return (<TableRow key={index} selected={this.props.isSelected(index)}>
                   <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'15px'}}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+':'+durationDifference+' '}</TableRowColumn>
+                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableRowColumn>
                   <TableRowColumn ref={"status"+index} style={{fontSize:'15px'}}> {visit.status} </TableRowColumn>
                 </TableRow>)
     }

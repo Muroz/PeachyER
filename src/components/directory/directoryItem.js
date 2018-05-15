@@ -38,7 +38,7 @@ class DirectoryItem extends React.Component {
         return(<div key={index} className='visitlogEntry' onClick={this.openVisitDialog.bind(this,visit)}>
                 <div> HSW = {visit.caregiverName} </div>
                 <div> Status = {visit.status} </div>
-                <div> Duration(Hrs) = {Math.round(visit.duration)} </div>
+                <div> Duration (hrs) = {Math.round(visit.duration)} </div>
                 <div> Date = {moment(visit.date).format('DD MMM')} </div>
                 <div> Clock in time = {moment(visit.clockInTime).format('hh:mma')} </div>
                 <div> Clock out time = {moment(visit.clockOutTime).format('hh:mma')} </div>

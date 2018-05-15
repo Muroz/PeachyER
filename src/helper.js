@@ -9,7 +9,7 @@ export function formatPhone(phonenum) {
     if (regexObj.test(phonenum)) {
         var parts = phonenum.match(regexObj);
         var phone = "";
-        if (parts[1]) { phone += "+1 (" + parts[1] + ") "; }
+        if (parts[1]) { phone += "(" + parts[1] + ") "; }
         phone += parts[2] + "-" + parts[3];
         return phone;
     }
