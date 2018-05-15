@@ -13,12 +13,14 @@ html {
   color: var(--black);
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
 
+
 }
 
 body{
   letter-spacing: 1px!important;
   font-family:Roboto, sans-serif!important;
   text-shadow: none!important;
+  background: rgb(247, 247, 247);
 }
 a {
   font-size: 16;
@@ -86,13 +88,16 @@ body {
 }
 
 .navbar {
+  grid-row: 1/span 3;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 10%);
-  grid-template-rows: 80px;
-  /* background-color:lightgoldenrodyellow;   */
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(12,80px);
+  grid-auto-flow: column;
   background-color: white;
   align-items: center;
   justify-items: center;
+  width: 100%;
+  grid-gap: 10px;
 }
 
 .navbar_profile{
@@ -108,10 +113,10 @@ body {
 
 .navbar_logout {
 
-  grid-column: 10/11;
+  grid-row: 11/12;
 }
 .navbar_help{
-  grid-column: 9/10;
+  grid-row: 10/11;
 }
 
 .navbar_logo {
@@ -127,8 +132,7 @@ body {
 
 .logo {
   height: 100%;
-  padding: 15px;
-  width: 200px;
+  width: 50px;
 }
 
 
@@ -309,15 +313,20 @@ html, body, .app {
 .directoryBody{
   padding: 50px;
   font-size:20;
+  overflow: scroll;
 }
 
 .directoryBody a{
   background-color: peachpuff!important;
 }
 .directoryTitle{
+  padding: 20px;
+  margin: 20px;
   font-size: 50;
   color: lightskyblue;
   border-bottom: 1px solid lightskyblue;
+  padding-top: 10px;
+  margin-top: 10px;
 }
 
 .directoryList{
@@ -540,4 +549,31 @@ iframe{
 .allShiftsCalendar {
   width: 20%;
   margin-left: 20px;
+}
+
+
+.tableContainer{
+  width: 80%;
+  margin:auto;
+  padding: 20px;
+  background:white;
+  margin-bottom: 20px;
+  margin-top:30px;
+
+}
+
+.dashboardRoot{
+  display: grid;
+  height: 100%;
+  grid-template-rows: 100px 1fr 1fr;
+  grid-auto-flow: column;
+  grid-template-columns: 8% 92%;
+}
+
+.directoryRoot{
+  display: grid;
+  height: 100%;
+  grid-template-rows: 100px 1fr;
+  grid-auto-flow: column;
+  grid-template-columns: 8% 92%;
 }

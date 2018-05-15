@@ -13,15 +13,13 @@ class Directory extends React.Component {
   render() {
     var content = this.props.content.map(this.setItems,this)
 
-    return (<div>
+    return (
         <div className='directoryBody'>
-          <h1 className='directoryTitle'> {this.props.directoryType} </h1>
           <div className='directoryList'>
             {content}
           </div>
         </div>
-
-    </div>);
+        );
   }
 }
 

@@ -316,15 +316,16 @@ class Dashboard extends React.Component {
       console.log('this is still a thing');
       selectedRows = this.state.selected;    
     }
-
-    var selectedShift = this.props[this.state.tabValue][selectedRows[0]]
+    console.log('the rows');
+    console.log(selectedRows)
+    var selectedShift = this.props['allShifts'][selectedRows[0]]
     var stringClockIn = selectedShift.clockInTime ? moment(selectedShift.clockInTime) : null
     var stringClockOut =  selectedShift.clockOutTime ? moment(selectedShift.clockOutTime) : null
     var stringStart = moment(selectedShift.startTime)
     var stringEnd =  moment(selectedShift.endTime)
     var difference = Math.round(moment(stringEnd).diff(moment(stringStart),'hours',true))
     this.setState({
-      selectedVisit:this.props[this.state.tabValue][selectedRows[0]], 
+      selectedVisit:this.props['allShifts'][selectedRows[0]], 
       selected: selectedRows,
       caregiverName:selectedShift.caregiverName,
       clientName:selectedShift.clientName,
@@ -361,7 +362,8 @@ class Dashboard extends React.Component {
   };
 
   isSelected = (index) => {
-
+    console.log('this is selected');
+    console.log(index);
     if (this.state.open){
       return false
     }
@@ -396,23 +398,25 @@ class Dashboard extends React.Component {
     />
     
     ];
- 
-    var dialog;
+    var editVisit = this.props['allShifts'][this.state.selected[0]]
+    var dialog = <Popup visit={editVisit || {}} tabValue={'allShifts'} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
 
-    if(this.state.tabValue == 'unconfirmed' || this.state.tabValue == 'allShifts'){
-      var editVisit = this.props[this.state.tabValue][this.state.selected[0]]
+    // if(this.state.tabValue == 'unconfirmed' || this.state.tabValue == 'allShifts'){
+    //   var editVisit = this.props[this.state.tabValue][this.state.selected[0]]
 
-      dialog = <Popup visit={editVisit || {}} tabValue={this.state.tabValue} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
-    } else {
-      dialog = null;
-    }
+  
+    // } else {
+    //   dialog = null;
+    // }
 
-    return (
-      <div>
-        <NavBar />
+              {/* <div className='summaryTable'>
+          <div className='summaryItem'>
+            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.confirmed? this.props.confirmed.length:'0'}</p></div>
+            <div style={{margin:'auto'}}><p className='summaryItemSub'>Working</p></div>
+          </div>
+          </div>   */}
 
-      {dialog}
-      <Tabs
+           {/* <Tabs
         value={this.state.tabValue}
         onChange={this.handleChangeTab}
       >
@@ -422,19 +426,8 @@ class Dashboard extends React.Component {
           value="confirmed"
           className='tabContainer'
         > 
-          <div className='tabDescription'>
-          This tab shares live updates on staff that are currently working, late for their shift and working overtime.  
-          </div>
-          <div className='tabSub'>
-          Welcome to your first week with Peachy, Tracy! We are excited to start adding value to your business and learn how we can add even more. 
-          </div>
-          <div className='summaryTable'>
-          <div className='summaryItem'>
-            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.confirmed? this.props.confirmed.length:'0'}</p></div>
-            <div style={{margin:'auto'}}><p className='summaryItemSub'>Working</p></div>
-          </div>
-          </div>  
-          <RealtimeTable/>
+
+
 
         </Tab>
         <Tab 
@@ -458,9 +451,26 @@ class Dashboard extends React.Component {
         >
           <UnconfirmedTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)}/>
         </Tab>
-      </Tabs>
-        
-      </div>
+      </Tabs> */}
+    return (
+      <div className="dashboardRoot">
+        <NavBar />
+        <h1 className='directoryTitle'> Shifts </h1>
+        <div className="tableContainer">
+          <RealtimeTable/>
+        </div>
+        <div className="tableContainer">
+          <div className="allShiftsCalendar">
+            <DatePicker
+                onChange={this.handleChangeDate}
+                floatingLabelText="Shifts on"
+                defaultDate={this.state.currentDate}
+            />
+          </div>
+          <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>  
+        </div>
+        {dialog}
+    </div>
     );
   }
 }

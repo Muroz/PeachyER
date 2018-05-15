@@ -14,8 +14,9 @@ class MainClient extends React.Component {
     this.props.fetchStaff();
   }
   render() {
-    return (<div>
+    return (<div className='directoryRoot'>
         <Navbar />
+        <h1 className='directoryTitle'> Clients </h1>
         <Directory directoryType="Clients" content={this.props.clients} />
 
     </div>);

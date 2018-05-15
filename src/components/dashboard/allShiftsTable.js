@@ -34,7 +34,7 @@ class AllShiftsTable extends React.Component {
             enableSelectAll: false,
             deselectOnClickaway: false,
             showCheckboxes: false,
-            height: '600px',
+            height: '200px',
 
             open:false
 
@@ -66,7 +66,7 @@ class AllShiftsTable extends React.Component {
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
                   <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+'.'+durationDifference+' '}</TableRowColumn>
+                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+':'+durationDifference+' '}</TableRowColumn>
                   <TableRowColumn ref={"status"+index} style={{fontSize:'15px'}}> {visit.status} </TableRowColumn>
                 </TableRow>)
     }
@@ -97,7 +97,7 @@ class AllShiftsTable extends React.Component {
             <TableRow>
                 <TableHeaderColumn colSpan="3" tooltip="Scheduled shifts today" className='tableHeader'>
                 <div className='tabDescription'>
-                    View and edit all of the shifts scheduled for {moment(this.props.selectedDate).format('MMM D')} <HelpOutline onClick={this.togglePopup}/>
+                    All shifts "In process" or "Completed" on {moment(this.props.selectedDate).format('MMM D')} <HelpOutline onClick={this.togglePopup}/>
                 </div>
                 </TableHeaderColumn>
             </TableRow>    
@@ -106,7 +106,7 @@ class AllShiftsTable extends React.Component {
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Overtime">Actual duration (hrs)</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Overtime">Duration (hrs)</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Status">Status</TableHeaderColumn>
             </TableRow>
             </TableHeader>
