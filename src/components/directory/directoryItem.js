@@ -68,12 +68,14 @@ class DirectoryItem extends React.Component {
         } else {
             numberType = 'Hours Worked'
         }
+        var hourNumber = item.payingHours || item.billedHours || 0
+
         return(
         <div className='directoryItemHead'>
         <div className='directoryItem' onClick={this.handleClick.bind(this, item.name)} >
-            <div className='directoryItemTitle'>{item.name}-{item.employeeId || item.id}</div>
+            <div className='directoryItemTitle'>{item.name} - {item.employeeId || item.id}</div>
             <div className='directoryItemBody'>Telephone: {phoneNumber} </div>
-            <div className='directoryItemBody'>  {numberType}: {item.payingHours || item.billedHours || '0'} </div>
+            <div className='directoryItemBody'>  {numberType}: {hourNumber.toFixed(2)} </div>
         </div>
         {this.state.logOpen ? (
                 <div className='directoryItemVisitLog'> 

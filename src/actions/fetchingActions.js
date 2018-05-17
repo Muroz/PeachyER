@@ -69,6 +69,20 @@ export function addClient(client) {
   };
 }
 
+export function addItem(item) {
+  console.log('at addingItem')
+  return function(dispatch) {
+    axios
+      .post("/fetch/addItem", item)
+      .then(function(response) {
+        dispatch({ type: "ADD_ITEM", payload: response.data, item:item.type });
+      })
+      .catch(function(err) {
+        dispatch({ type: "ADD_ITEM_REJECTED", payload: err });
+      });
+  };
+}
+
 // Add visit entry
 export function addVisit(visit) {
   return function(dispatch) {

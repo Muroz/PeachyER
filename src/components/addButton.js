@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { addClient, addStaff, addVisit } from "./../actions/fetchingActions";
+import { addClient, addStaff, addVisit, addItem } from "./../actions/fetchingActions";
 import InputTextField from './inputTextField';
 
 import Dialog from 'material-ui/Dialog';
@@ -22,87 +22,46 @@ class AddButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clientState: "",
-      staffState:"",
-      stage:0,
-      saved:[false,false,false,false],
+      itemName: null,
+      itemPhone: null,
 
-      selectedStaff: null,
-      selectedClient: null,
-      selectedStart: null,
-      selectedEnd: null,
-      selectedDate: new moment(),
+      message:'',
 
-      message:''
+      typeSelected:null
     };
 
   }
 
-  setNewVal = (value,type) => {
-    var newState = {}
-    newState[type] = value
-    this.setState(newState);
-  }
-
-  setClients(client,index){
-
-    return(<MenuItem key={index} value={client.name} primaryText={client.name} />)
-  }
-
-  // handleInputChange = (type,event) => {
-  //   console.log(type);
-  //   console.log(event.target.value)
-  // }
-
-  handleDropdownChange = (type, event, index, value) => {
+  handleInputChange = (type, event, newVal) => {
     var newState = {};
-
-    newState[type] = value;
-
+    newState[type] = newVal;
     this.setState(newState);
-  }
-
-  handleChangeTimeChange = (type,event, date) => {
-
-    var newState = {};
-
-    newState[type] = date;
-
-    this.setState(newState);
-
   }
 
   handleSave = () => {
-    console.log('saving');
-    
-    if (this.state.selectedClient != null && this.state.selectedStaff != null){
-      console.log('valid people');
 
-      if (this.state.selectedStart != null && this.state.selectedEnd != null){
+    console.log(this.state);
 
-        if(moment(this.state.selectedStart).diff(moment(this.state.selectedEnd),'minutes')<0){
-          var newVisit = {};
-          newVisit['caregiverName'] = this.state.selectedStaff;
-          newVisit['clientName'] = this.state.selectedClient;
-          newVisit['startTime'] = this.state.selectedStart;
-          newVisit['endTime'] = this.state.selectedEnd;
-          this.setState({message:''})
-          this.props.togglePopup();
-          this.props.addVisit(newVisit);
-
-        } else {
-          console.log('cant save bro, times are not logically correct')
-          this.setState({message:'Start time cannot be after the end time'})
-        }
-      } else {
-        console.log('info not filled')
-        this.setState({message:'Not all of the fields have been filled'})
+    if(this.state.itemName != null && this.state.itemPhone != null){
+      console.log('ready to save');
+      var newItemData = {
+        name:this.state.itemName,
+        phone:this.state.itemPhone
       }
-    } else {
-      console.log('info not filled');
-      this.setState({message:'Not all of the fields have been filled'})
+      var newItem = {
+        type:this.state.typeSelected,
+        item:newItemData
+      }
+      this.props.addItem(newItem);
     }
+    
   }
+
+  addItem = (type) => this.setState({typeSelected:type});
+  
+
+  goBack = () => this.setState({typeSelected:null,itemName: null,itemPhone: null})
+
 
   render() {
     const actions = [
@@ -113,7 +72,7 @@ class AddButton extends React.Component {
       />,
       <FlatButton
       label="Save"
-      primary={true}
+      primary={false}
       onClick={this.handleSave}
   />
     ];
@@ -123,44 +82,49 @@ class AddButton extends React.Component {
 
     return (
       <Dialog
-          title={"Add a visit ("+currentDate.format('MMM DD')+")"}
+          title="Add a client/staff"
           actions={actions}
           modal={false}
           open={this.props.showPopup}
           onRequestClose={this.props.togglePopup}
         >
         <div className='dialogBody'>
-          <div className='dialogText'>Instantly add a shift for today's schedule</div>
-          <div className="dropdown_title">HSW:</div> 
-          <InputDropdown title="Staff name" type='staffName' defaultValue={this.state.selectedStaff} list={this.props.staff} handleChange={this.handleDropdownChange.bind(this,'selectedStaff')}/>
-          <div className="dropdown_title">Client:</div> 
-          <InputDropdown title="Client name" type='clientName' defaultValue={this.state.selectedClient} list={this.props.clients} handleChange={this.handleDropdownChange.bind(this,'selectedClient')}/>
+          <FlatButton
+            className="dialogButton"
+            label="Add client"
+            primary={true}
+            onClick={this.addItem.bind(this,'Client')}
+          />
+          <FlatButton
+            className="dialogButton"
+            label="Add staff"
+            primary={true}
+            onClick={this.addItem.bind(this,'Staff')}
+          />
 
-          <div>Scheduled start: </div>  
-          <div>
-            <TimePicker
-               //hintText={stringClockIn}
-               value={this.state.selectedStart}
-               onChange={this.handleChangeTimeChange.bind(this,'selectedStart')}
-            />
-          </div>
-
-          <div>Scheduled end: </div>  
-          <div>
-            <TimePicker
-              //hintText={moment(this.state.selectedEnd).format('HH:mm')}
-               value={this.state.selectedEnd}
-               onChange={this.handleChangeTimeChange.bind(this,'selectedEnd')}
-            />
-          </div>
-
-          <div className='alertMessage'>
-          {this.state.message}
-          </div>
-
+          { this.state.typeSelected ?   
+            (<div className="formBody">
+              <TextField
+                floatingLabelText="Name"
+                name="itemName"
+                onChange={this.handleInputChange.bind(this,'itemName')}
+                value={this.state.itemName}
+              /> 
+              <TextField
+                floatingLabelText="Telephone number"
+                name="itemPhone"
+                onChange={this.handleInputChange.bind(this,'itemPhone')}
+                value={this.state.itemPhone}        
+              /> 
+              <FlatButton
+                className="formButton"
+                label="Back"
+                primary={true}
+                value={this.state.itemPhone}
+                onClick={this.goBack.bind(this)}
+              /> 
+            </div>) : null}
         </div>
-
-
         </Dialog>
     );
   }
@@ -175,11 +139,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    { addClient: addClient, addStaff: addStaff, addVisit:addVisit },
+    { addClient: addClient, addStaff: addStaff, addVisit:addVisit, addItem:addItem },
     dispatch
   );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddButton);
-
-

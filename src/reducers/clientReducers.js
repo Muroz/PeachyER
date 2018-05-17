@@ -23,6 +23,10 @@ export function clientReducers(
     case "ADD_VISIT":
       return { ...state, allShifts: [...state.allShifts, ...action.payload]};
       break;
+    case "ADD_ITEM":
+      console.log(action);
+      return{...state}
+      break;
     case "GET_ALLSHIFTS_FILTERED":
       return {...state, allShiftsFiltered: action.payload};
       break;
