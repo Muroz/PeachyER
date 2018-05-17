@@ -35,7 +35,9 @@ class NavBar extends React.Component {
   render() {
 
 
-
+        {/* <div className="navbar_li navbar_guides">
+          <a href="/guides"><School/><br/>Guides</a>
+        </div> */}
 
     return (
       <div className="navbar">
@@ -52,9 +54,7 @@ class NavBar extends React.Component {
         <div className="navbar_li navbar_staff">
           <a href="/staff"><List/><br/>Staff</a>
         </div>
-        <div className="navbar_li navbar_guides">
-          <a href="/guides"><School/><br/>Guides</a>
-        </div>
+
         <div className="navbar_li navbar_add" onClick={this.togglePopup}>
           <a ><GroupAdd /><br/> Add</a>
         </div>

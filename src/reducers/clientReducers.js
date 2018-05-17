@@ -41,6 +41,11 @@ export function clientReducers(
     case "GET_OVERTIME":
       return{...state, overtime:action.payload}
       break;
+    case "ADD_ITEM":
+      console.log('yay');
+      console.log(action);
+      return{...state}
+      break;
     case "UPDATE_UNCONFIRMED_VISIT":
       const shiftsToUpdate = [...state.unconfirmed]
       const indexToUpdate = shiftsToUpdate.findIndex(

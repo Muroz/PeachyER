@@ -2,6 +2,7 @@
   --yellow: #ffc600;
   /* to use put in code var(--yellow) instead of the actual color name or hex code */
 }
+
 html {
   /* border-box box model allows us to add padding and border to our elements without increasing their size */
   box-sizing: border-box;
@@ -12,8 +13,6 @@ html {
   font-size: 10px;
   color: var(--black);
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
-
-
 }
 
 body{
@@ -21,7 +20,28 @@ body{
   font-family:Roboto, sans-serif!important;
   text-shadow: none!important;
   background: rgb(247, 247, 247);
+  background-size: 340px, auto;
+  min-height: calc(100vh - 100px);
+  margin: 50px;
+  background-position: fixed;
 }
+
+h1 {
+  margin: 0;
+  padding: 0;
+}
+html, body, .app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+iframe{
+  grid-column:2/3;
+  display: inline-block;
+}
+
 a {
   font-size: 16;
   font-family:'avenir', sans-serif;
@@ -46,18 +66,11 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
+  transform: scale(1.1);
   background-color: peachpuff;
 }
 
-.navbar_li{
-
-}
-
-.navbar_li:hover{
-  background: lightblue;
-}
 /*
-  WAT IS THIS?!
   We inherit box-sizing: border-box; from our <html> selector
   Apparently this is a bit better than applying box-sizing: border-box; directly to the * selector
 */
@@ -65,26 +78,6 @@ a:hover, a:active {
 *:before,
 *:after {
   box-sizing: inherit;
-}
-
-body {
-  background-size: 340px, auto;
-  min-height: calc(100vh - 100px);
-  margin: 50px;
-  /* background: white; */
-  background-position: fixed;
-  letter-spacing: -1px;
-}
-
-.dashboard_contentBlock {
-  margin-left: 20;
-  margin-right: 20;
-  margin-top: 10;
-  margin-bottom: 20;
-  background: #ffffff;
-  height: 250;
-  text-align: center;
-
 }
 
 .navbar {
@@ -98,17 +91,6 @@ body {
   justify-items: center;
   width: 100%;
   grid-gap: 10px;
-}
-
-.navbar_profile{
-  grid-column: 9 / span 2;
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  justify-items: center;
-  /*grid-template-rows: 1fr 1fr 1fr;
-  background: #4CAF50; */
 }
 
 .navbar_logout {
@@ -125,38 +107,39 @@ body {
   grid-row-start: 1;
 }
 
-.navbar_profile_pic {
-  width: 50;
-  height:50;
-}
-
 .logo {
   height: 100%;
   width: 50px;
 }
 
+.dashboardRoot{
+  display: grid;
+  height: 100%;
+  grid-template-rows: 100px 1fr 1fr;
+  grid-auto-flow: column;
+  grid-template-columns: 8% 92%;
+}
 
 .dashboard_background{
  background: #A6B2DD;
  width: 100%;
  height: 100%;
-
  align-items: center;
+}
+
+.dashboard_contentBlock {
+  margin-left: 20;
+  margin-right: 20;
+  margin-top: 10;
+  margin-bottom: 20;
+  background: #ffffff;
+  height: 250;
+  text-align: center;
 }
 
 .dashboard_title{
   margin-left: 10;
 }
-
-
-
-
-.summaryView_container{
-  margin-top:10;
-}
-
-
-
 /* container tryout */
 
 /* Style the container with a rounded border, grey background and some padding and margin */
@@ -184,110 +167,6 @@ body {
   }
 }
 
-.staffList_container{
-  margin-top: 30;
-}
-
-.clientList_container{
-  margin-top: 30;
-}
-
-h1 {
-  margin: 0;
-  padding: 0;
-}
-html, body, .app {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-.addButton_overlay {
-
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(0,0,0, 0.5);
-  z-index:10;
-  position:relative
-}
-.addButton_popup {
-  position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
-  margin: auto;
-  background: white;
-}
-
-.clientProfile_scheduleView {
-}
-
-.clientProfile_cell {
-  border: 1px solid black;
-}
-
-.timeColumn_container{
-  display: grid;
-  grid-template-columns: [left-side] 100px [center-side] 500px [right-side] 200fr [end-side]; /* also repeat (5, 100px 2fr); also 25%  fr gets whatever is left after everything is drawn also auto depends on the item with the biggest content on it */
-  grid-template-rows: 100px 200px 300px;
-  grid-auto-rows: 200px; /* passing extra values here is buggy on firefox, but not in chrome */
-  grid-gap: 20px;
-  grid-auto-columns: 150px;
-  grid-auto-flow: row; /* could also be column */
-  /* autofill is used at repeat(auto-fill, 150px) to set up the number of columns depending on the available content */
-  /* similar to autofill, auto-fit set depending on the number of columns, but doesnt expand if moved */
-  /* minmax(minval, maxval) instead of giving a size for the column */
-  /* fitcontent(maxval) sets the maximum size instead of using auto */
-  /* grid-template-area : "name1 name2 name3" "undername1 undername2 undername3" or "here here2 ." . means nothing */
-  /* can also use namearea-start or namearea-end instead of numbers to delimit ranges */
-  /* grid-auto-flow dense to fill all the gaps */
-  /* adding !important at the end of anything overwrites anything else */
-}
- 
- /*cool stuff
-  item:nth-child(6n) {
-
-  }
-  adds css to any item multiple of 6 i.e. item6 item 12 etc */
-
-.timeColum_item {
-  /* We center the contents of these items. You can also do this with flexbox too! */
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  border: 5px solid rgba(0, 0, 0, 0.03);
-  border-radius: 3px;
-  font-size: 35px;
-  background-color: var(--yellow); /* best colour */
-  /*grid-column: span 2;
-  grid-row: span 2;
-  grid-column-start: 2;
-  grid-column-end:5; or grid-column:2/5;  == -1 gets it to the end to get 100% witdh
-  same with grid-row
-  grid-area: footer would move it there*/
-}
-
-.timeColum_item p {
-  margin: 0 0 5px 0;
-}
-
-/*@media (max-width: 700px){
-  .container{
-    grid-template-areas:
-      "content content content"
-      "stuff stuff stuff"
-      "so so so"
-  }
-}*/
-
-
 .tabContainer { 
     /* color: #000000 !important; */
     background: rgb(184, 221, 233) !important;
@@ -303,11 +182,18 @@ html, body, .app {
   background: peachpuff!important
 } 
 
-
 .tableHeader {
   color:black!important;
   font-size: 17!important;
   font-weight: bold!important;
+}
+
+.directoryRoot{
+  display: grid;
+  height: 100%;
+  grid-template-rows: 100px 1fr;
+  grid-auto-flow: column;
+  grid-template-columns: 8% 92%;
 }
 
 .directoryBody{
@@ -319,6 +205,7 @@ html, body, .app {
 .directoryBody a{
   background-color: peachpuff!important;
 }
+
 .directoryTitle{
   padding: 20px;
   margin: 20px;
@@ -349,10 +236,34 @@ html, body, .app {
 .directoryItem:hover{
   border: 5px solid peachpuff;
 }
+
+.directoryItemVisitLog{
+  grid-column: 1/3;
+  padding: 10px;
+  padding-top: 10px;
+}
+
 .directoryItemTitle{
   grid-column: 1/-1;
   border-bottom: 1px solid rgb(112, 112, 112);
   font-size: 30;
+}
+
+.directoryItemBody{
+  padding-top: 10px;
+}
+
+.directoryItemHead{
+  margin: 20px;
+  padding:1;
+  border: 1px solid lightblue;
+  background: rgb(212, 239, 255);
+  font-size: 20;
+  color:rgb(112, 112, 112);
+}
+
+.directoryItemHead:hover{
+  border: 1px solid peachpuff;
 }
 
 .guideTitle{
@@ -366,10 +277,6 @@ html, body, .app {
   background: peachpuff;
 }
 
-.directoryItemBody{
-  padding-top: 10px;
-}
-
 .summaryTable{
   margin: auto;
   margin-top:40;
@@ -379,6 +286,10 @@ html, body, .app {
   color:rgb(112, 112, 112);
   display: grid;
   grid-template-columns: repeat(1,1fr);
+}
+
+.summaryView_container{
+  margin-top:10;
 }
 
 .summaryItem{
@@ -392,7 +303,7 @@ html, body, .app {
 
   grid-template-columns: repeat(1,1fr);
   grid-template-rows: repeat(1,2fr 1fr);
- }
+}
 
 .summaryItemTitle{
   font-size:40;
@@ -404,6 +315,7 @@ html, body, .app {
 .summaryItemSub{
   font-size:15;
 }
+
 .dropdown{
   color: rgba(0, 0, 0, 0.87); 
   width:300px!important;
@@ -429,10 +341,19 @@ html, body, .app {
   text-align: center;
 }
 
-iframe{
-  grid-column:2/3;
-  display: inline-block;
+.formBody {
+  grid-column: 1/span 2;
+  grid-row: 2/span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  margin-top: 60px;
 }
+
+.formButton{
+  grid-column: 1/3;
+}
+
 
 .tabDescription{
   font-weight: bold;
@@ -462,6 +383,7 @@ iframe{
   grid-template-rows: repeat(5,1fr);
   grid-template-columns: repeat(2,1fr);
   align-items: center;
+  height: 250px;
 }
 
 .dropdown{
@@ -483,25 +405,6 @@ iframe{
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 10px;
-}
-
-.directoryItemVisitLog{
-  grid-column: 1/3;
-  padding: 10px;
-  padding-top: 10px;
-}
-
-.directoryItemHead{
-  margin: 20px;
-  padding:1;
-  border: 1px solid lightblue;
-  background: rgb(212, 239, 255);
-  font-size: 20;
-  color:rgb(112, 112, 112);
-}
-
-.directoryItemHead:hover{
-  border: 1px solid peachpuff;
 }
 
 .visitlogEntry{
@@ -542,6 +445,11 @@ iframe{
 
 }
 
+
+.dialogButton:hover{
+  transform: scale(1.1);
+}
+
 .rowItem{
   margin-left:23px!important;
 }
@@ -562,18 +470,6 @@ iframe{
 
 }
 
-.dashboardRoot{
-  display: grid;
-  height: 100%;
-  grid-template-rows: 100px 1fr 1fr;
-  grid-auto-flow: column;
-  grid-template-columns: 8% 92%;
-}
 
-.directoryRoot{
-  display: grid;
-  height: 100%;
-  grid-template-rows: 100px 1fr;
-  grid-auto-flow: column;
-  grid-template-columns: 8% 92%;
-}
+
+

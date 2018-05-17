@@ -9,7 +9,7 @@ module.exports = {
   },
   watch: true,
   //cache: false,
-
+  mode:'development',
   module: {
     rules: [
       {

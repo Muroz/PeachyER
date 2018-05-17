@@ -136,8 +136,6 @@ import {updateVisit} from '../../actions/fetchingActions';
       }
     
     render() {
-        console.log(this)
-        console.log('here it is');
         const actions = [
             <FlatButton
               label="Save"

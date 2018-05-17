@@ -4,7 +4,7 @@
 var LocalStrategy = require("passport-local").Strategy;
 
 //Load up the user model
-var User = require("./../models/user");
+var User = require("./../models/plaftformUser");
 
 //Export this function
 module.exports = function(passport) {
@@ -61,8 +61,10 @@ module.exports = function(passport) {
               var newUser = new User();
 
               // set the user's local credentials
-              newUser.username = email;
+              newUser.email = email;
+              newUser.username = req.body.username;
               newUser.password = newUser.generateHash(password);
+              newUser.type = req.body.type;
               // save the user
               newUser.save(function(err) {
                 if (err) throw err;
@@ -91,7 +93,7 @@ module.exports = function(passport) {
         // callback with email and password from our form
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        User.findOne({ username: email }, function(err, user) {
+        User.findOne({ email: email }, function(err, user) {
           // if there are any errors, return the error before anything else
           if (err) return done(err);
 

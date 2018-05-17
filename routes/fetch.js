@@ -4,7 +4,6 @@ var express = require("express");
 var router = express.Router();
 var Client = require("./../models/client");
 var Caregiver = require("./../models/caregiver");
-var Activity = require("./../models/recentActivity");
 var Visit = require("./../models/visit");
 var moment = require('moment-timezone');
 var TestVisit = require('./../models/testerVisit');
@@ -48,7 +47,7 @@ router.post("/getConfirmed", function(req, res){
   //confirmed shifts
   TestVisit.find({$and:[
             {status:'In process'}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
-          ]}).sort({startTime:1}).exec(function(err,visits){
+          ]}).sort({clockInTime:1}).exec(function(err,visits){
             if(err){
               throw err;
             }
@@ -129,14 +128,6 @@ router.post("/updateVisit", function(req, res) {
   });
 });
 
-
-
-router.post("/activity", function(req, res) {
-  Activity.find({}, function(err, activities) {
-    res.json(activities);
-  });
-});
-
 router.post("/addStaff", function(req, res) {
   var caregiver = req.body;
   Caregiver.create(caregiver, function(err, staff) {
@@ -197,14 +188,41 @@ router.post("/addVisit", function(req,res){
   })
 });
 
-router.post("/addClient", function(req, res) {
-  var client = req.body;
-  Client.create(client, function(err, clients) {
-    if (err) {
-      throw err;
-    }
-    res.json(clients);
-  });
+
+router.post("/addItem", function(req, res) {
+  var info = req.body;
+  if (info.type == 'Client'){
+    Client.create({
+      name: req.body.item.name,
+      id: req.body.item.phone,
+      billedHours: 0,
+      billedVisits: [],
+      visitsBy:[],
+      phoneNumber:'1709'+req.body.item.phone,
+      company:'Coombs'
+    }, function(err, clients){
+        if (err) {
+          throw err;
+        }
+        res.json(clients);
+    }) 
+  } else if (info.type == 'Staff'){
+    Caregiver.create({
+      name: req.body.item.name,
+      id: req.body.item.phone,
+      employeeId: req.body.item.id,
+      payingHours: 0,
+      billedVisits: [],
+      visits:[],
+      phoneNumber:'1709'+req.body.item.phone,
+      company:'Coombs'
+    }, function(err, staff){
+        if (err) {
+          throw err;
+        }
+        res.json(staff);
+    }) 
+  }
 });
 
 
