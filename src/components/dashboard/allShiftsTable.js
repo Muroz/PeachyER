@@ -91,13 +91,6 @@ class AllShiftsTable extends React.Component {
             enableSelectAll={this.state.enableSelectAll}
             >
             <TableRow>
-                <TableHeaderColumn colSpan="3" tooltip="Scheduled shifts today" className='tableHeader'>
-                <div className='tabDescription'>
-                    All shifts "In process" or "Completed" on {moment(this.props.selectedDate).format('MMM D')} <HelpOutline onClick={this.togglePopup}/>
-                </div>
-                </TableHeaderColumn>
-            </TableRow>    
-            <TableRow>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">HSW</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>

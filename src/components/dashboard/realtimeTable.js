@@ -57,11 +57,6 @@ class RealtimeTable extends React.Component {
             enableSelectAll={this.state.enableSelectAll}
             >
             <TableRow>
-                <TableHeaderColumn colSpan="3" tooltip="Currently working" className='tableHeader'>
-                These staff are currently working
-                </TableHeaderColumn>
-            </TableRow>
-            <TableRow>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">HSW</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>

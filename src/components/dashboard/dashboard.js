@@ -455,16 +455,24 @@ class Dashboard extends React.Component {
     return (
       <div className="dashboardRoot">
         <NavBar />
-        <h1 className='directoryTitle'> Shifts </h1>
-        <div className="tableContainer">
+        <div className="topBar"> <h1 className="headers topBarHeader"> Hello, Tracy </h1> </div>
+        <div className="dashboardHeaderContainer"> 
+          <h1 className='dashboardHeader headers'> 10 days left </h1> 
+          <h1 className="dashboardDate subheader"> Monday, May 7 </h1>
+          <h1 className="dashboardSubheader subheader"> in pay period </h1>
+        </div>
+        <div className="tableContainer contentContainer">
+          <h1 className="tableContainerTitle headers"> Live visit feed </h1>
           <RealtimeTable/>
         </div>
-        <div className="tableContainer">
+        <div className="tableContainer contentContainer">
+          <h1 className="tableContainerTitle headers"> Completed visits </h1>
           <div className="allShiftsCalendar">
             <DatePicker
                 onChange={this.handleChangeDate}
-                floatingLabelText="Shifts on"
                 defaultDate={this.state.currentDate}
+                firstDayOfWeek={0}
+                formatDate={(date) => moment(date).format('MMM D, YYYY')}
             />
           </div>
           <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>  

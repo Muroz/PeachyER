@@ -39,32 +39,25 @@ class NavBar extends React.Component {
 
     return (
       <div className="navbar">
-     
+        <div className="navbar_li navbar_add" onClick={this.togglePopup}>
+          <a > <div className="navbarItem"><GroupAdd /> <div className="navbarTitle headers">Add</div> </div></a>
+        </div>
         <div className="navbar_logo">
           <img src="/images/Icon.png" className="logo" />
         </div>
         <div className="navbar_li navbar_home">
-          <a href="/dashboard"><Dashboard/><br/>Dashboard</a>
+          <a href="/dashboard" ><div className="navbarItem"><Dashboard/><div className="navbarTitle headers">Home</div> </div></a>
         </div>
         <div className="navbar_li navbar_client">
-          <a href="/clients"><Group/><br/>Clients</a>
+          <a href="/clients"><div className="navbarItem"><Group/><div className="navbarTitle headers">Clients</div> </div></a>
         </div>
         <div className="navbar_li navbar_staff">
-          <a href="/staff"><List/><br/>Staff</a>
+          <a href="/staff"><div className="navbarItem"> <List/><div className="navbarTitle headers">Staff</div> </div></a>
         </div>
-        <div className="navbar_li navbar_guides">
-          <a href="/guides"><School/><br/>Guides</a>
-        </div>
-        <div className="navbar_li navbar_add" onClick={this.togglePopup}>
-          <a ><GroupAdd /><br/> Add</a>
-        </div>
+
         <div className="navbar_li navbar_help">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSccNAn2ySm4UMDskwOHIH44m80CWUex8s-VP2NX-laJnW_zfw/viewform?embedded=true"><HelpOutline /><br/> Help</a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSccNAn2ySm4UMDskwOHIH44m80CWUex8s-VP2NX-laJnW_zfw/viewform?embedded=true" ><HelpOutline /><br/> Help</a>
         </div>
-        {/* <div className="navbar_li navbar_add">
-          {" "}
-          <a onClick={this.togglePopup.bind(this)}>Add person</a>{" "}
-        </div> */}
         <div className="navbar_logout" >
           <a href="/logout" ><ExitToApp/><br/> Logout </a>
         </div> 
