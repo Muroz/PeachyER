@@ -16,7 +16,8 @@ class MainClient extends React.Component {
   render() {
     return (<div className='directoryRoot'>
         <Navbar />
-        <h1 className='directoryTitle'> Clients </h1>
+        <div className="topBar"> <h1 className="headers topBarHeader"> Hello, Tracy </h1> </div>
+        <h1 className='directoryTitle'> Client information </h1>
         <Directory directoryType="Clients" content={this.props.clients} />
 
     </div>);

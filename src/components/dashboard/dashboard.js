@@ -86,7 +86,7 @@ class Dashboard extends React.Component {
       selectedRows = this.state.selected;    
     }
     console.log('the rows');
-    console.log(selectedRows)
+    console.log(selectedRows);
     var selectedShift = this.props['allShifts'][selectedRows[0]]
     var stringClockIn = selectedShift.clockInTime ? moment(selectedShift.clockInTime) : null
     var stringClockOut =  selectedShift.clockOutTime ? moment(selectedShift.clockOutTime) : null
@@ -131,8 +131,6 @@ class Dashboard extends React.Component {
   };
 
   isSelected = (index) => {
-    console.log('this is selected');
-    console.log(index);
     if (this.state.open){
       return false
     }

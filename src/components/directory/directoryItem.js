@@ -73,7 +73,7 @@ class DirectoryItem extends React.Component {
         return(
         <div className='directoryItemHead'>
         <div className='directoryItem' onClick={this.handleClick.bind(this, item.name)} >
-            <div className='directoryItemTitle'>{item.name} - {item.employeeId || item.id}</div>
+            <div className='directoryItemBody'>{item.name} - {item.employeeId || item.id}</div>
             <div className='directoryItemBody'>Telephone: {phoneNumber} </div>
             <div className='directoryItemBody'>  {numberType}: {hourNumber.toFixed(2)} </div>
         </div>
@@ -104,7 +104,7 @@ class DirectoryItem extends React.Component {
             dialog = <Popup visit={this.state.selectedVisit || {}} tabValue={tabValue} open={this.state.openDialog} handleClose={this.handleClose.bind(this)}/>
         }
         return (
-            <div className='directoryList' >
+            <div >
                 {dialog}
                 {this.setItem(this.props.item)}
             </div>
