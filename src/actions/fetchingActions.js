@@ -219,3 +219,17 @@ export function updateVisit(visit,type) {
 
 }
 
+//clockout people
+export function deleteItem(visits) {
+  return function(dispatch) {
+    axios
+      .post("/fetch/deleteItem", visits)
+      .then(function(response) {
+          dispatch({ type: "DELETE_ITEM", payload: response.data });
+      })
+      .catch(function(err) {
+        dispatch({ type: "DELETE_ITEM_REJECTED", payload: err });
+      });
+  };
+}
+

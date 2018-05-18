@@ -54,6 +54,11 @@ import {updateVisit} from '../../actions/fetchingActions';
 
     }
 
+    componentWillMount(){
+      //set the state values here
+      console.log(this.props.visit);
+    }
+
 
     handleSave = () => {
         //check all values
@@ -116,6 +121,7 @@ import {updateVisit} from '../../actions/fetchingActions';
       };
     
       handleChangeStatus = (event, index, value) => {
+        console.log('changing status to ', value);
         this.setState({status:value, save:true});
       }
     
@@ -136,7 +142,7 @@ import {updateVisit} from '../../actions/fetchingActions';
       }
     
     render() {
-        console.log(this)
+        console.log(this.state)
         console.log('here it is');
         const actions = [
             <FlatButton
@@ -220,7 +226,7 @@ import {updateVisit} from '../../actions/fetchingActions';
             <div className="row8a">Status:     </div> 
             {this.props.tabValue == 'allShifts' ?
             <DropDownMenu 
-              ref="status" value={this.props.visit.status} 
+              ref="status" value={this.state.status} 
               onChange={this.handleChangeStatus}  
               className="row8b"
               className="dropdown"

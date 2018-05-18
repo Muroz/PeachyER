@@ -262,18 +262,45 @@ router.post("/fetchVisitLog", function(req,res){
   })
   }
 })
-//todo
-    //all shifts
 
-    //Visit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}, function(err,visits){
+router.post("/clockOut", function(req, res) {
+  TestVisit.find({$and: [ {'visitId': { $in: req.body }},{'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}]}).exec(function(err,visits){
+    visits.forEach(function(visit){
+      var endTime = new moment().tz('America/St_Johns');
+      visit.clockOutTime = endTime;
+      visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+      visit.status = 'Completed';
+  
+      Client.findOne({name:visit.clientName}, function(err,client){
+        if(err) return err;
+        if(client!=null){
+          client.billedHours += parseFloat(visit.duration);
+          client.billedVisits.push(visit);
+          client.save();
+        }
+        Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
+          if (err) return err;
+          if(carer!=null) {
+            carer.payingHours += parseFloat(visit.duration);
+            carer.billedVisits.push(visit);
+            carer.visits.push(visit);
+            carer.save();
+          };
+          visit.save();
+        });
+      });
+    })
+
+});
+});
 
 
-        //unconfirmed shifts
-        //Visit.find({status:'Unconfirmed'}, function(err,visits){
+router.post("/deleteItem", function(req, res) {
+  TestVisit.find({$and: [ {'visitId': { $in: req.body }},{'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}]}).exec(function(err,visits){
+    visits.forEach(function(visit){
+      visit.remove();
+    })
+  });
+});
 
-
-
-          // Visit.find({$and:[
-          //   {$or:[{status:'Completed'},{status:'In process'}]}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
-          // ]}, function(err,visits){
 module.exports = router;
