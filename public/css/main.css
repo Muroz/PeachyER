@@ -467,6 +467,7 @@ iframe{
   grid-template-rows: 10% 5% 1fr 1fr;
   grid-auto-flow: column;
   grid-template-columns: 12% 88%;
+  grid-gap: 10px;
 }
 
 .dashboardHeaderContainer{
@@ -506,7 +507,7 @@ iframe{
 
 }
 .navbar {
-  grid-row: 1/-1;
+  grid-row: 2/-1;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: repeat(12,80px);
@@ -528,8 +529,9 @@ iframe{
 }
 
 .logo {
-  height: 100%;
-  width: 100%;
+  height: 65px;
+  width: 200px;
+  margin: auto;
 }
 
 .navbar_li{
@@ -546,6 +548,7 @@ iframe{
 .navbarAdd {
   margin-top: 5%;
   font-size:18;
+  width: 100%;
 }
 
 .navbarTitle {
@@ -556,10 +559,13 @@ iframe{
 }
 
 .topBar {
+  grid-column: 1/-1;
   text-align: right;
   justify-items: right;
   background: white;
   margin-left: 0.5%;
+  display: grid;
+  grid-template-columns: 1fr 8fr;
 }
 
 .topBarHeader {

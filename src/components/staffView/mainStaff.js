@@ -16,7 +16,10 @@ class MainStaff extends React.Component {
     return (
       <div className='directoryRoot'>
           <Navbar />
-          <div className="topBar"> <h1 className="headers topBarHeader"> Hello, Tracy </h1> </div>
+          <div className="topBar">  
+            <img src="/images/Icon.png" className="logo" />
+            <h1 className="headers topBarHeader"> Hello, Tracy </h1> 
+          </div>
           <h1 className='directoryTitle'> Staff </h1>
           <Directory directoryType="Staff" content={this.props.staff}/>
       </div>);

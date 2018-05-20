@@ -222,7 +222,10 @@ class Dashboard extends React.Component {
     return (
       <div className="dashboardRoot">
         <NavBar />
-        <div className="topBar"> <h1 className="headers topBarHeader"> Hello, Tracy </h1> </div>
+        <div className="topBar"> 
+          <img src="/images/rsz_peachy_logo.png" className="logo" />
+          <h1 className="headers topBarHeader"> Hello, Tracy </h1> 
+        </div>
         <div className="dashboardHeaderContainer"> 
           <h1 className='dashboardHeader headers'> 10 days left </h1> 
           <h1 className="dashboardDate subheader"> Monday, May 7 </h1>

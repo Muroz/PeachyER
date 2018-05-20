@@ -39,9 +39,6 @@ class NavBar extends React.Component {
             </Button>
           </a>
         </div>
-        <div className="navbar_logo">
-          <img src="/images/Icon.png" className="logo" />
-        </div>
         <div className="navbar_li navbar_home">
           <a href="/dashboard" ><div className="navbarItem"><Dashboard/><div className="navbarTitle headers">Home</div> </div></a>
         </div>
