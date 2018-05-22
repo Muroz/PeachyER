@@ -190,10 +190,11 @@ router.post("/addVisit", function(req,res){
 
 router.post("/addItem", function(req, res) {
   var info = req.body;
+  console.log(info);
   if (info.type == 'Client'){
     Client.create({
       name: req.body.item.name,
-      id: req.body.item.phone,
+      id: req.body.item.id,
       billedHours: 0,
       billedVisits: [],
       visitsBy:[],

@@ -17,6 +17,8 @@ import MainClient from './components/clientView/mainClient';
 import MainGuide from './components/guideView/mainGuide';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 
 const middleWare = applyMiddleware(thunk, createLogger());
 const store = createStore(reducers, middleWare);
@@ -24,6 +26,7 @@ const store = createStore(reducers, middleWare);
 render(
   <Provider store={store}>
     <BrowserRouter>
+    <CssBaseline >
       <MuiThemeProvider>
       <div>
         <Route exact path="/dashboard" component={Dashboard} />
@@ -32,6 +35,7 @@ render(
         <Route exact path="/guides" component={MainGuide} />
       </div>
       </MuiThemeProvider>
+    </CssBaseline >
     </BrowserRouter>
   </Provider>,
   document.getElementById("app")

@@ -70,7 +70,6 @@ export function addClient(client) {
 }
 
 export function addItem(item) {
-  console.log('at addingItem')
   return function(dispatch) {
     axios
       .post("/fetch/addItem", item)

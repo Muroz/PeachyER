@@ -73,14 +73,14 @@ class DirectoryItem extends React.Component {
         return(
         <div className='directoryItemHead'>
         <div className='directoryItem' onClick={this.handleClick.bind(this, item.name)} >
-            <div className='directoryItemBody'>{item.name} - {item.employeeId || item.id}</div>
-            <div className='directoryItemBody'>Telephone: {phoneNumber} </div>
-            <div className='directoryItemBody'>  {numberType}: {hourNumber.toFixed(2)} </div>
+            <div className='directoryItemBody midheader'>{item.name} - {item.employeeId || item.id}</div>
+            <div className='directoryItemBody subheader'>Telephone: {phoneNumber} </div>
+            <div className='directoryItemBody subheader'>  {numberType}: {hourNumber.toFixed(2)} </div>
         </div>
         {this.state.logOpen ? (
                 <div className='directoryItemVisitLog'> 
-                    <div className='visitlogTitle'> Visit log: </div>
-                    <div className='visitlogBody'> {visitLogs}</div>
+                    <div className='visitlogTitle midheader'> Visit log: </div>
+                    <div className='visitlogBody subheader'> {visitLogs}</div>
                 </div>
             ):null}
         </div>

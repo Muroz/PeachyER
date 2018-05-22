@@ -3,58 +3,79 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { addClient, addStaff, addVisit, addItem } from "./../actions/fetchingActions";
-import InputTextField from './inputTextField';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import TimePicker from 'material-ui/TimePicker';
 import MenuItem from 'material-ui/MenuItem';
-import InputDropdown from "./inputDropdown";
 
 import moment from 'moment-timezone';
+
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Phone from '@material-ui/icons/Phone';
+import CreditCard from '@material-ui/icons/CreditCard';
+
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+
 
 class AddButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemName: null,
-      itemPhone: null,
+      name: '',
+      phone: '',
+      id: '',
 
       message:'',
 
-      typeSelected:null
+      typeSelected:''
     };
 
   }
 
-  handleInputChange = (type, event, newVal) => {
+  handleInputChange = (type, event) => {
+
     var newState = {};
-    newState[type] = newVal;
+    newState[type] = event.target.value;
     this.setState(newState);
   }
 
   handleSave = () => {
 
-    console.log(this.state);
-
-    if(this.state.itemName != null && this.state.itemPhone != null){
-      console.log('ready to save');
+    if(this.state.name != '' && this.state.phone != '' && this.state.id != '' && this.state.typeSelected != ''){
       var newItemData = {
-        name:this.state.itemName,
-        phone:this.state.itemPhone
+        name:this.state.name,
+        phone:this.state.phone,
+        id:this.state.id
       }
       var newItem = {
         type:this.state.typeSelected,
         item:newItemData
       }
       this.props.addItem(newItem);
+      this.setState({
+        name: '',
+        phone: '',
+        id: '',
+        message: '',
+        typeSelected: ''
+      });
+      this.props.togglePopup();
     }
-    
   }
 
   addItem = (type) => this.setState({typeSelected:type});
@@ -82,49 +103,66 @@ class AddButton extends React.Component {
 
     return (
       <Dialog
-          title="Add a client/staff"
+          title="Add"
           actions={actions}
           modal={false}
           open={this.props.showPopup}
           onRequestClose={this.props.togglePopup}
+          className='addDialog'
         >
         <div className='dialogBody'>
-          <FlatButton
-            className="dialogButton"
-            label="Add client"
-            primary={true}
-            onClick={this.addItem.bind(this,'Client')}
+          <TextField
+            className='dialogText'
+            id="input-with-icon-textfield"
+            label="Name"
+            onChange = {this.handleInputChange.bind(this,'name')}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
           />
-          <FlatButton
-            className="dialogButton"
-            label="Add staff"
-            primary={true}
-            onClick={this.addItem.bind(this,'Staff')}
+          <TextField
+            className='dialogText'
+            id="input-with-icon-textfield"
+            label="Phone"
+            onChange = {this.handleInputChange.bind(this,'phone')}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Phone />
+                </InputAdornment>
+              ),
+            }}
           />
-
-          { this.state.typeSelected ?   
-            (<div className="formBody">
-              <TextField
-                floatingLabelText="Name"
-                name="itemName"
-                onChange={this.handleInputChange.bind(this,'itemName')}
-                value={this.state.itemName}
-              /> 
-              <TextField
-                floatingLabelText="Telephone number"
-                name="itemPhone"
-                onChange={this.handleInputChange.bind(this,'itemPhone')}
-                value={this.state.itemPhone}        
-              /> 
-              <FlatButton
-                className="formButton"
-                label="Back"
-                primary={true}
-                value={this.state.itemPhone}
-                onClick={this.goBack.bind(this)}
-              /> 
-            </div>) : null}
+          <TextField
+            className='dialogText'
+            id="input-with-icon-textfield"
+            label="Id"
+            onChange = {this.handleInputChange.bind(this,'id')}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CreditCard />
+                </InputAdornment>
+              ),
+            }}
+          />
+          <RadioGroup
+              aria-label="type"
+              name="type"
+              className='dialogRadioGroup'
+              value={this.state.typeSelected}
+              onChange={this.handleInputChange.bind(this,'typeSelected')}
+            >
+              <FormControlLabel value="Staff" control={<Radio color="primary" />} label="Staff" />
+              <FormControlLabel value="Client" control={<Radio color="primary" />} label="Client" />
+          </RadioGroup>
         </div>
+        
+
         </Dialog>
     );
   }

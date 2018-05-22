@@ -12,6 +12,7 @@ import {
     TableRow,
     TableRowColumn,
   } from 'material-ui/Table';
+  import Paper from '@material-ui/core/Paper';
 
     import Dialog from 'material-ui/Dialog';
     import FlatButton from 'material-ui/FlatButton';
@@ -58,12 +59,12 @@ class AllShiftsTable extends React.Component {
         
         ('0' + durationDifference).slice(-2)
         return (<TableRow key={index} selected={this.props.isSelected(index)}>
-                  <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'15px'}}> {visit.caregiverName} </TableRowColumn>
-                  <TableRowColumn ref={"clientName"+index} style={{fontSize:'15px'}}> {visit.clientName} </TableRowColumn>
-                  <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'15px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'15px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-                  <TableRowColumn ref={"duration"+index} style={{fontSize:'15px'}}>  {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableRowColumn>
-                  <TableRowColumn ref={"status"+index} style={{fontSize:'15px'}}> {visit.status} </TableRowColumn>
+                  <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'12px'}}> {visit.caregiverName} </TableRowColumn>
+                  <TableRowColumn ref={"clientName"+index} style={{fontSize:'12px'}}> {visit.clientName} </TableRowColumn>
+                  <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'12px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
+                  <TableRowColumn ref={"clockOutTime"+index} style={{fontSize:'12px'}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
+                  <TableRowColumn ref={"duration"+index} style={{fontSize:'12px'}}>  {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableRowColumn>
+                  <TableRowColumn ref={"status"+index} style={{fontSize:'12px'}}> {visit.status} </TableRowColumn>
                 </TableRow>)
     }
 
@@ -78,6 +79,7 @@ class AllShiftsTable extends React.Component {
 
         return(
             <div>
+            <Paper>
             <Table onRowSelection={this.props.handleOpen}          
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
@@ -91,12 +93,12 @@ class AllShiftsTable extends React.Component {
             enableSelectAll={this.state.enableSelectAll}
             >
             <TableRow>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">HSW</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Overtime">Duration (hrs)</TableHeaderColumn>
-                <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Status">Status</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Employee">HSW</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Client">Client</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Overtime">Duration (hrs)</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Status">Status</TableHeaderColumn>
             </TableRow>
             </TableHeader>
 
@@ -108,6 +110,7 @@ class AllShiftsTable extends React.Component {
             {this.props.allShiftsFiltered ?this.props.allShiftsFiltered.map(this.setTableInfo,this):null}
             </TableBody>
         </Table>
+        </Paper>
          <Dialog
          title="Shifts happening today"
          actions={actions}
@@ -122,6 +125,7 @@ class AllShiftsTable extends React.Component {
          notified (5 min after shift start time), manager notified (15 min after shift start time), overtime, completed and unconfirmed. </p>
          </div>
        </Dialog>
+
        </div>
         )
     }

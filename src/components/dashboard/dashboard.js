@@ -219,6 +219,16 @@ class Dashboard extends React.Component {
           <UnconfirmedTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)}/>
         </Tab>
       </Tabs> */}
+      var period = moment().week()
+      var periodDaysLeft = 0
+      if(period % 2 == 0)
+      {
+        periodDaysLeft = 7 + 6 - moment().day() 
+      }
+      else
+      {
+        periodDaysLeft = 6 - moment().day();
+      }
     return (
       <div className="dashboardRoot">
         <NavBar />
@@ -227,25 +237,27 @@ class Dashboard extends React.Component {
           <h1 className="headers topBarHeader"> Hello, Tracy </h1> 
         </div>
         <div className="dashboardHeaderContainer"> 
-          <h1 className='dashboardHeader headers'> 10 days left </h1> 
-          <h1 className="dashboardDate subheader"> Monday, May 7 </h1>
+          <h1 className='dashboardHeader headers'> {periodDaysLeft} days left </h1> 
+          <h1 className="dashboardDate subheader">  {moment().format('dddd, MMM D')} </h1>
           <h1 className="dashboardSubheader subheader"> in pay period </h1>
         </div>
-        <div className="tableContainer contentContainer">
-          <h1 className="tableContainerTitle headers"> Live visit feed </h1>
-          <RealtimeTable/>
-        </div>
-        <div className="tableContainer contentContainer">
-          <h1 className="tableContainerTitle headers"> Completed visits </h1>
-          <div className="allShiftsCalendar">
-            <DatePicker
-                onChange={this.handleChangeDate}
-                defaultDate={this.state.currentDate}
-                firstDayOfWeek={0}
-                formatDate={(date) => moment(date).format('MMM D, YYYY')}
-            />
+        <div className="dashboardCotainer">
+          <div className="tableContainer contentContainer">
+            <h1 className="tableContainerTitle headers"> Live visit feed </h1>
+            <RealtimeTable/>
           </div>
-          <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>  
+          <div className="tableContainer contentContainer">
+            <h1 className="tableContainerTitle headers"> Completed visits </h1>
+            <div className="allShiftsCalendar">
+              <DatePicker
+                  onChange={this.handleChangeDate}
+                  defaultDate={this.state.currentDate}
+                  firstDayOfWeek={0}
+                  formatDate={(date) => moment(date).format('MMM D, YYYY')}
+              />
+            </div>
+            <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>  
+          </div>
         </div>
         {dialog}
     </div>

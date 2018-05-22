@@ -143,7 +143,7 @@ import {clockOut, deleteItem} from '../../actions/fetchingActions';
 
 
 const columnData = [
-    { id: 'caregiverName', numeric: false, disablePadding: true, label: 'HSW' },
+    { id: 'caregiverName', numeric: false, disablePadding: false, label: 'HSW' },
     { id: 'clientName', numeric: false, disablePadding: false, label: 'Client' },
     { id: 'clockInTime', numeric: false, disablePadding: false, label: 'Clock in time' },
     { id: 'duration', numeric: false, disablePadding: false, label: 'Duration' },
@@ -165,6 +165,7 @@ class EnhancedTableHead extends React.Component {
                 indeterminate={numSelected > 0 && numSelected < rowCount}
                 checked={numSelected === rowCount}
                 onChange={onSelectAllClick}
+                style={{color: '#f55845'}}
               />
             </TableCell>
             {columnData.map(column => {
@@ -221,18 +222,18 @@ const toolbarStyles = theme => ({
     highlight:
       theme.palette.type === 'light'
         ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            color: '#000000',
+            backgroundColor: "#F4AE90",
           }
         : {
             color: theme.palette.text.primary,
             backgroundColor: theme.palette.secondary.dark,
           },
     spacer: {
-      flex: '1 1 100%',
+      flex: '1 1 80%',
     },
     actions: {
-      color: theme.palette.text.secondary,
+      color: 'theme.palette.text.secondary',
     },
     title: {
       flex: '0 0 auto',
@@ -256,7 +257,6 @@ const toolbarStyles = theme => ({
             </Typography>
           ) : (
             <Typography variant="title" id="tableTitle">
-              Select desired shifts to clock out
             </Typography>
           )}
         </div>
@@ -275,12 +275,7 @@ const toolbarStyles = theme => ({
             </Tooltip>
         </div>
           ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list" onClick={filter}>
-                <FilterListIcon />
-              </IconButton>
-
-            </Tooltip>
+            <div> </div>
           )}
         </div>
       </Toolbar>
@@ -296,6 +291,12 @@ const toolbarStyles = theme => ({
 
 
 
+              {/* <Tooltip title="Filter list">
+              <IconButton aria-label="Filter list" onClick={filter}>
+                <FilterListIcon />
+              </IconButton>
+
+            </Tooltip> */}
 
 
 
@@ -314,11 +315,14 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
+    overflow:'scroll',
+    height: '46%'
   },
   table: {
     minWidth: 700,
-  },
+  }
 });
+
 
 class RealtimeTable extends React.Component{
     constructor(props){
@@ -398,15 +402,11 @@ class RealtimeTable extends React.Component{
     }
 
     clockOutItems = () => {
-        console.log('clocking out the given people');
-        console.log(this.state.selected);
         this.props.clockOut(this.state.selected);
         this.setState({ selected:[]});
     }
 
     deleteItem = () => {
-        console.log('deleting');
-        console.log(this.state.selected);
         this.props.deleteItem(this.state.selected);
         this.setState({ selected:[]});
     }
@@ -445,22 +445,23 @@ class RealtimeTable extends React.Component{
                         aria-checked={isSelected}
                         tabIndex={-1}
                         selected={isSelected}
+                       
                     >
                         <TableCell padding="checkbox">
-                            <Checkbox checked={isSelected} />
+                            <Checkbox checked={isSelected}  style={{color: '#f55845'}} />
                         </TableCell>
-                        <TableCell component="th" scope="row">
+                        <TableCell component="th" scope="row"  style={{fontSize: 12}}>
                         {visit.caregiverName}
                         </TableCell>
-                        <TableCell>{visit.clientName}</TableCell>
-                        <TableCell>{visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'}</TableCell>
-                        <TableCell> {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableCell>
+                        <TableCell style={{fontSize: 12}}>{visit.clientName}</TableCell>
+                        <TableCell style={{fontSize: 12}}>{visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'}</TableCell>
+                        <TableCell style={{fontSize: 12}}> {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableCell>
                 
                     </TableRow>
                     );
                 })}
                 {emptyRows > 0 && (
-                            <TableRow style={{ height: 49 * emptyRows }}>
+                            <TableRow style={{ height: 45 * emptyRows }}>
                             <TableCell colSpan={6} />
                             </TableRow>
                 )}
