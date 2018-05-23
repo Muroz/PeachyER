@@ -1,109 +1,4 @@
-// "use strict";
-// import React from "react";
-
-
-
-// import {
-//     Table,
-//     TableBody,
-//     TableFooter,
-//     TableHeader,
-//     TableHeaderColumn,
-//     TableRow,
-//     TableRowColumn,
-//   } from 'material-ui/Table';
-
-// class RealtimeTable extends React.Component {
-
-//     constructor(props){
-//         super(props);
-
-//         this.state = {
-//             selected: [1],
-//             fixedHeader: true,
-//             fixedFooter: true,
-//             stripedRows: false,
-//             showRowHover: true,
-//             selectable: false,
-//             multiSelectable: false,
-//             enableSelectAll: false,
-//             deselectOnClickaway: false,
-//             showCheckboxes: false,
-//             height: '200px',
-//             secondsElapsed: 0
-
-//         }
-
-//         this.tick = this.tick.bind(this);
-//     }
-
-//     tick() {
-//         this.setState({secondsElapsed: this.state.secondsElapsed + 1});
-//     }
-
-//     componentDidMount(){
-//         this.interval = setInterval(this.tick, 1000);
-//     }
-
-//     componentWillUnmount() {
-//         clearInterval(this.interval);
-//     }
-
-//     setTableInfo(visit, index){
-//         var duration = (moment().diff(moment(visit.clockInTime),'hours',true));
-//         var DurationHour = Math.floor(duration);
-//         var durationDifference = Math.round((duration - DurationHour)*60);
-
-//         return (<TableRow key={index} >
-//                   <TableRowColumn style={{fontSize:'15px'}} ref={"caregiverName"+index}> {visit.caregiverName} </TableRowColumn>
-//                   <TableRowColumn style={{fontSize:'15px'}} ref={"clientName"+index}> {visit.clientName} </TableRowColumn>
-//                   <TableRowColumn style={{fontSize:'15px'}} ref={"clockInTime"+index}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
-//                   <TableRowColumn style={{fontSize:'15px'}}>  {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableRowColumn>
-//                 </TableRow>)
-//     }
-
-//     render() {
-//         return(
-//             <Table    
-//             height={this.state.height}
-//              fixedHeader={this.state.fixedHeader}
-//             fixedFooter={this.state.fixedFooter}
-//             selectable={this.state.selectable}
-//             multiSelectable={this.state.multiSelectable}
-//             >
-//             <TableHeader
-//             displaySelectAll={this.state.showCheckboxes}
-//             adjustForCheckbox={this.state.showCheckboxes}
-//             enableSelectAll={this.state.enableSelectAll}
-//             >
-//             <TableRow>
-//                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Employee">HSW</TableHeaderColumn>
-//                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Client">Client</TableHeaderColumn>
-//                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
-//                 <TableHeaderColumn style={{fontSize:'15px'}} tooltip="Duration">Duration</TableHeaderColumn>
-
-
-//             </TableRow>
-//             </TableHeader>
-
-//             <TableBody displayRowCheckbox={this.state.showCheckboxes}
-//             deselectOnClickaway={this.state.deselectOnClickaway}
-//             showRowHover={this.state.showRowHover}
-//             stripedRows={this.state.stripedRows}
-//             >
-//             {this.props.confirmed?this.props.confirmed.map(this.setTableInfo,this):null}
-//             </TableBody>
-//         </Table>
-//         )
-//     }
-
-// }
-
-
-
-// export default connect(mapStateToProps)(RealtimeTable);
-
-
+"use strict";
 
 import React from 'react';
 import { connect } from "react-redux";
@@ -140,6 +35,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { bindActionCreators } from "redux";
 import {clockOut, deleteItem} from '../../actions/fetchingActions';
+import ClockOutPopup from './clockOutPopup';
 
 
 const columnData = [
@@ -160,14 +56,7 @@ class EnhancedTableHead extends React.Component {
       return (
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox">
-              <Checkbox
-                indeterminate={numSelected > 0 && numSelected < rowCount}
-                checked={numSelected === rowCount}
-                onChange={onSelectAllClick}
-                style={{color: '#f55845'}}
-              />
-            </TableCell>
+
             {columnData.map(column => {
               return (
                 <TableCell
@@ -192,6 +81,9 @@ class EnhancedTableHead extends React.Component {
                 </TableCell>
               );
             }, this)}
+            <TableCell padding="checkbox">
+   
+            </TableCell>
           </TableRow>
         </TableHead>
       );
@@ -206,107 +98,6 @@ class EnhancedTableHead extends React.Component {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
   };
-
-
-
-
-
-
-
-
-
-const toolbarStyles = theme => ({
-    root: {
-      paddingRight: theme.spacing.unit,
-    },
-    highlight:
-      theme.palette.type === 'light'
-        ? {
-            color: '#000000',
-            backgroundColor: "#F4AE90",
-          }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
-          },
-    spacer: {
-      flex: '1 1 80%',
-    },
-    actions: {
-      color: 'theme.palette.text.secondary',
-    },
-    title: {
-      flex: '0 0 auto',
-    },
-  });
-  
-
-  let EnhancedTableToolbar = props => {
-    const { numSelected, classes, filter, clockOut, deleteItem} = props;
-  
-    return (
-      <Toolbar
-        className={classNames(classes.root, {
-          [classes.highlight]: numSelected > 0,
-        })}
-      >
-        <div className={classes.title}>
-          {numSelected > 0 ? (
-            <Typography color="inherit" variant="subheading">
-              {numSelected} selected
-            </Typography>
-          ) : (
-            <Typography variant="title" id="tableTitle">
-            </Typography>
-          )}
-        </div>
-        <div className={classes.spacer} />
-        <div className={classes.actions}>
-          {numSelected > 0 ? (<div>
-            <Tooltip title="Clock out">
-              <IconButton aria-label="calendar-clock" onClick={clockOut}>
-                <AvTime />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <IconButton aria-label="delete" onClick={deleteItem}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-        </div>
-          ) : (
-            <div> </div>
-          )}
-        </div>
-      </Toolbar>
-    );
-  };
-  
-  EnhancedTableToolbar.propTypes = {
-    classes: PropTypes.object.isRequired,
-    numSelected: PropTypes.number.isRequired,
-  };
-  
-  EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
-
-
-
-              {/* <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list" onClick={filter}>
-                <FilterListIcon />
-              </IconButton>
-
-            </Tooltip> */}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -328,13 +119,13 @@ class RealtimeTable extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-        order: 'asc',
-        orderBy: 'duration',
-        selected: [],
-        data: [
-        ],
-        page: 0,
-        rowsPerPage: 5,
+            order: 'asc',
+            orderBy: 'duration',
+            selected: [],
+            page: 0,
+            rowsPerPage: 5,
+            open:false,
+            selectedVisit:null
         }
         this.sortItems = this.sortItems.bind(this);
     }
@@ -356,6 +147,7 @@ class RealtimeTable extends React.Component{
         }
         this.setState({ selected: [] });
     };
+
     handleClick = (event, id) => {
         const { selected } = this.state;
         const selectedIndex = selected.indexOf(id);
@@ -384,7 +176,9 @@ class RealtimeTable extends React.Component{
         this.setState({ rowsPerPage: event.target.value });
     };
     
-    isSelected = id => this.state.selected.indexOf(id) !== -1;
+    isSelected = (id) => {
+        return this.state.selected.indexOf(id) !== -1;
+    }
 
 
     sortItems = () => { 
@@ -411,15 +205,25 @@ class RealtimeTable extends React.Component{
         this.setState({ selected:[]});
     }
 
+    handleClickOpen = (visit) => {
+        this.setState({
+          open: true,
+          selectedVisit :visit
+        });
+      };
+    
+    handleClose = value => {
+        this.setState({open: false });
+    };
+
     render(){
 
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.confirmed.length - page * rowsPerPage);
-
         return (
             <Paper className={classes.root}>
-            <EnhancedTableToolbar numSelected={selected.length} filter={this.filter.bind(this)} clockOut={this.clockOutItems.bind(this)} deleteItem={this.deleteItem.bind(this)} />
+
             <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
                 <EnhancedTableHead
@@ -432,30 +236,34 @@ class RealtimeTable extends React.Component{
                 />
                 <TableBody>
                 {this.sortItems().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(visit => {
-                    const isSelected = this.isSelected(visit.visitId);
+                    const isSelected = this.isSelected(visit.visitId+moment(visit.date).format('DDMMYYYY'));
                     var duration = (moment().diff(moment(visit.clockInTime),'hours',true));
                     var DurationHour = Math.floor(duration);
                     var durationDifference = Math.round((duration - DurationHour)*60);
                     return (
                     <TableRow 
-                        key={visit.visitId}
+                        key={visit.visitId+moment(visit.date).format('DDMMYYYY')}
                         hover
-                        onClick={event => this.handleClick(event, visit.visitId)}
+                        onClick={event => this.handleClick(event, visit.visitId+moment(visit.date).format('DDMMYYYY'))}
                         role="checkbox"
                         aria-checked={isSelected}
                         tabIndex={-1}
                         selected={isSelected}
-                       
-                    >
-                        <TableCell padding="checkbox">
-                            <Checkbox checked={isSelected}  style={{color: '#f55845'}} />
-                        </TableCell>
+                                    >
+
                         <TableCell component="th" scope="row"  style={{fontSize: 12}}>
                         {visit.caregiverName}
                         </TableCell>
                         <TableCell style={{fontSize: 12}}>{visit.clientName}</TableCell>
                         <TableCell style={{fontSize: 12}}>{visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'}</TableCell>
                         <TableCell style={{fontSize: 12}}> {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableCell>
+                        <TableCell padding="checkbox">
+                        <Tooltip title="Clock out">
+                            <IconButton aria-label="calendar-clock" onClick={this.handleClickOpen.bind(this,visit)} className='clockOutIcon'>
+                                <AvTime style={{color:'#f55845'}}/>
+                            </IconButton>
+                        </Tooltip>
+                        </TableCell>
                 
                     </TableRow>
                     );
@@ -470,7 +278,7 @@ class RealtimeTable extends React.Component{
             </div>
             <TablePagination
                 component="div"
-                count={data.length}
+                count={this.props.confirmed.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{
@@ -481,6 +289,11 @@ class RealtimeTable extends React.Component{
                 }}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            />
+            <ClockOutPopup 
+                open={this.state.open}
+                onClose={this.handleClose}
+                visit={this.state.selectedVisit}
             />
             </Paper>
         );

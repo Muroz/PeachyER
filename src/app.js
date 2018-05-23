@@ -19,8 +19,8 @@ import MainGuide from './components/guideView/mainGuide';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-
-const middleWare = applyMiddleware(thunk, createLogger());
+//const middleWare = applyMiddleware(thunk, createLogger());
+const middleWare = applyMiddleware(thunk);
 const store = createStore(reducers, middleWare);
 
 render(

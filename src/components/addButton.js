@@ -111,6 +111,16 @@ class AddButton extends React.Component {
           className='addDialog'
         >
         <div className='dialogBody'>
+            <RadioGroup
+              aria-label="type"
+              name="type"
+              className='dialogRadioGroup'
+              value={this.state.typeSelected}
+              onChange={this.handleInputChange.bind(this,'typeSelected')}
+            >
+              <FormControlLabel value="Staff" control={<Radio color="primary"  style={{color: '#f55845'}}/>} label="Staff" />
+              <FormControlLabel value="Client" control={<Radio color="primary"  style={{color: '#f55845'}}/>} label="Client" />
+          </RadioGroup>
           <TextField
             className='dialogText'
             id="input-with-icon-textfield"
@@ -119,7 +129,7 @@ class AddButton extends React.Component {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircle />
+                  <AccountCircle  style={{color: '#f55845'}}/>
                 </InputAdornment>
               ),
             }}
@@ -132,7 +142,7 @@ class AddButton extends React.Component {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Phone />
+                  <Phone  style={{color: '#f55845'}}/>
                 </InputAdornment>
               ),
             }}
@@ -140,26 +150,17 @@ class AddButton extends React.Component {
           <TextField
             className='dialogText'
             id="input-with-icon-textfield"
-            label="Id"
+            label="ID"
             onChange = {this.handleInputChange.bind(this,'id')}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <CreditCard />
+                  <CreditCard  style={{color: '#f55845'}}/>
                 </InputAdornment>
               ),
             }}
           />
-          <RadioGroup
-              aria-label="type"
-              name="type"
-              className='dialogRadioGroup'
-              value={this.state.typeSelected}
-              onChange={this.handleInputChange.bind(this,'typeSelected')}
-            >
-              <FormControlLabel value="Staff" control={<Radio color="primary" />} label="Staff" />
-              <FormControlLabel value="Client" control={<Radio color="primary" />} label="Client" />
-          </RadioGroup>
+
         </div>
         
 

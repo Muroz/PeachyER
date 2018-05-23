@@ -33,7 +33,7 @@ class NavBar extends React.Component {
     return (
       <div className="navbar">
         <div className="navbar_li navbar_add" onClick={this.togglePopup}>
-          <a > 
+          <a className="navbarAddLink"> 
             <Button variant="raised" className="navbarAdd">
             +
             </Button>

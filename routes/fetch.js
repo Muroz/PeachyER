@@ -9,7 +9,7 @@ var moment = require('moment-timezone');
 var TestVisit = require('./../models/testerVisit');
 
 // Axios HTTP requests to fetch data from the database
-router.post("/clients", function(req, res) {
+router.post("/clients",  isLoggedIn,function(req, res) {
   Client.find({}).sort({name:1}).exec(function(err,clients){
     if(err){
       throw err;
@@ -18,7 +18,7 @@ router.post("/clients", function(req, res) {
   })
 });
 
-router.post("/staff", function(req, res) {
+router.post("/staff",  isLoggedIn,function(req, res) {
   Caregiver.find({}).sort({name:1}).exec(function(err,staff){
     if(err){
       throw err;
@@ -27,13 +27,13 @@ router.post("/staff", function(req, res) {
   })
 });
 
-router.post("/visit", function(req, res) {
+router.post("/visit",  isLoggedIn,function(req, res) {
   TestVisit.find({}, function(err, visits) {
     res.json(visits);
   });
 });
 
-router.post("/getUnconfirmed", function(req, res){
+router.post("/getUnconfirmed",  isLoggedIn,function(req, res){
     //unconfirmed shifts
     TestVisit.find({$or:[{status:'Unconfirmed'}]}).sort({date:1}).exec(function(err,visits){
       if(err){
@@ -43,10 +43,10 @@ router.post("/getUnconfirmed", function(req, res){
     })
 })
 
-router.post("/getConfirmed", function(req, res){
+router.post("/getConfirmed", isLoggedIn, function(req, res){
   //confirmed shifts
   TestVisit.find({$and:[
-            {status:'In process'}, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
+            {status:'In process'}
           ]}).sort({clockInTime:1}).exec(function(err,visits){
             if(err){
               throw err;
@@ -55,8 +55,11 @@ router.post("/getConfirmed", function(req, res){
           });
 })
 
+//, {'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}
 
-router.post("/getAllShifts", function(req, res){
+
+router.post("/getAllShifts", isLoggedIn, function(req, res){
+  console.log(req.isAuthenticated())
   //all shifts
   TestVisit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
     if(err){
@@ -67,7 +70,7 @@ router.post("/getAllShifts", function(req, res){
   })
 })
 
-router.post("/getAllShiftsFiltered", function(req, res){
+router.post("/getAllShiftsFiltered", isLoggedIn, function(req, res){
   //all shifts
   TestVisit.find({'date':{"$gte": new moment(req.body.date).tz('America/St_Johns').startOf('day'), "$lt": new moment(req.body.date).tz('America/St_Johns').endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
     if(err){
@@ -80,7 +83,7 @@ router.post("/getAllShiftsFiltered", function(req, res){
 
 
 
-router.post("/updateVisit", function(req, res) {
+router.post("/updateVisit",  isLoggedIn,function(req, res) {
   TestVisit.findOne({ _id: req.body._id }, function(err,visit){
 
     visit.clockInTime = req.body.clockInTime;
@@ -128,7 +131,7 @@ router.post("/updateVisit", function(req, res) {
   });
 });
 
-router.post("/addStaff", function(req, res) {
+router.post("/addStaff",  isLoggedIn,function(req, res) {
   var caregiver = req.body;
   Caregiver.create(caregiver, function(err, staff) {
     if (err) {
@@ -138,7 +141,7 @@ router.post("/addStaff", function(req, res) {
   });
 });
 
-router.post("/addVisit", function(req,res){
+router.post("/addVisit",  isLoggedIn,function(req,res){
   var visit = req.body;
 
   Client.findOne({name:visit.clientName}, function(err,client){
@@ -188,7 +191,7 @@ router.post("/addVisit", function(req,res){
   })
 });
 
-router.post("/addItem", function(req, res) {
+router.post("/addItem",  isLoggedIn,function(req, res) {
   var info = req.body;
   console.log(info);
   if (info.type == 'Client'){
@@ -225,7 +228,7 @@ router.post("/addItem", function(req, res) {
   }
 });
 
-router.post("/addClient", function(req, res) {
+router.post("/addClient", isLoggedIn, function(req, res) {
   var client = req.body;
   Client.create(client, function(err, clients) {
     if (err) {
@@ -236,7 +239,7 @@ router.post("/addClient", function(req, res) {
 });
 
 
-router.post("/fetchVisitLog", function(req,res){
+router.post("/fetchVisitLog", isLoggedIn, function(req,res){
   var period = moment().week()
   var extraPeriod = 0
   if(period % 2 == 0)
@@ -264,7 +267,7 @@ router.post("/fetchVisitLog", function(req,res){
   }
 })
 
-router.post("/clockOut", function(req, res) {
+router.post("/clockOut",  isLoggedIn,function(req, res) {
   TestVisit.find({$and: [ {'visitId': { $in: req.body }},{'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}]}).exec(function(err,visits){
     visits.forEach(function(visit){
       var endTime = new moment().tz('America/St_Johns');
@@ -296,7 +299,7 @@ router.post("/clockOut", function(req, res) {
 });
 
 
-router.post("/deleteItem", function(req, res) {
+router.post("/deleteItem", isLoggedIn,function(req, res) {
   TestVisit.find({$and: [ {'visitId': { $in: req.body }},{'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}]}).exec(function(err,visits){
     visits.forEach(function(visit){
       visit.remove();
@@ -304,4 +307,14 @@ router.post("/deleteItem", function(req, res) {
   });
 });
 
+
+function isLoggedIn(req, res, next) {
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect("/");
+}
+
 module.exports = router;
+

@@ -44,15 +44,9 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
-  background-color: peachpuff;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
 
-
-
-.navbar_li:hover{
-  background: lightblue;
-}
 /*
   WAT IS THIS?!
   We inherit box-sizing: border-box; from our <html> selector
@@ -541,6 +535,13 @@ iframe{
   margin-left: 1px;
 }
 
+.navbar_add{
+  width: 100%;
+}
+
+.navbarAddLink {
+  width: 100%;
+}
 .navbarAdd {
   margin-top: 5%;
   font-size:18;
@@ -549,8 +550,7 @@ iframe{
 }
 
 .navbarAdd:hover{
-  background: #f4AE90;
-  transform: scale(1.25);
+  background: #f55845;
 }
 
 .navbarTitle {
@@ -711,4 +711,9 @@ iframe{
   display: grid;
   grid-auto-flow: column;
   margin: 4%;
+}
+
+
+.clockOutIcon:hover{
+  transform: scale(1.3);
 }

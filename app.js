@@ -50,6 +50,8 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
 
+var xl = require('excel4node');
+
 
 //end google stuff
 
@@ -302,24 +304,56 @@ function storeToken(token) {
 
 // TestVisit.find({}).sort({clientName:1}).exec(function(err,visits){
 //   visits.forEach(function(visit){
-    // visit.payPeriod = moment(visit.date).week();
-    // visit.save();
-    //if (visit.status != "Unconfirmed"){
-      // if(visit.clockOutTime != null && visit.clockInTime != null){
-      //   visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
-      //   visit.save();
-      // }
+//     visit.payPeriod = moment(visit.date).week();
+//     visit.save();
+//     if (visit.status != "Unconfirmed"){
+//       if(visit.clockOutTime != null && visit.clockInTime != null){
+//         visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+//         visit.save();
+//       }
 
-    // if (visit.payPeriod == 18 || visit.payPeriod == 19){
-    //   console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
-    //   console.log(',')
-    // }
+//     if (visit.payPeriod == 18 || visit.payPeriod == 19){
+//       console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
+//       console.log(',')
+//     }
 //     } else {
 //       console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
 //     }
 //   })
 
 // });
+
+TestVisit.find({}).sort({clientName:1}).exec(function(err,visits){
+  var wb = new xl.Workbook();
+ 
+  // Add Worksheets to the workbook
+  var ws = wb.addWorksheet('Report');
+
+  var period = moment().week()
+  var extraPeriod = 0
+  if(period % 2 == 0)
+  {
+    extraPeriod = period + 1
+  }
+  else
+  {
+    extraPeriod = period - 1
+  }
+  visits.forEach(function(visit){
+    if (visit.status != "Unconfirmed"){
+      if (visit.payPeriod == period || visit.payPeriod == extraPeriod){
+        
+        console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
+        console.log(',')
+      }
+    } else {
+      console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
+    }
+  })
+
+});
+
+
 
 // console.log('This pay period');
 // console.log(moment().week())
