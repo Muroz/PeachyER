@@ -248,7 +248,6 @@ class RealtimeTable extends React.Component{
                         role="checkbox"
                         aria-checked={isSelected}
                         tabIndex={-1}
-                        selected={isSelected}
                                     >
 
                         <TableCell component="th" scope="row"  style={{fontSize: 12}}>

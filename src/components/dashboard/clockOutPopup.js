@@ -17,18 +17,26 @@ import TimePicker from 'material-ui/TimePicker';
 import DatePicker from 'material-ui/DatePicker';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
-
+import {clockOut, deleteItem} from '../../actions/fetchingActions';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
 class ClockOutPopup extends React.Component {
     state = {
         date: null,
         time: null,
-        visit: null
+        errorMessage: ''
       };
 
-  handleClose = () => {
+  handleClose = () => this.reset()
+
+  reset = () => {
+    this.setState({     
+        date: null,
+        time: null,
+        errorMessage: ''});
     this.props.onClose();
-  };
+  }
 
   handleChange = (type, event, newVal) => {
     var newState = {};
@@ -36,8 +44,21 @@ class ClockOutPopup extends React.Component {
     this.setState(newState);
   };
 
+  handleClockout = () => {
+      if (this.state.date != null && this.state.time !=null){
+        var timeInfo = {}
+        timeInfo['date']= this.state.date;
+        timeInfo['time']=this.state.time
+        var visit = this.props.visit
+        this.props.clockOut(visit,timeInfo);
+        this.reset();
+      } else {
+        this.setState({errorMessage:'Please fill all of the required information'})
+      }
+  }
+
   render() {
-    const {onClose, ...other } = this.props;
+    const {onClose, clockOut,...other } = this.props;
     return (
       <Dialog onClose={this.handleClose} 
             aria-labelledby="simple-dialog-title" 
@@ -61,12 +82,13 @@ class ClockOutPopup extends React.Component {
                 onChange={this.handleChange.bind(this,'date')}
             />
             </div>
+            <div style={{color:'red'}}> {this.state.errorMessage} </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.handleOk} color="primary">
+          <Button onClick={this.handleClockout} color="primary">
             Clock out
           </Button>
         </DialogActions>
@@ -79,4 +101,22 @@ ClockOutPopup.propTypes = {
   onClose: PropTypes.func,
 };
 
-export default ClockOutPopup;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ 
+
+    }, dispatch);
+}
+
+function mapStateToProps(state) {
+    return {confirmed: state.clientReducers.confirmed};
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ 
+      clockOut:clockOut,
+      deleteItem:deleteItem
+    }, dispatch);
+  }
+
+export default connect(mapStateToProps,mapDispatchToProps)(ClockOutPopup);
+

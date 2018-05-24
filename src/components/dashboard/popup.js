@@ -54,12 +54,6 @@ import {updateVisit} from '../../actions/fetchingActions';
 
     }
 
-    componentWillMount(){
-      //set the state values here
-      console.log(this.props.visit);
-    }
-
-
     handleSave = () => {
         //check all values
         var visit = this.props.visit;
@@ -121,7 +115,6 @@ import {updateVisit} from '../../actions/fetchingActions';
       };
     
       handleChangeStatus = (event, index, value) => {
-        console.log('changing status to ', value);
         this.setState({status:value, save:true});
       }
     
@@ -171,10 +164,9 @@ import {updateVisit} from '../../actions/fetchingActions';
             onRequestClose={this.props.handleClose}
             bodyClassName="dialogWindow"
           >
-          
             <div className="row8a">HSW name:     </div> 
             <DropDownMenu 
-              ref="caregiverName" value={this.props.visit.caregiverName} 
+              value={this.props.visit.caregiverName} 
               onChange={this.handleChangeCaregiver}  
               className="dropdown"
               style={{width:'100px'}}
@@ -184,7 +176,7 @@ import {updateVisit} from '../../actions/fetchingActions';
     
             <div className="row8a">Client name:     </div> 
             <DropDownMenu 
-              ref="clientName" value={this.props.visit.clientName} 
+              value={this.props.visit.clientName} 
               onChange={this.handleChangeClient}  
               className="dropdown"
               style={{width:'100px'}}
@@ -195,8 +187,9 @@ import {updateVisit} from '../../actions/fetchingActions';
             <div className="row3a">Time clocked in: </div>  
             <div className="rowItem">
             <TimePicker
+              id='timepickerFirst'
               hintText={stringClockIn}
-              value={this.props.visit.clockInTime}
+              value={moment(this.props.visit.clockInTime)}
               onChange={this.handleChangeTimeChange.bind(this,'clockInTime')}
             />
             </div>
@@ -204,30 +197,26 @@ import {updateVisit} from '../../actions/fetchingActions';
             <div className="row4a">Time clocked out: </div>  
             <div className="rowItem">
             <TimePicker
-              ref="clockOutTime"
+              id='timepicker'
               hintText={stringClockOut}
-              value={this.props.visit.clockOutTime}
+              value={moment(this.props.visit.clockOutTime)}
               onChange={this.handleChangeTimeChange.bind(this,'clockOutTime')}
             />
             </div>
     
             <div className="row5a">Shift duration: </div>  
             <TextField
-              ref="scheduledDuration"
               className="rowItem"
-              id="scheduledDuration"
               disabled={true}
               value={Number(this.props.visit.duration).toFixed(2)}
             />
     
-    
             <div className="row8a">Status:     </div> 
             {this.props.tabValue == 'allShifts' ?
             <DropDownMenu 
-              ref="status" value={this.state.status} 
+              value={this.state.status} 
               onChange={this.handleChangeStatus}  
-              className="row8b"
-              className="dropdown"
+              className="dropdown row8b"
               autoWidth={true}>
     
                 <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
@@ -238,10 +227,9 @@ import {updateVisit} from '../../actions/fetchingActions';
             </DropDownMenu>
             :
             <DropDownMenu 
-              ref="status" value={this.props.visit.status} 
+              value={this.props.visit.status} 
               onChange={this.handleChangeStatus}  
-              className="row8b"
-              className="dropdown"
+              className="dropdown row8b"
               autoWidth={true}>
     
                 <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />

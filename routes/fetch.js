@@ -268,10 +268,14 @@ router.post("/fetchVisitLog", isLoggedIn, function(req,res){
 })
 
 router.post("/clockOut",  isLoggedIn,function(req, res) {
-  TestVisit.find({$and: [ {'visitId': { $in: req.body }},{'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}]}).exec(function(err,visits){
-    visits.forEach(function(visit){
-      var endTime = new moment().tz('America/St_Johns');
-      visit.clockOutTime = endTime;
+
+  TestVisit.find({$and: [ {'visitId': req.body.visit.visitId},{'date':{"$gte": new moment(req.body.time.date).tz('America/St_Johns').startOf('day'), "$lt": new moment(req.body.time.date).tz('America/St_Johns').endOf('day')}}]}).exec(function(err,visits){
+
+    var timeInfo = req.body.time.time;
+    var clockOutTime = moment(req.body.time.date).set('hour',moment(timeInfo).get('hour')).set('minute',moment(timeInfo).get('minute'))
+
+    var visit = visits[0]
+      visit.clockOutTime = clockOutTime;
       visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
       visit.status = 'Completed';
   
@@ -293,7 +297,6 @@ router.post("/clockOut",  isLoggedIn,function(req, res) {
           visit.save();
         });
       });
-    })
 
 });
 });

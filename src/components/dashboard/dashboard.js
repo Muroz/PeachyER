@@ -4,19 +4,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import NavBar from "./../navbar";
 import {fetchAllShifts,fetchConfirmedShifts,fetchUnconfirmedShifts,fetchAllShiftsFiltered, updateVisit, selectRow, fetchOvertimeShifts, fetchLateShifts, fetchStaff, fetchClients} from '../../actions/fetchingActions';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Badge from 'material-ui/Badge';
 import moment from 'moment-timezone';
-import TextField from 'material-ui/TextField';
-import Toggle from 'material-ui/Toggle';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import DatePicker from 'material-ui/DatePicker';
-import TimePicker from 'material-ui/TimePicker';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-import UnconfirmedTable from "./unconfirmedTable";
 import RealtimeTable from "./realtimeTable";
 import AllShiftsTable from "./allShiftsTable";
 import Popup from "./popup";
@@ -82,11 +71,8 @@ class Dashboard extends React.Component {
 
   handleOpen = (selectedRows) => {
     if(selectedRows.length == 0){
-      console.log('this is still a thing');
       selectedRows = this.state.selected;    
     }
-    console.log('the rows');
-    console.log(selectedRows);
     var selectedShift = this.props['allShifts'][selectedRows[0]]
     var stringClockIn = selectedShift.clockInTime ? moment(selectedShift.clockInTime) : null
     var stringClockOut =  selectedShift.clockOutTime ? moment(selectedShift.clockOutTime) : null
@@ -146,79 +132,11 @@ class Dashboard extends React.Component {
     });
   };
 
-
-
   render() {
 
-    const actions = [
-      <FlatButton
-        label="Save"
-        primary={true}
-        keyboardFocused={true}
-        disabled={!this.state.save}
-        onClick={this.handleSave}
-      />,<FlatButton
-      label="Cancel"
-      primary={false}
-      keyboardFocused={false}
-      onClick={this.handleClose}
-    />
-    
-    ];
     var editVisit = this.props['allShifts'][this.state.selected[0]]
     var dialog = <Popup visit={editVisit || {}} tabValue={'allShifts'} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
 
-    // if(this.state.tabValue == 'unconfirmed' || this.state.tabValue == 'allShifts'){
-    //   var editVisit = this.props[this.state.tabValue][this.state.selected[0]]
-
-  
-    // } else {
-    //   dialog = null;
-    // }
-
-              {/* <div className='summaryTable'>
-          <div className='summaryItem'>
-            <div style={{margin:'auto'}}><p className='summaryItemTitle'>{this.props.confirmed? this.props.confirmed.length:'0'}</p></div>
-            <div style={{margin:'auto'}}><p className='summaryItemSub'>Working</p></div>
-          </div>
-          </div>   */}
-
-           {/* <Tabs
-        value={this.state.tabValue}
-        onChange={this.handleChangeTab}
-      >
-
-        <Tab 
-          label="Currently working" 
-          value="confirmed"
-          className='tabContainer'
-        > 
-
-
-
-        </Tab>
-        <Tab 
-          label={"Shifts scheduled today ("+this.props.allShifts.length+")"}
-          value="allShifts"
-          className='tabContainer'
-        >
-          <div className="allShiftsCalendar">
-          <DatePicker
-            onChange={this.handleChangeDate}
-            floatingLabelText="Shifts on"
-            defaultDate={this.state.currentDate}
-          />
-          </div>
-          <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>
-        </Tab>
-        <Tab 
-          label={"Unconfirmed shifts ("+this.props.unconfirmed.length+")"}
-          value="unconfirmed"
-          className='tabContainer'
-        >
-          <UnconfirmedTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)}/>
-        </Tab>
-      </Tabs> */}
       var period = moment().week()
       var periodDaysLeft = 0
       if(period % 2 == 0)
@@ -250,6 +168,7 @@ class Dashboard extends React.Component {
             <h1 className="tableContainerTitle headers"> Completed visits </h1>
             <div className="allShiftsCalendar">
               <DatePicker
+                  id="datePickerDashboard"
                   onChange={this.handleChangeDate}
                   defaultDate={this.state.currentDate}
                   firstDayOfWeek={0}

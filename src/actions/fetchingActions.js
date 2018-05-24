@@ -70,6 +70,7 @@ export function addClient(client) {
 }
 
 export function addItem(item) {
+  console.log('at addingItem')
   return function(dispatch) {
     axios
       .post("/fetch/addItem", item)
@@ -219,15 +220,19 @@ export function updateVisit(visit,type) {
 }
 
 //clockout people
-export function deleteItem(visits) {
+export function clockOut(visit,time) {
+  var body = {}
+  body['visit'] = visit
+  body['time'] = time
+  console.log(body)
   return function(dispatch) {
     axios
-      .post("/fetch/deleteItem", visits)
+      .post("/fetch/clockOut", body)
       .then(function(response) {
-          dispatch({ type: "DELETE_ITEM", payload: response.data });
+          dispatch({ type: "CLOCK_OUT", payload: response.data });
       })
       .catch(function(err) {
-        dispatch({ type: "DELETE_ITEM_REJECTED", payload: err });
+        dispatch({ type: "CLOCK_OUT_REJECTED", payload: err });
       });
   };
 }
