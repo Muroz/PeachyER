@@ -168,6 +168,7 @@ import {updateVisit} from '../../actions/fetchingActions';
             <DropDownMenu 
               value={this.props.visit.caregiverName} 
               onChange={this.handleChangeCaregiver}  
+              id='dropdownHSW'
               className="dropdown"
               style={{width:'100px'}}
               autoWidth={true}>
@@ -207,16 +208,17 @@ import {updateVisit} from '../../actions/fetchingActions';
             <div className="row5a">Shift duration: </div>  
             <TextField
               className="rowItem"
+              id="duration"
               disabled={true}
               value={Number(this.props.visit.duration).toFixed(2)}
             />
     
-            <div className="row8a">Status:     </div> 
-            {this.props.tabValue == 'allShifts' ?
+            <div className="row8a">Status: </div> 
             <DropDownMenu 
               value={this.state.status} 
               onChange={this.handleChangeStatus}  
               className="dropdown row8b"
+              id='dropdownStatus'
               autoWidth={true}>
     
                 <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
@@ -225,20 +227,6 @@ import {updateVisit} from '../../actions/fetchingActions';
                 <MenuItem value={'In process'} primaryText="In process" />
                   
             </DropDownMenu>
-            :
-            <DropDownMenu 
-              value={this.props.visit.status} 
-              onChange={this.handleChangeStatus}  
-              className="dropdown row8b"
-              autoWidth={true}>
-    
-                <MenuItem value={'Unconfirmed'} primaryText="Unconfirmed" />
-                <MenuItem value={'Completed'} primaryText="Completed" />
-                <MenuItem value={'Cancelled'} primaryText="Cancelled" />
-                  
-            </DropDownMenu>
-
-            }
     
             <div className='alertMessage'>
               {this.state.messageClock}

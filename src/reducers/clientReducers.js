@@ -11,9 +11,6 @@ export function clientReducers(
     case "GET_STAFF":
       return { ...state, staff: action.payload };
       break;
-    case "GET_ACTIVITY":
-      return { ...state, activity: action.payload };
-      break;
     case "ADD_CLIENT":
       return { ...state, clients: [...state.clients, ...action.payload] };
       break;
@@ -38,12 +35,6 @@ export function clientReducers(
       break;
     case "GET_ALLSHIFTS":
       return {...state, allShifts: action.payload}
-      break;
-    case "GET_LATE":
-      return{...state, late:action.payload}
-      break;
-    case "GET_OVERTIME":
-      return{...state, overtime:action.payload}
       break;
     case "UPDATE_UNCONFIRMED_VISIT":
       const shiftsToUpdate = [...state.unconfirmed]

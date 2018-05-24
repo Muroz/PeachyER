@@ -3,12 +3,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import NavBar from "./../navbar";
-import {fetchAllShifts,fetchConfirmedShifts,fetchUnconfirmedShifts,fetchAllShiftsFiltered, updateVisit, selectRow, fetchOvertimeShifts, fetchLateShifts, fetchStaff, fetchClients} from '../../actions/fetchingActions';
+import {fetchAllShifts,fetchConfirmedShifts,fetchAllShiftsFiltered, updateVisit, selectRow, fetchStaff, fetchClients} from '../../actions/fetchingActions';
 import moment from 'moment-timezone';
 import DatePicker from 'material-ui/DatePicker';
 import RealtimeTable from "./realtimeTable";
 import AllShiftsTable from "./allShiftsTable";
 import Popup from "./popup";
+import ReactGA from 'react-ga';
 
 class Dashboard extends React.Component {
   state = {
@@ -45,22 +46,14 @@ class Dashboard extends React.Component {
   componentWillMount(){
     //fetch all shifts (pass a date);
     this.props.fetchAllShiftsFiltered(this.state.currentDate);
-    this.props.fetchAllShifts();
     this.props.fetchConfirmedShifts();
-    this.props.fetchUnconfirmedShifts();
-    this.props.fetchOvertimeShifts();
-    this.props.fetchLateShifts();
     this.props.fetchStaff();
     this.props.fetchClients();
   }
   componentDidMount() {
     setInterval( () => {
       this.props.fetchAllShiftsFiltered(this.state.currentDate);
-      this.props.fetchAllShifts();
       this.props.fetchConfirmedShifts();
-      this.props.fetchUnconfirmedShifts();
-      this.props.fetchOvertimeShifts();
-      this.props.fetchLateShifts();
     },20000);
   }
 
@@ -203,13 +196,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ 
     fetchAllShifts: fetchAllShifts, 
-    fetchUnconfirmedShifts:fetchUnconfirmedShifts, 
-    fetchAllShifts:fetchAllShifts, 
     fetchConfirmedShifts:fetchConfirmedShifts, 
     updateVisit:updateVisit, 
     selectRow:selectRow,
-    fetchOvertimeShifts: fetchOvertimeShifts,
-    fetchLateShifts: fetchLateShifts,
     fetchClients: fetchClients,
     fetchStaff: fetchStaff,
     fetchAllShiftsFiltered:fetchAllShiftsFiltered}, dispatch);

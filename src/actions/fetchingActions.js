@@ -98,20 +98,6 @@ export function addVisit(visit) {
 }
 
 
-// Fetch activity information
-export function fetchActivity() {
-  return function(dispatch) {
-    axios
-      .post("/fetch/activity")
-      .then(function(response) {
-        dispatch({ type: "GET_ACTIVITY", payload: response.data });
-      })
-      .catch(function(err) {
-        dispatch({ type: "GET_ACTIVITY_REJECTED", payload: err });
-      });
-  };
-}
-
 // Fetch all shift information
 export function fetchAllShifts() {
   return function(dispatch) {
@@ -172,33 +158,6 @@ export function fetchConfirmedShifts() {
   };
 }
 
-// Fetch late shifts information
-export function fetchLateShifts() {
-  return function(dispatch) {
-    axios
-      .post("/fetch/getLate")
-      .then(function(response) {
-        dispatch({ type: "GET_LATE", payload: response.data });
-      })
-      .catch(function(err) {
-        dispatch({ type: "GET_LATE_REJECTED", payload: err });
-      });
-  };
-}
-
-// Fetch overtime shifts information
-export function fetchOvertimeShifts() {
-  return function(dispatch) {
-    axios
-      .post("/fetch/getOvertime")
-      .then(function(response) {
-        dispatch({ type: "GET_OVERTIME", payload: response.data });
-      })
-      .catch(function(err) {
-        dispatch({ type: "GET_OVERTIME_REJECTED", payload: err });
-      });
-  };
-}
 
 // Add client entry
 export function updateVisit(visit,type) {
@@ -224,7 +183,6 @@ export function clockOut(visit,time) {
   var body = {}
   body['visit'] = visit
   body['time'] = time
-  console.log(body)
   return function(dispatch) {
     axios
       .post("/fetch/clockOut", body)

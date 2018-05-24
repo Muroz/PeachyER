@@ -301,16 +301,6 @@ router.post("/clockOut",  isLoggedIn,function(req, res) {
 });
 });
 
-
-router.post("/deleteItem", isLoggedIn,function(req, res) {
-  TestVisit.find({$and: [ {'visitId': { $in: req.body }},{'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}]}).exec(function(err,visits){
-    visits.forEach(function(visit){
-      visit.remove();
-    })
-  });
-});
-
-
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) return next();
