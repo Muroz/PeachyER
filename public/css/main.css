@@ -297,7 +297,6 @@ html, body, .app {
 }
 
 .directoryItemBody{
-  padding-top: 10px;
 }
 
 .summaryTable{
@@ -465,8 +464,13 @@ iframe{
 }
 .dashboardHeader{
   font-size: 18px;
+  text-align: center;
 }
 
+.dashboardPagination{
+  height: 0px;
+  font-size: 15;
+}
 .dashboardSubheader{
  
 }
@@ -479,7 +483,7 @@ iframe{
   width: 90%;
   margin:auto;
   padding: 20px;
-  background:white;
+  background:rgb(247, 247, 247);
   margin-bottom: 10px;
 
 }
@@ -514,8 +518,8 @@ iframe{
 }
 
 .logo {
-  height: 65px;
-  width: 200px;
+  height: 50px;
+  width: 145px;
   margin: auto;
 }
 
@@ -576,15 +580,15 @@ iframe{
 }
 
 .headers {
-  font-size: 18px!important;
+  font-size: 24px!important;
 }
 
 .midheader {
-  font-size: 14px!important;
+  font-size: 18px!important;
 }
 
 .subheader {
-  font-size: 12px!important;
+  font-size: 14px!important;
 }
 
 .contentContainer{
@@ -625,6 +629,10 @@ iframe{
   background-color: peachpuff!important;
 }
 
+.directorySearchBar{
+  width:60%;
+  justify-self: end;
+}
 .directoryList{
   display: grid;
   grid-template-columns: repeat(1,1fr);

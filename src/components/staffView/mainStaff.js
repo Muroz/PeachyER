@@ -14,6 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Search from '@material-ui/icons/Search';
+import Topbar from "../topbar";
 
 
 class MainStaff extends React.Component {
@@ -49,16 +50,13 @@ class MainStaff extends React.Component {
     return (
       <div className='directoryRoot'>
           <Navbar />
-          <div className="topBar">  
-            <img src="/images/rsz_peachy_logo.png" className="logo" />
-            <h1 className="headers topBarHeader"> Hello, Tracy </h1> 
-          </div>
+          <Topbar/>
           <div className="dashboardHeaderContainer directoryTitle"> 
-          <h1 className='dashboardHeader headers'> Staff information</h1> 
-          <h1 className="dashboardDate subheader"> {moment().format('dddd, MMM D')}</h1>
+          <h1 className='headers'> Staff information</h1> 
           <TextField
             className='directorySearchBar'
             id="input-with-icon-textfield"
+            placeholder="Search"
             onChange = {this.handleInputChange.bind(this)}
             InputProps={{
               startAdornment: (

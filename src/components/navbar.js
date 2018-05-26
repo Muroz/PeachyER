@@ -12,6 +12,7 @@ import Group from 'material-ui/svg-icons/social/group';
 import List from 'material-ui/svg-icons/action/list';
 import School from 'material-ui/svg-icons/social/school';
 import ExitToApp from 'material-ui/svg-icons/action/exit-to-app';
+import moment from 'moment-timezone';
 
 class NavBar extends React.Component {
   constructor() {
@@ -28,10 +29,23 @@ class NavBar extends React.Component {
   }
   render() {
 
-
+    var period = moment().week()
+    var periodDaysLeft = 0
+    if(period % 2 == 0)
+    {
+      periodDaysLeft = 7 + 6 - moment().day() 
+    }
+    else
+    {
+      periodDaysLeft = 6 - moment().day();
+    }
 
     return (
       <div className="navbar">
+        <div > 
+          <h1 className="dashboardDate midheader">  {moment().format('dddd, MMM D')} </h1>
+          <h1 className='dashboardHeader subheader'> {periodDaysLeft} days left </h1> 
+        </div>
         <div className="navbar_li navbar_add" onClick={this.togglePopup}>
           <a className="navbarAddLink"> 
             <Button variant="raised" className="navbarAdd">
@@ -40,13 +54,13 @@ class NavBar extends React.Component {
           </a>
         </div>
         <div className="navbar_li navbar_home">
-          <a href="/dashboard" ><div className="navbarItem"><Dashboard color={'#f55845'}/><div className="navbarTitle headers">Home</div> </div></a>
+          <a href="/dashboard" ><div className="navbarItem"><Dashboard color={'#f55845'}/><div className="navbarTitle midheader">Home</div> </div></a>
         </div>
         <div className="navbar_li navbar_client">
-          <a href="/clients"><div className="navbarItem"><img src="/images/heartLogo.png" className='navbarLogo'/><div className="navbarTitle headers">Clients</div> </div></a>
+          <a href="/clients"><div className="navbarItem"><img src="/images/heartLogo.png" className='navbarLogo'/><div className="navbarTitle midheader">Clients</div> </div></a>
         </div>
         <div className="navbar_li navbar_staff">
-          <a href="/staff"><div className="navbarItem"> <Group color={'#f55845'}/><div className="navbarTitle headers">Staff</div> </div></a>
+          <a href="/staff"><div className="navbarItem"> <Group color={'#f55845'}/><div className="navbarTitle midheader">Staff</div> </div></a>
         </div>
 
         <div className="navbar_li navbar_help">

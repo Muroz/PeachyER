@@ -93,7 +93,7 @@ class AllShiftsTable extends React.Component {
             enableSelectAll={this.state.enableSelectAll}
             >
             <TableRow>
-                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Employee">HSW</TableHeaderColumn>
+                <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Employee">Staff</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'14px'}} tooltip="Client">Client</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'14px'}} tooltip="ClockInTime">Time clocked in</TableHeaderColumn>
                 <TableHeaderColumn style={{fontSize:'14px'}} tooltip="ClockOutTime">Time clocked out</TableHeaderColumn>

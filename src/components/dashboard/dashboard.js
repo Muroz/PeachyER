@@ -9,7 +9,10 @@ import DatePicker from 'material-ui/DatePicker';
 import RealtimeTable from "./realtimeTable";
 import AllShiftsTable from "./allShiftsTable";
 import Popup from "./popup";
-import ReactGA from 'react-ga';
+import {fireEvent} from './../../helper'
+import Topbar from "../topbar";
+
+
 
 class Dashboard extends React.Component {
   state = {
@@ -46,14 +49,17 @@ class Dashboard extends React.Component {
   componentWillMount(){
     //fetch all shifts (pass a date);
     this.props.fetchAllShiftsFiltered(this.state.currentDate);
+    this.props.fetchAllShifts();
     this.props.fetchConfirmedShifts();
     this.props.fetchStaff();
     this.props.fetchClients();
   }
   componentDidMount() {
+    fireEvent('pageView','Dashboard');
     setInterval( () => {
       this.props.fetchAllShiftsFiltered(this.state.currentDate);
       this.props.fetchConfirmedShifts();
+      this.props.fetchAllShifts();
     },20000);
   }
 
@@ -63,6 +69,7 @@ class Dashboard extends React.Component {
 
 
   handleOpen = (selectedRows) => {
+    fireEvent('Action','ClickAllShiftsTable')
     if(selectedRows.length == 0){
       selectedRows = this.state.selected;    
     }
@@ -130,35 +137,20 @@ class Dashboard extends React.Component {
     var editVisit = this.props['allShifts'][this.state.selected[0]]
     var dialog = <Popup visit={editVisit || {}} tabValue={'allShifts'} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
 
-      var period = moment().week()
-      var periodDaysLeft = 0
-      if(period % 2 == 0)
-      {
-        periodDaysLeft = 7 + 6 - moment().day() 
-      }
-      else
-      {
-        periodDaysLeft = 6 - moment().day();
-      }
     return (
       <div className="dashboardRoot">
         <NavBar />
-        <div className="topBar"> 
-          <img src="/images/rsz_peachy_logo.png" className="logo" />
-          <h1 className="headers topBarHeader"> Hello, Tracy </h1> 
-        </div>
+        <Topbar />
         <div className="dashboardHeaderContainer"> 
-          <h1 className='dashboardHeader headers'> {periodDaysLeft} days left </h1> 
-          <h1 className="dashboardDate subheader">  {moment().format('dddd, MMM D')} </h1>
-          <h1 className="dashboardSubheader subheader"> in pay period </h1>
+          <h1 className='headers'> <strong> Overview </strong></h1> 
         </div>
         <div className="dashboardCotainer">
           <div className="tableContainer contentContainer">
-            <h1 className="tableContainerTitle headers"> Live visit feed </h1>
+            <h1 className="tableContainerTitle midheader"> Live visit feed </h1>
             <RealtimeTable/>
           </div>
           <div className="tableContainer contentContainer">
-            <h1 className="tableContainerTitle headers"> Completed visits </h1>
+            <h1 className="tableContainerTitle midheader"> Completed visits </h1>
             <div className="allShiftsCalendar">
               <DatePicker
                   id="datePickerDashboard"

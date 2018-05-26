@@ -36,10 +36,10 @@ class DirectoryItem extends React.Component {
       
     setLogs(visit, index){
         return(<div key={index} className='visitlogEntry' onClick={this.openVisitDialog.bind(this,visit)}>
-                <div> HSW = {visit.caregiverName} </div>
+                <div> Staff = {visit.caregiverName} </div>
                 <div> Status = {visit.status} </div>
                 <div> Duration (hrs) = {Math.round(visit.duration)} </div>
-                <div> Date = {moment(visit.date).format('DD MMM')} </div>
+                <div> Date = {moment(visit.date).format('MMM DDo')} </div>
                 <div> Clock in time = {moment(visit.clockInTime).format('hh:mma')} </div>
                 <div> Clock out time = {moment(visit.clockOutTime).format('hh:mma')} </div>
             </div>)
@@ -73,7 +73,7 @@ class DirectoryItem extends React.Component {
         return(
         <div className='directoryItemHead'>
         <div className='directoryItem' onClick={this.handleClick.bind(this, item.name)} >
-            <div className='directoryItemBody midheader'>{item.name} - {item.employeeId || item.id}</div>
+            <div className='directoryItemBody subheader'>{item.name} - {item.employeeId || item.id}</div>
             <div className='directoryItemBody subheader'>Telephone: {phoneNumber} </div>
             <div className='directoryItemBody subheader'>  {numberType}: {hourNumber.toFixed(2)} </div>
         </div>

@@ -39,7 +39,7 @@ import ClockOutPopup from './clockOutPopup';
 
 
 const columnData = [
-    { id: 'caregiverName', numeric: false, disablePadding: false, label: 'HSW' },
+    { id: 'caregiverName', numeric: false, disablePadding: false, label: 'Staff' },
     { id: 'clientName', numeric: false, disablePadding: false, label: 'Client' },
     { id: 'clockInTime', numeric: false, disablePadding: false, label: 'Clock in time' },
     { id: 'duration', numeric: false, disablePadding: false, label: 'Duration' },
@@ -278,6 +278,7 @@ class RealtimeTable extends React.Component{
             <TablePagination
                 component="div"
                 count={this.props.confirmed.length}
+                classes={{root:'dashboardPagination'}}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{

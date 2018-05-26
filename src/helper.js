@@ -1,5 +1,5 @@
 //Helper functions
-
+import ReactGA from 'react-ga';
 
 /**
  *  Format phone numbers
@@ -17,4 +17,12 @@ export function formatPhone(phonenum) {
         //invalid phone number
         return phonenum;
     }
+}
+
+
+export function fireEvent(category,action){
+        ReactGA.event({
+          category: category,
+          action: action
+      });
 }

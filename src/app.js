@@ -19,6 +19,10 @@ import MainGuide from './components/guideView/mainGuide';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import ReactGA from 'react-ga';
+
+ReactGA.initialize('UA-119767358-1');
+
 //const middleWare = applyMiddleware(thunk, createLogger());
 const middleWare = applyMiddleware(thunk);
 const store = createStore(reducers, middleWare);
