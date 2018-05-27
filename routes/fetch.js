@@ -59,7 +59,6 @@ router.post("/getConfirmed", isLoggedIn, function(req, res){
 
 
 router.post("/getAllShifts", isLoggedIn, function(req, res){
-  console.log(req.isAuthenticated())
   //all shifts
   TestVisit.find({'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}).sort({clockInTime:1}).exec(function(err,visits){
     if(err){

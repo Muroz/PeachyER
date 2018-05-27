@@ -51,7 +51,7 @@ router.post("/", function(req, res) {
   if (req.body.Digits) {
 
     if(req.body.Digits.length >= 4){
-      TestVisit.findOne({visitId: req.body.From+req.body.Digits, status:'In process', 'date':{"$gte": new moment().startOf('day'), "$lt": new moment().endOf('day')}}, function(err, visit){
+      TestVisit.findOne({visitId: req.body.From+req.body.Digits, status:'In process'}, function(err, visit){
         if(err) return err;
         if(visit==null) {
           var input;
@@ -118,10 +118,7 @@ router.post("/", function(req, res) {
             });
           });
 
-        } else if (visit.status == 'Completed'){
-          //Create an extra visit
-        }
-
+        } 
         if(visit != null){
           visit.save();
         }

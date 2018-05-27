@@ -21,7 +21,11 @@ var UserSchema = new mongoose.Schema({
   type: {
       type:String,
       required: true
-  }
+  },
+  company: {
+    type:String,
+    required: true
+    }
 });
 
 // methods ======================

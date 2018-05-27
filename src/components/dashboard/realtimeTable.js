@@ -81,9 +81,6 @@ class EnhancedTableHead extends React.Component {
                 </TableCell>
               );
             }, this)}
-            <TableCell padding="checkbox">
-   
-            </TableCell>
           </TableRow>
         </TableHead>
       );
@@ -218,6 +215,14 @@ class RealtimeTable extends React.Component{
 
     render(){
 
+        {/* <TableCell padding="checkbox">
+                        <Tooltip title="Clock out">
+                            <IconButton aria-label="calendar-clock" onClick={this.handleClickOpen.bind(this,visit)} className='clockOutIcon'>
+                                <AvTime style={{color:'#f55845'}}/>
+                            </IconButton>
+                        </Tooltip>
+        </TableCell> */}
+
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.confirmed.length - page * rowsPerPage);
@@ -256,13 +261,7 @@ class RealtimeTable extends React.Component{
                         <TableCell style={{fontSize: 12}}>{visit.clientName}</TableCell>
                         <TableCell style={{fontSize: 12}}>{visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'}</TableCell>
                         <TableCell style={{fontSize: 12}}> {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableCell>
-                        <TableCell padding="checkbox">
-                        <Tooltip title="Clock out">
-                            <IconButton aria-label="calendar-clock" onClick={this.handleClickOpen.bind(this,visit)} className='clockOutIcon'>
-                                <AvTime style={{color:'#f55845'}}/>
-                            </IconButton>
-                        </Tooltip>
-                        </TableCell>
+                        
                 
                     </TableRow>
                     );

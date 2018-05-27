@@ -55,10 +55,14 @@ class AllShiftsTable extends React.Component {
 
         var DurationHour = Math.floor(visit.duration);
         var durationDifference = Math.round((visit.duration - DurationHour)*60);
-
+        if (durationDifference == 60) {
+            durationDifference = 0;
+            DurationHour = DurationHour + 1;
+        }
+        //selected={this.props.isSelected(index)}
         
         ('0' + durationDifference).slice(-2)
-        return (<TableRow key={index} selected={this.props.isSelected(index)}>
+        return (<TableRow key={index} >
                   <TableRowColumn ref={"caregiverName"+index} style={{fontSize:'12px'}}> {visit.caregiverName} </TableRowColumn>
                   <TableRowColumn ref={"clientName"+index} style={{fontSize:'12px'}}> {visit.clientName} </TableRowColumn>
                   <TableRowColumn ref={"clockInTime"+index} style={{fontSize:'12px'}}> {visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'} </TableRowColumn>
@@ -76,11 +80,11 @@ class AllShiftsTable extends React.Component {
               onClick={this.togglePopup}
             />,
           ];
-
+          //onRowSelection={this.props.handleOpen}     
         return(
             <div>
             <Paper>
-            <Table onRowSelection={this.props.handleOpen}          
+            <Table      
             height={this.state.height}
              fixedHeader={this.state.fixedHeader}
             fixedFooter={this.state.fixedFooter}

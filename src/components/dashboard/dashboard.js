@@ -136,7 +136,7 @@ class Dashboard extends React.Component {
 
     var editVisit = this.props['allShifts'][this.state.selected[0]]
     var dialog = <Popup visit={editVisit || {}} tabValue={'allShifts'} open={this.state.open} handleClose={this.handleClose.bind(this)}/>
-
+    //handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} 
     return (
       <div className="dashboardRoot">
         <NavBar />
@@ -160,7 +160,8 @@ class Dashboard extends React.Component {
                   formatDate={(date) => moment(date).format('MMM D, YYYY')}
               />
             </div>
-            <AllShiftsTable handleOpen={this.handleOpen.bind(this)} isSelected={this.isSelected.bind(this)} selectedDate = {this.state.currentDate}/>  
+            
+            <AllShiftsTable selectedDate = {this.state.currentDate}/>  
           </div>
         </div>
         {dialog}
