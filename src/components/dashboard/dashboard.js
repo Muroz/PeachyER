@@ -10,7 +10,7 @@ import RealtimeTable from "./realtimeTable";
 import AllShiftsTable from "./allShiftsTable";
 import Popup from "./popup";
 import {fireEvent} from './../../helper'
-import Topbar from "../topbar";
+import Topbar from "../Topbar";
 
 
 
