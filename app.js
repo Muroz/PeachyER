@@ -145,20 +145,20 @@ app.use(function(req, res, next){
 
 
 //wipe staff hours clean
-Caregiver.find({}, function(err, staff){
-  staff.forEach(function(caregiver){
-    caregiver.payingHours = 0;
-    caregiver.save();
-  })
-})
+// Caregiver.find({}, function(err, staff){
+//   staff.forEach(function(caregiver){
+//     caregiver.payingHours = 0;
+//     caregiver.save();
+//   })
+// })
 
-//wipe client hours clean
-ClientModel.find({}, function(err, clients){
-  clients.forEach(function(client){
-    client.billedHours = 0
-    client.save();
-  })
-})
+// //wipe client hours clean
+// ClientModel.find({}, function(err, clients){
+//   clients.forEach(function(client){
+//     client.billedHours = 0
+//     client.save();
+//   })
+// })
 
 // TestVisit.find({}).sort({clientName:1}).exec(function(err,visits){
 
