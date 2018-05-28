@@ -130,6 +130,36 @@ app.use(function(req, res, next){
 
 // });
 
+//find all of the visits in process
+// TestVisit.find({status:'In process'}, function(err, visits){
+//   visits.forEach(function(visit){
+//     console.log(visit);
+//     var endTime = new moment().tz('America/St_Johns');
+//     visit.clockOutTime = endTime;
+//     visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+//     visit.status = 'Completed';
+//     visit.save();
+//   })
+
+// })
+
+
+//wipe staff hours clean
+Caregiver.find({}, function(err, staff){
+  staff.forEach(function(caregiver){
+    caregiver.payingHours = 0;
+    caregiver.save();
+  })
+})
+
+//wipe client hours clean
+ClientModel.find({}, function(err, clients){
+  clients.forEach(function(client){
+    client.billedHours = 0
+    client.save();
+  })
+})
+
 // TestVisit.find({}).sort({clientName:1}).exec(function(err,visits){
 
 //   var period = moment().week()

@@ -51,15 +51,16 @@ router.post("/", function(req, res) {
   if (req.body.Digits) {
 
     if(req.body.Digits.length >= 4){
-      TestVisit.findOne({visitId: req.body.From+req.body.Digits, status:'In process'}, function(err, visit){
+      var input;
+      if (req.body.Digits.length == 5){
+        input = req.body.Digits.slice(0,-1);
+      } else {
+        input = req.body.Digits
+      }
+      TestVisit.findOne({visitId: req.body.From+input, status:'In process'}, function(err, visit){
         if(err) return err;
         if(visit==null) {
-          var input;
-          if (req.body.Digits.length == 5){
-            input = req.body.Digits.slice(0,-1);
-          } else {
-            input = req.body.Digits
-          }
+
 
           Client.findOne({phoneNumber:req.body.From}, function(err,client){
             var clientName = req.body.From
