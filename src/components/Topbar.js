@@ -12,7 +12,7 @@ class Topbar extends React.Component {
     return (
         <div className="topBar"> 
             <img src="/images/rsz_peachy_logo.png" className="logo" />
-            <h1 className="midheader topBarHeader"> <strong> Hello, </strong> {this.props.user} </h1> 
+            <h1 className="midheader topBarHeader"> <strong> Hello, </strong> {this.props.user ? this.props.user.username.split(' ')[0] : 'Unknown'} </h1> 
         </div>
     );
   }
@@ -24,7 +24,11 @@ function mapStateToProps(state) {
   };
 }
 
-
+Topbar.defaultProps = {
+  user: {
+    username: 'Unknown'
+  },
+};
 
 export default connect(mapStateToProps)(Topbar);
 

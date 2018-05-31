@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import NavBar from "./../navbar";
-import {fetchAllShifts,fetchConfirmedShifts,fetchAllShiftsFiltered, updateVisit, selectRow, fetchStaff, fetchClients} from '../../actions/fetchingActions';
+import {fetchAllShifts,fetchConfirmedShifts,fetchAllShiftsFiltered, updateVisit, selectRow, fetchStaff, fetchClients, getUser} from '../../actions/fetchingActions';
 import moment from 'moment-timezone';
 import DatePicker from 'material-ui/DatePicker';
 import RealtimeTable from "./realtimeTable";
@@ -47,12 +47,13 @@ class Dashboard extends React.Component {
 
 
   componentWillMount(){
-    //fetch all shifts (pass a date);
+    this.props.getUser();
     this.props.fetchAllShiftsFiltered(this.state.currentDate);
     this.props.fetchAllShifts();
     this.props.fetchConfirmedShifts();
     this.props.fetchStaff();
     this.props.fetchClients();
+  
   }
   componentDidMount() {
    
@@ -200,6 +201,7 @@ function mapDispatchToProps(dispatch) {
     selectRow:selectRow,
     fetchClients: fetchClients,
     fetchStaff: fetchStaff,
-    fetchAllShiftsFiltered:fetchAllShiftsFiltered}, dispatch);
+    fetchAllShiftsFiltered:fetchAllShiftsFiltered,
+    getUser:getUser}, dispatch);
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);

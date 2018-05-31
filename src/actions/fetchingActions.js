@@ -198,6 +198,7 @@ export function clockOut(visit,time) {
 
 //get User
 export function getUser(){
+  console.log('fetching user');
   return function(dispatch){
     axios.post("/fetch/getUser")
     .then(res => {
