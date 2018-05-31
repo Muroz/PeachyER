@@ -10,7 +10,7 @@ class Topbar extends React.Component {
     return (
         <div className="topBar"> 
             <img src="/images/rsz_peachy_logo.png" className="logo" />
-            <h1 className="midheader topBarHeader"> <strong> Hello, </strong> Tracy </h1> 
+            <h1 className="midheader topBarHeader"> <strong> Hello, </strong> Chris </h1> 
         </div>
     );
   }

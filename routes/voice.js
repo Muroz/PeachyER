@@ -60,8 +60,6 @@ router.post("/", function(req, res) {
       TestVisit.findOne({visitId: req.body.From+input, status:'In process'}, function(err, visit){
         if(err) return err;
         if(visit==null) {
-
-
           Client.findOne({phoneNumber:req.body.From}, function(err,client){
             var clientName = req.body.From
             if (client != null){
@@ -70,13 +68,13 @@ router.post("/", function(req, res) {
 
             Caregiver.findOne({employeeId:input}, function(err, carer){
 
-              var carerName = req.body.Digits;
+              var carerName = input;
               if (carer != null){
                 carerName = carer.name
               }
 
               TestVisit.create({
-                visitId:req.body.From+req.body.Digits,
+                visitId:req.body.From+input,
                 caregiverName: carerName,
                 clientName:clientName,
                 status: 'In process',

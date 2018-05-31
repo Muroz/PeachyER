@@ -19,6 +19,13 @@ import {
     import RaisedButton from 'material-ui/RaisedButton';
     import HelpOutline from 'material-ui/svg-icons/action/help-outline';
 
+
+    const dummyData = [
+        { caregiverName:'John Smith', clientName:'Carl Johnson', clockInTime:moment().set('Hours', 6), status:'In process', duration: 0},
+        { caregiverName:'Mary Parsons', clientName:'Joe Burry', clockInTime:moment().set('Hours', 9), status:'In process', duration: 0},
+        { caregiverName:'Jessica Davids', clientName:'Mary Stone', clockInTime:moment().set('Hours', 7),clockOutTime:moment().set('Hours', 9), status:'Completed', duration: 2}
+    ]
+
 class AllShiftsTable extends React.Component {
 
     constructor(props){
@@ -80,7 +87,8 @@ class AllShiftsTable extends React.Component {
               onClick={this.togglePopup}
             />,
           ];
-          //onRowSelection={this.props.handleOpen}     
+          //onRowSelection={this.props.handleOpen}   
+          //             {dummyData.map(this.setTableInfo,this)}    
         return(
             <div>
             <Paper>
@@ -111,7 +119,7 @@ class AllShiftsTable extends React.Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
             >
-            {this.props.allShiftsFiltered ?this.props.allShiftsFiltered.map(this.setTableInfo,this):null}
+            {this.props.allShiftsFiltered ?this.props.allShiftsFiltered.map(this.setTableInfo,this):null}  
             </TableBody>
         </Table>
         </Paper>

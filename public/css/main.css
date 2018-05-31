@@ -518,8 +518,8 @@ iframe{
 }
 
 .logo {
-  height: 50px;
-  width: 145px;
+  height: 80%;
+  width: 80%;
   margin: auto;
 }
 
@@ -550,11 +550,11 @@ iframe{
   margin-top: 5%;
   font-size:18;
   width: 100%;
-  background: #f4AE90;
+  background: #62E88E;
 }
 
 .navbarAdd:hover{
-  background: #f55845;
+  background: #fd6663;
 }
 
 .navbarTitle {
@@ -609,11 +609,28 @@ iframe{
 }
 
 .directoryTitle{
-  font-size: 18;
-  color: black;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+}
+
+.directoryDownload{
+  width:30%;
+  font-size: 12px;
+  transform: scale(0.8);
+  background: #048BA8;
+}
+
+.directoryHeader{
+  font-weight: bolder;
+}
+
+.directoryHeaderContainer{
   width: 90%;
-  margin: auto;
-  padding: 5px;
+  margin:auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .directoryBody{

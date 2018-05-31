@@ -54,20 +54,20 @@ class NavBar extends React.Component {
           </a>
         </div>
         <div className="navbar_li navbar_home">
-          <a href="/dashboard" ><div className="navbarItem"><Dashboard color={'#f55845'}/><div className="navbarTitle midheader">Home</div> </div></a>
+          <a href="/dashboard" ><div className="navbarItem"><Dashboard color={'#fd6663'}/><div className="navbarTitle midheader">Home</div> </div></a>
         </div>
         <div className="navbar_li navbar_client">
           <a href="/clients"><div className="navbarItem"><img src="/images/heartLogo.png" className='navbarLogo'/><div className="navbarTitle midheader">Clients</div> </div></a>
         </div>
         <div className="navbar_li navbar_staff">
-          <a href="/staff"><div className="navbarItem"> <Group color={'#f55845'}/><div className="navbarTitle midheader">Staff</div> </div></a>
+          <a href="/staff"><div className="navbarItem"> <Group color={'#fd6663'}/><div className="navbarTitle midheader">Staff</div> </div></a>
         </div>
 
         <div className="navbar_li navbar_help">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSccNAn2ySm4UMDskwOHIH44m80CWUex8s-VP2NX-laJnW_zfw/viewform?embedded=true" ><HelpOutline color={'#f4AE90'}/><br/> Help</a>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSccNAn2ySm4UMDskwOHIH44m80CWUex8s-VP2NX-laJnW_zfw/viewform?embedded=true" ><HelpOutline color={'#fd6663'}/><br/> Help</a>
         </div>
         <div className="navbar_logout" >
-          <a href="/logout" ><ExitToApp color={'#f4AE90'}/><br/> Logout </a>
+          <a href="/logout" ><ExitToApp color={'#fd6663'}/><br/> Logout </a>
         </div> 
          {this.state.showPopup ? (
            <AddButton togglePopup={this.togglePopup} showPopup={this.state.showPopup} />

@@ -2,6 +2,7 @@
 
 "use strict";
 import axios from "axios";
+import {fireEvent} from './../helper'
 
 //Select rows
 export function selectRow(selectedRow){return function(dispatch){
@@ -193,5 +194,21 @@ export function clockOut(visit,time) {
         dispatch({ type: "CLOCK_OUT_REJECTED", payload: err });
       });
   };
+}
+
+//get User
+export function getUser(){
+  return function(dispatch){
+    axios.post("/fetch/getUser")
+    .then(res => {
+      if (res.data.username != 'DiegoZ'){
+        fireEvent('pageView','Dashboard');
+      }
+      dispatch({ type: "GET_USER", payload: res.data });
+    })
+    .catch(function(err) {
+      dispatch({ type: "GET_USER_REJECTED", payload: err });
+    });
+}
 }
 

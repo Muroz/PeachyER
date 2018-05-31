@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import { fetchStaff, fetchClients } from "../../actions/fetchingActions";
 import Navbar from "../navbar";
 import Directory from '../directory/directory'
+import DirectoryHeader from '../directory/directoryHeader';
 import moment from 'moment-timezone';
 
 import Input from '@material-ui/core/Input';
@@ -51,22 +52,7 @@ class MainStaff extends React.Component {
       <div className='directoryRoot'>
           <Navbar />
           <Topbar/>
-          <div className="dashboardHeaderContainer directoryTitle"> 
-          <h1 className='headers'> Staff information</h1> 
-          <TextField
-            className='directorySearchBar'
-            id="input-with-icon-textfield"
-            placeholder="Search"
-            onChange = {this.handleInputChange.bind(this)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
+          <DirectoryHeader type={'Staff'} varName={'caregiverName'} handleInputChange={this.handleInputChange.bind(this)}/>
           <Directory directoryType="Staff" content={this.filter()}/>
       </div>);
   }

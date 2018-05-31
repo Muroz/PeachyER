@@ -300,13 +300,44 @@ router.post("/clockOut",  isLoggedIn,function(req, res) {
 });
 });
 
+router.post("/reportInfo", isLoggedIn, function(req,res){
+  var period = moment().week()
+  var extraPeriod = 0
+  if(period % 2 == 0)
+  {
+    extraPeriod = period + 1
+  }
+  else
+  {
+    extraPeriod = period - 1
+  }
+  var sortDict = {};
+  sortDict[req.body.type] = 1;
+  TestVisit.find({$and: [
+    { status:'Completed' },
+    { $or: [{payPeriod: period}, {payPeriod: extraPeriod}] }
+    ]}).sort(sortDict).exec(function(err,visits){
+      res.json(visits);
+  });
+
+});
+
+router.post("/getAuth", function(req,res){
+  res.json(req.isAuthenticated());
+})
+
+router.post("/getUser", isLoggedIn, function(req,res){
+  res.json(req.user);
+})
+
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) return next();
-
   // if they aren't redirect them to the home page
   res.redirect("/");
 }
+
+
 
 module.exports = router;
 

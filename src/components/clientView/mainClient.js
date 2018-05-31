@@ -5,7 +5,8 @@ import { bindActionCreators } from "redux";
 import { fetchClients, fetchStaff } from "../../actions/fetchingActions";
 import Navbar from "../navbar";
 import {formatPhone} from '../../helper';
-import Directory from '../directory/directory'
+import Directory from '../directory/directory';
+import DirectoryHeader from '../directory/directoryHeader';
 import moment from 'moment-timezone';
 
 
@@ -17,6 +18,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Search from '@material-ui/icons/Search';
 import Topbar from "../Topbar";
+import IconButton from '@material-ui/core/IconButton';
+import Download from '@material-ui/icons/CloudDownload'
 
 
 class MainClient extends React.Component {
@@ -53,22 +56,7 @@ class MainClient extends React.Component {
     return (<div className='directoryRoot'>
         <Navbar />
         <Topbar />
-        <div className="dashboardHeaderContainer directoryTitle"> 
-          <h1 className='headers'> Client information</h1> 
-          <TextField
-            className='directorySearchBar'
-            id="input-with-icon-textfield"
-            placeholder="Search"
-            onChange = {this.handleInputChange.bind(this)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
+        <DirectoryHeader type={'Client'} varName={'clientName'} handleInputChange={this.handleInputChange.bind(this)}/>
 
         <Directory directoryType="Clients" content={this.filter()} />
 

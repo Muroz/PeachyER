@@ -60,7 +60,8 @@
     "serve-favicon": "~2.4.5",
     "twilio": "^3.16.0",
     "typeface-roboto": "0.0.54",
-    "victory": "^0.24.5"
+    "victory": "^0.24.5",
+    "zipcelx": "^1.4.2"
   },
   "devDependencies": {
     "css-loader": "^0.28.11",

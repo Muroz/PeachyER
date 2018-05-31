@@ -109,6 +109,7 @@ app.use(function(req, res, next){
 });
 
 
+//modify old visit to fit the new schema
 // TestVisit.find({}).sort({clientName:1}).exec(function(err,visits){
 //   visits.forEach(function(visit){
 //     visit.payPeriod = moment(visit.date).week();
@@ -160,31 +161,70 @@ app.use(function(req, res, next){
 //   })
 // })
 
-// TestVisit.find({}).sort({clientName:1}).exec(function(err,visits){
 
-//   var period = moment().week()
-//   var extraPeriod = 0
-//   if(period % 2 == 0)
-//   {
-//     extraPeriod = period + 1
-//   }
-//   else
-//   {
-//     extraPeriod = period - 1
-//   }
-//   visits.forEach(function(visit){
-//     if (visit.status != "Unconfirmed"){
-//       if (visit.payPeriod == period || visit.payPeriod == extraPeriod){
-        
-//         console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
-//         console.log(',')
+//get visits 
+// var period = moment().week()
+// var extraPeriod = 0
+// if(period % 2 == 0)
+// {
+//   extraPeriod = period + 1
+// }
+// else
+// {
+//   extraPeriod = period - 1
+// }
+// TestVisit.find({$and: [
+//   { status:'Completed' },
+//   { $or: [{payPeriod: period}, {payPeriod: extraPeriod}] }
+// ]}).sort({clientName:1}).exec(function(err,visits){
+//   const items = visits;
+//   const emptySpaces = ['','','','','','']
+//   const replacer = (key, value) => value === null ? '' : value // specify how you want to handle null values here
+//   const header = ['clientName','date','clockInTime','clockOutTime','duration','caregiverName']
+//   //const header = Object.keys(items[0])
+//   var clientLog = ''
+//   let csv = items.map(row => header.map((fieldName) => {
+//     var value = row[fieldName];
+//     if (fieldName == 'clockInTime' || fieldName == 'clockOutTime'){
+//       value = moment(value).format("h:mm a")
+//     } else if (fieldName == 'date'){
+//       value = moment(value).format('MM-DD-YYYY')
+//     } else if (fieldName == 'clientName'){
+//       if (value != clientLog){
+//         clientLog = value
+//       } else {
+//         value = 'isSame'
 //       }
-//     } else {
-//       console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
 //     }
-//   })
+//     return JSON.stringify(value, replacer)
+//   }).join(',')
+// );
+//   csv.unshift(header.join(','))
+//   csv = csv.join('\r\n')
 
-// });
+//   fs.writeFile("report1.csv", csv, err => {
+//     if (err) throw err;
+//     console.log('File successfully written to disk');
+//   }) 
+
+
+//console.log(moment("2018-05-29T00:30:44.492Z").diff(moment("2018-05-28T22:27:53.929Z"),'hours',true));
+  // visits.forEach(function(visit){
+  //   if (visit.status != "Unconfirmed"){
+  //     if (visit.payPeriod == period || visit.payPeriod == extraPeriod){
+        
+  //       console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
+  //       console.log(',')
+  //     }
+  //   } else {
+  //     console.log(JSON.stringify({ "Client name": visit.clientName, "Shift date": moment(visit.date).format('MM-DD-YYYY'), "Clocked in": moment(visit.clockInTime).format("h:mm a"),"Clocked out": moment(visit.clockOutTime).format("h:mm a"),"Employee":visit.caregiverName,"Actual hours worked":visit.duration}))
+  //   }
+  // })
+
+//});
+
+
+
 
 module.exports = app;
 

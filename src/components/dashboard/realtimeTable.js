@@ -45,6 +45,10 @@ const columnData = [
     { id: 'duration', numeric: false, disablePadding: false, label: 'Duration' },
 ];
 
+const dummyData = [
+    { caregiverName:'John Smith', clientName:'Carl Johnson', clockInTime:moment().set('Hours', 6)},
+    { caregiverName:'Mary Parsons', clientName:'Joe Burry', clockInTime:moment().set('Hours', 9)}
+]
 class EnhancedTableHead extends React.Component {
     createSortHandler = property => event => {
       this.props.onRequestSort(event, property);
@@ -226,6 +230,11 @@ class RealtimeTable extends React.Component{
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.confirmed.length - page * rowsPerPage);
+        //const emptyRows = rowsPerPage - Math.min(rowsPerPage, dummyData.length - page * rowsPerPage);
+
+        console.log('this empty')
+        console.log(emptyRows);
+        //    {dummyData.map(visit =>{
         return (
             <Paper className={classes.root}>
 
@@ -240,6 +249,7 @@ class RealtimeTable extends React.Component{
                     rowCount={this.props.confirmed.length}
                 />
                 <TableBody>
+                
                 {this.sortItems().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(visit => {
                     const isSelected = this.isSelected(visit.visitId+moment(visit.date).format('DDMMYYYY'));
                     var duration = (moment().diff(moment(visit.clockInTime),'hours',true));
@@ -277,7 +287,6 @@ class RealtimeTable extends React.Component{
             <TablePagination
                 component="div"
                 count={this.props.confirmed.length}
-                classes={{root:'dashboardPagination'}}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{

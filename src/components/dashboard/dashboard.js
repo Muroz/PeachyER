@@ -11,7 +11,7 @@ import AllShiftsTable from "./allShiftsTable";
 import Popup from "./popup";
 import {fireEvent} from './../../helper'
 import Topbar from "../Topbar";
-
+import axios from 'axios';
 
 
 class Dashboard extends React.Component {
@@ -55,7 +55,7 @@ class Dashboard extends React.Component {
     this.props.fetchClients();
   }
   componentDidMount() {
-    fireEvent('pageView','Dashboard');
+
     setInterval( () => {
       this.props.fetchAllShiftsFiltered(this.state.currentDate);
       this.props.fetchConfirmedShifts();
