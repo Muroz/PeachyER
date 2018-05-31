@@ -29,9 +29,9 @@ class DirectoryHeader extends React.Component {
             var varName = '';
             var duration = 0;
             if(this.props.type == 'Client'){
-                var keys = ['clientName', 'date', 'clockInTime', 'clockOutTime', 'caregiverName', 'duration'];
+                var keys = ['Client', 'Date', 'Clock in time', 'Clock out time', 'Caregiver', 'Duration'];
             } else if (this.props.type == 'Staff'){
-                var keys = ['caregiverName', 'date', 'clockInTime', 'clockOutTime', 'clientName', 'duration'];
+                var keys = ['Caregiver', 'Date', 'Clock in time', 'Clock out time', 'Client', 'Duration'];
             } else {
                 var keys = [];
             }
@@ -44,8 +44,12 @@ class DirectoryHeader extends React.Component {
                     var row = [];
                     if (visit[this.props.varName] != varName){
                         if (index == 0){
-                            var headers = this.createDict('string','aHeader');
-                            data.push([headers,headers,headers,headers,headers,headers])
+                            var headers = []
+                            keys.forEach(key => {
+                                var header = this.createDict('string',key);
+                                headers.push(header);
+                            });
+                            data.push(headers);
                         } else {
                             var emptyVal = this.createDict('string','');
                             var totalLabel =  this.createDict('string','Total duration');
