@@ -143,7 +143,7 @@ class RealtimeTable extends React.Component{
 
     handleSelectAllClick = (event, checked) => {
         if (checked) {
-          this.setState({ selected: this.props.confirmed.map(visit => visit.visitId) });
+          this.setState({ selected: this.sortItems().map(visit => visit.visitId) });
           return;
         }
         this.setState({ selected: [] });
@@ -189,7 +189,33 @@ class RealtimeTable extends React.Component{
         }
         var asc = (this.state.order == 'asc')
 
-        return this.props.confirmed.sort(function(a,b){return (a[orderProp] > b[orderProp] ) ? asc : ((b[orderProp]  > a[orderProp] ) ? !asc : 0);});
+        return this.props.confirmed.sort(function(a, b) {
+            if (orderProp == 'caregiverName' || orderProp == 'clientName'){
+                var valueA = a[orderProp].toUpperCase(); // ignore upper and lowercase
+                var valueB = b[orderProp].toUpperCase(); // ignore upper and lowercase
+            } else {
+                var now = moment();
+                var valueA = now.diff(moment(a['clockInTime'])) 
+                var valueB = now.diff(moment(b['clockInTime']))
+            }
+            if(asc){
+                if (valueA < valueB) {
+                    return -1;
+                }
+                if (valueA > valueB) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                if (valueA > valueB) {
+                    return -1;
+                }
+                if (valueA < valueB) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
     }
 
     filter = () => {
@@ -229,14 +255,13 @@ class RealtimeTable extends React.Component{
 
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.props.confirmed.length - page * rowsPerPage);
+        const emptyRows = rowsPerPage - Math.min(rowsPerPage, this.sortItems().length - page * rowsPerPage);
         //const emptyRows = rowsPerPage - Math.min(rowsPerPage, dummyData.length - page * rowsPerPage);
 
-        console.log('this empty')
-        console.log(emptyRows);
-        //    {dummyData.map(visit =>{
+        //       {dummyData.map(visit =>{
+        console.log(this.sortItems());
         return (
-            <Paper className={classes.root}>
+            <Paper className={'tableRoot'}>
 
             <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -246,10 +271,10 @@ class RealtimeTable extends React.Component{
                     orderBy={orderBy}
                     onSelectAllClick={this.handleSelectAllClick}
                     onRequestSort={this.handleRequestSort}
-                    rowCount={this.props.confirmed.length}
+                    rowCount={this.sortItems().length}
                 />
                 <TableBody>
-                
+             
                 {this.sortItems().slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(visit => {
                     const isSelected = this.isSelected(visit.visitId+moment(visit.date).format('DDMMYYYY'));
                     var duration = (moment().diff(moment(visit.clockInTime),'hours',true));
@@ -286,7 +311,7 @@ class RealtimeTable extends React.Component{
             </div>
             <TablePagination
                 component="div"
-                count={this.props.confirmed.length}
+                count={this.sortItems().length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{

@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
       this.props.fetchAllShiftsFiltered(this.state.currentDate);
       this.props.fetchConfirmedShifts();
       this.props.fetchAllShifts();
-    },20000);
+    },60000);
   }
 
   componentWillUnmount() {
