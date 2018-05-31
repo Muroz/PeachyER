@@ -8,18 +8,9 @@ import {formatPhone} from '../../helper';
 import Directory from '../directory/directory';
 import DirectoryHeader from '../directory/directoryHeader';
 import moment from 'moment-timezone';
-
-
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Search from '@material-ui/icons/Search';
 import Topbar from "../Topbar";
-import IconButton from '@material-ui/core/IconButton';
-import Download from '@material-ui/icons/CloudDownload'
+import {fireEvent} from './../../helper'
+import axios from 'axios';
 
 
 class MainClient extends React.Component {
@@ -35,6 +26,15 @@ class MainClient extends React.Component {
   componentWillMount(){
     this.props.fetchClients();
     this.props.fetchStaff();
+  }
+
+  componentDidMount(){
+    axios.post("/fetch/getUser")
+    .then(res => {
+      if (res.data.username != 'DiegoZ'){
+        fireEvent('Client', res.data.username);
+      }
+    })
   }
 
   handleInputChange = (event) => {

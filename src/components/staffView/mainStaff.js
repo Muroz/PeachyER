@@ -7,16 +7,9 @@ import Navbar from "../navbar";
 import Directory from '../directory/directory'
 import DirectoryHeader from '../directory/directoryHeader';
 import moment from 'moment-timezone';
-
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import Search from '@material-ui/icons/Search';
 import Topbar from "../Topbar";
-
+import {fireEvent} from './../../helper'
+import axios from 'axios';
 
 class MainStaff extends React.Component {
 
@@ -32,6 +25,16 @@ class MainStaff extends React.Component {
     this.props.fetchClients();
     this.props.fetchStaff();
   }
+
+  componentDidMount(){
+    axios.post("/fetch/getUser")
+    .then(res => {
+      if (res.data.username != 'DiegoZ'){
+        fireEvent('Staff', res.data.username);
+      }
+    })
+  }
+
 
   handleInputChange = (event) => {
     this.setState({filter:event.target.value})

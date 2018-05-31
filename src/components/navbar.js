@@ -13,6 +13,8 @@ import List from 'material-ui/svg-icons/action/list';
 import School from 'material-ui/svg-icons/social/school';
 import ExitToApp from 'material-ui/svg-icons/action/exit-to-app';
 import moment from 'moment-timezone';
+import {fireEvent} from './../helper';
+import axios from 'axios';
 
 class NavBar extends React.Component {
   constructor() {
@@ -26,6 +28,12 @@ class NavBar extends React.Component {
     this.setState({
       showPopup: !this.state.showPopup
     });
+    axios.post("/fetch/getUser")
+    .then(res => {
+      if (res.data.username != 'DiegoZ'){
+        fireEvent('AddItemClick', res.data.username);
+      }
+    })
   }
   render() {
 

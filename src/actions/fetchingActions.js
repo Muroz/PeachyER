@@ -201,9 +201,6 @@ export function getUser(){
   return function(dispatch){
     axios.post("/fetch/getUser")
     .then(res => {
-      if (res.data.username != 'DiegoZ'){
-        fireEvent('pageView','Dashboard');
-      }
       dispatch({ type: "GET_USER", payload: res.data });
     })
     .catch(function(err) {

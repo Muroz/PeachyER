@@ -55,6 +55,13 @@ class Dashboard extends React.Component {
     this.props.fetchClients();
   }
   componentDidMount() {
+   
+    axios.post("/fetch/getUser")
+    .then(res => {
+      if (res.data.username != 'DiegoZ'){
+        fireEvent('Dashboard', res.data.username);
+      }
+    })
 
     setInterval( () => {
       this.props.fetchAllShiftsFiltered(this.state.currentDate);
@@ -69,7 +76,6 @@ class Dashboard extends React.Component {
 
 
   handleOpen = (selectedRows) => {
-    fireEvent('Action','ClickAllShiftsTable')
     if(selectedRows.length == 0){
       selectedRows = this.state.selected;    
     }
