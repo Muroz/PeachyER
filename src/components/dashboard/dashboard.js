@@ -7,11 +7,13 @@ import {fetchAllShifts,fetchConfirmedShifts,fetchAllShiftsFiltered, updateVisit,
 import moment from 'moment-timezone';
 import DatePicker from 'material-ui/DatePicker';
 import RealtimeTable from "./realtimeTable";
-import AllShiftsTable from "./allShiftsTable";
+//import AllShiftsTable from "./allShiftsTable";
 import Popup from "./popup";
 import {fireEvent} from './../../helper'
 import Topbar from "../Topbar";
 import axios from 'axios';
+//import AllShiftsTable from './shiftTable'
+import AllShiftsTable from './newAllShift'
 
 
 class Dashboard extends React.Component {
@@ -168,7 +170,7 @@ class Dashboard extends React.Component {
               />
             </div>
             
-            <AllShiftsTable selectedDate = {this.state.currentDate}/>  
+            <AllShiftsTable/>  
           </div>
         </div>
         {dialog}

@@ -42,7 +42,9 @@ const columnData = [
     { id: 'caregiverName', numeric: false, disablePadding: false, label: 'Staff' },
     { id: 'clientName', numeric: false, disablePadding: false, label: 'Client' },
     { id: 'clockInTime', numeric: false, disablePadding: false, label: 'Clock in time' },
+    { id: 'clockOutTime', numeric: false, disablePadding: false, label: 'Clock out time' },
     { id: 'duration', numeric: false, disablePadding: false, label: 'Duration' },
+    { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
 ];
 
 const dummyData = [
@@ -116,7 +118,7 @@ const styles = theme => ({
 });
 
 
-class RealtimeTable extends React.Component{
+class AllShiftsTable extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -189,7 +191,7 @@ class RealtimeTable extends React.Component{
         }
         var asc = (this.state.order == 'asc')
 
-        return this.props.confirmed.sort(function(a, b) {
+        return this.props.allShiftsFiltered.sort(function(a, b) {
             if (orderProp == 'caregiverName' || orderProp == 'clientName'){
                 var valueA = a[orderProp].toUpperCase(); // ignore upper and lowercase
                 var valueB = b[orderProp].toUpperCase(); // ignore upper and lowercase
@@ -222,36 +224,10 @@ class RealtimeTable extends React.Component{
         console.log('here is the filter');
     }
 
-    clockOutItems = () => {
-        this.props.clockOut(this.state.selected);
-        this.setState({ selected:[]});
-    }
 
-    deleteItem = () => {
-        this.props.deleteItem(this.state.selected);
-        this.setState({ selected:[]});
-    }
-
-    handleClickOpen = (visit) => {
-        this.setState({
-          open: true,
-          selectedVisit :visit
-        });
-      };
-    
-    handleClose = value => {
-        this.setState({open: false });
-    };
 
     render(){
 
-        {/* <TableCell padding="checkbox">
-                        <Tooltip title="Clock out">
-                            <IconButton aria-label="calendar-clock" onClick={this.handleClickOpen.bind(this,visit)} className='clockOutIcon'>
-                                <AvTime style={{color:'#f55845'}}/>
-                            </IconButton>
-                        </Tooltip>
-        </TableCell> */}
 
         const { classes } = this.props;
         const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
@@ -294,7 +270,9 @@ class RealtimeTable extends React.Component{
                         </TableCell>
                         <TableCell style={{fontSize: 12}}>{visit.clientName}</TableCell>
                         <TableCell style={{fontSize: 12}}>{visit.clockInTime? moment(visit.clockInTime).tz('America/St_Johns').format('h:mm a'): 'Not available'}</TableCell>
+                        <TableCell style={{fontSize: 12}}> {visit.clockOutTime? moment(visit.clockOutTime).tz('America/St_Johns').format('h:mm a'): 'Not available'}</TableCell>
                         <TableCell style={{fontSize: 12}}> {DurationHour+':'+('0' + durationDifference).slice(-2)+' '}</TableCell>
+                        <TableCell style={{fontSize:'12px'}}> {visit.status} </TableCell>
                         
                 
                     </TableRow>
@@ -332,24 +310,18 @@ class RealtimeTable extends React.Component{
     }
 }
 
-RealtimeTable.propTypes = {
+AllShiftsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-RealtimeTable.defaultProps = {
-    confirmed: [],
+AllShiftsTable.defaultProps = {
+    allShifts: [],
 };
 
 function mapStateToProps(state) {
-    return {confirmed: state.clientReducers.confirmed};
+    return {allShiftsFiltered: state.clientReducers.allShiftsFiltered};
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ 
-      clockOut:clockOut,
-      deleteItem:deleteItem
-    }, dispatch);
-  }
 
-export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles)(RealtimeTable));
+export default connect(mapStateToProps)(withStyles(styles)(AllShiftsTable));
 
