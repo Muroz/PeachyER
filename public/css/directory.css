@@ -1,0 +1,152 @@
+.directoryRoot{
+    display: grid;
+    height: 100%;
+    grid-template-rows: 10% 5% 1fr;
+    grid-auto-flow: column;
+    grid-template-columns: 12% 88%;
+    grid-gap: 10px;
+  }
+  
+  .directoryTitle{
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+  }
+  
+  .directoryDownload{
+    width:30%;
+    font-size: 12px;
+    transform: scale(0.8);
+    background: #048BA8;
+  }
+  
+  .directoryHeader{
+    font-weight: bolder;
+  }
+  
+  .directoryHeaderContainer{
+    width: 90%;
+    margin:auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .directoryBody{
+    width: 90%;
+    margin:auto;
+    font-size:18;
+    margin-top:1%;
+    height: 750px;
+  }
+  
+  .directoryBody a{
+    background-color: peachpuff!important;
+  }
+  
+  .directorySearchBar{
+    width:60%;
+    justify-self: end;
+  }
+  
+  /* change columns to set up different list formats */
+  .directoryList{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+  }
+  
+  /* change columns to set up different item formats */
+  .directoryItem{
+    padding:2px;
+    border: 1px solid rgb(165, 165, 165);
+    background: rgb(255, 255, 255);
+    font-size: 14;
+    color:rgb(112, 112, 112);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .directoryItem:hover{
+    border: 5px solid peachpuff;
+  }
+  .directoryItemTitle{
+    grid-column: 1/-1;
+    border-bottom: 1px solid rgb(112, 112, 112);
+    font-size: 30;
+  }
+  
+  .directoryIconContainer{
+    margin:auto;
+  }
+  .directoryIcon {
+    transform: scale(2.0);
+    margin:auto;
+  }
+  
+  /* add extra columns for adding buttons */
+  .directoryItemHead{
+    display: grid;
+    grid-template-columns: 4fr;
+    margin: 0.2%;
+    border: 1px solid rgb(238, 238, 238);
+    background: rgb(241, 241, 241);
+    font-size: 20;
+    color:rgb(112, 112, 112);
+  }
+  
+  .directoryItemHead:hover{
+    border: 1px solid peachpuff;
+  }
+  
+  .visitlogBody{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 2px;
+  }
+  
+  .directoryItemVisitLog{
+    grid-column: 1/3;
+    padding: 5px;
+    padding-top: 5px;
+  }
+  
+  .visitlogEntry{
+    margin-top:10px;
+    display: grid;
+    padding: 3px;
+    font-size: 12px;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    background: rgb(248, 248, 248);
+  }
+  
+  .visitlogTitle{
+    font-size: 14;
+    border-bottom: 1px solid rgb(230, 230, 230);
+  }
+  
+  .visitlogEntry:hover{
+    border: 5px solid peachpuff;
+  }
+  
+  .paginationContainer{
+
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background: white;
+}
+
+.subPaginationContainer{
+    display: grid;
+ 
+    grid-auto-flow: column;
+    grid-template-columns: 4fr 1fr 1fr;
+    padding: 3%;
+    width: 50%;
+}
+
+.paginationInfo {
+    justify-self: center;
+    align-self: center;
+}

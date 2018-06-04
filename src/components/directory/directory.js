@@ -2,6 +2,7 @@
 import React from "react";
 import Navbar from "../navbar";
 import DirectoryItem from './directoryItem'
+import DirectoryPagination from "./directoryPagination";
 
 const dummyData = [{
   billedHours:10,id:'11202',name:'Kayla Burry', phoneNumber:'+17097692872'
@@ -29,8 +30,22 @@ const dummyData = [{
 },
 {
   billedHours:7,id:'11235',name:'Mary Stanley', phoneNumber:'+17097098572'
-}]
+}];
+
 class Directory extends React.Component {
+
+  constructor(props){
+    super(props)
+
+    this.state = {
+      page:0,
+      itemsPerPage:20
+    }
+  }
+
+  changePage(nextPage){
+    this.setState({page:nextPage});
+  }
 
   setItems(item,index){
     return(
@@ -38,12 +53,15 @@ class Directory extends React.Component {
     )
   }
   render() {
-    var content = this.props.content.map(this.setItems,this)
+    var {page, itemsPerPage} = this.state;    
+    //var content = this.props.content.map(this.setItems,this)
+    var content =this.props.content.slice(page * itemsPerPage, page * itemsPerPage + itemsPerPage).map(this.setItems, this);
     //var content = dummyData.map(this.setItems,this)
     return (
         <div className='directoryBody'>
           <div className='directoryList'>
             {content}
+            <DirectoryPagination page={page} total={this.props.content.length} itemsPerPage={itemsPerPage} changePage={this.changePage.bind(this)}/>
           </div>
         </div>
         );
