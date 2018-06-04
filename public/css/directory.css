@@ -58,7 +58,7 @@
   /* change columns to set up different item formats */
   .directoryItem{
     padding:2px;
-    border: 1px solid rgb(165, 165, 165);
+    border: 0.5px solid rgb(165, 165, 165);
     background: rgb(255, 255, 255);
     font-size: 14;
     color:rgb(112, 112, 112);
@@ -67,11 +67,11 @@
   }
   
   .directoryItem:hover{
-    border: 5px solid peachpuff;
+    border: 1px solid peachpuff;
   }
   .directoryItemTitle{
     grid-column: 1/-1;
-    border-bottom: 1px solid rgb(112, 112, 112);
+    border-bottom: 0.5px solid rgb(112, 112, 112);
     font-size: 30;
   }
   
@@ -88,7 +88,7 @@
     display: grid;
     grid-template-columns: 4fr;
     margin: 0.2%;
-    border: 1px solid rgb(238, 238, 238);
+    border: 0.5px solid rgb(238, 238, 238);
     background: rgb(241, 241, 241);
     font-size: 20;
     color:rgb(112, 112, 112);
@@ -126,7 +126,7 @@
   }
   
   .visitlogEntry:hover{
-    border: 5px solid peachpuff;
+    border: 1px solid peachpuff;
   }
   
   .paginationContainer{
