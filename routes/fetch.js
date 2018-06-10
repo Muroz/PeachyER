@@ -301,6 +301,7 @@ router.post("/clockOut",  isLoggedIn,function(req, res) {
 });
 
 router.post("/reportInfo", isLoggedIn, function(req,res){
+
   var period = moment().week()
   var extraPeriod = 0
   if(period % 2 == 0)

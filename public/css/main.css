@@ -479,10 +479,8 @@ iframe{
 .tableContainer{
   width: 90%;
   margin:auto;
-  padding: 20px;
   background:rgb(247, 247, 247);
   margin-bottom: 10px;
-
 }
 
 .datePicker{
@@ -492,6 +490,7 @@ iframe{
 .datePickerText{
 
 }
+
 .navbar {
   grid-row: 2/-1;
   display: grid;
@@ -586,6 +585,10 @@ iframe{
 
 .subheader {
   font-size: 14px!important;
+}
+
+.dashboardMidheader{
+  margin-bottom: 10px;
 }
 
 .contentContainer{

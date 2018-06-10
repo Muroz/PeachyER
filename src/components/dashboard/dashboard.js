@@ -155,11 +155,11 @@ class Dashboard extends React.Component {
         </div>
         <div className="dashboardCotainer">
           <div className="tableContainer contentContainer">
-            <h1 className="tableContainerTitle midheader"> Live visit feed </h1>
+            <h1 className="tableContainerTitle midheader dashboardMidheader"><strong> Live visit feed</strong> </h1>
             <RealtimeTable/>
           </div>
           <div className="tableContainer contentContainer">
-            <h1 className="tableContainerTitle midheader"> Completed visits </h1>
+            <h1 className="tableContainerTitle midheader dashboardMidheader"><strong>Completed visits</strong> </h1>
             <div className="allShiftsCalendar">
               <DatePicker
                   id="datePickerDashboard"

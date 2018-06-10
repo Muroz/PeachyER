@@ -29,11 +29,14 @@ class DirectoryHeader extends React.Component {
             var varName = '';
             var duration = 0;
             if(this.props.type == 'Client'){
-                var keys = ['Client', 'Date', 'Clock in time', 'Clock out time', 'Caregiver', 'Duration'];
+                var headersTitles = ['Client', 'Date', 'Clock in time', 'Clock out time', 'Caregiver', 'Duration'];
+                var keys = ['clientName', 'date', 'clockInTime', 'clockOutTime', 'caregiverName', 'duration'];
             } else if (this.props.type == 'Staff'){
-                var keys = ['Caregiver', 'Date', 'Clock in time', 'Clock out time', 'Client', 'Duration'];
+                var headersTitles = ['Caregiver', 'Date', 'Clock in time', 'Clock out time', 'Client', 'Duration'];
+                var keys = ['caregiverName', 'date', 'clockInTime', 'clockOutTime', 'clientName', 'duration'];
             } else {
                 var keys = [];
+                var headersTitles = [];
             }
             var dict = {}
             dict['type'] = this.props.varName
@@ -45,7 +48,7 @@ class DirectoryHeader extends React.Component {
                     if (visit[this.props.varName] != varName){
                         if (index == 0){
                             var headers = []
-                            keys.forEach(key => {
+                            headersTitles.forEach(key => {
                                 var header = this.createDict('string',key);
                                 headers.push(header);
                             });
