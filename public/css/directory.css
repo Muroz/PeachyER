@@ -10,7 +10,7 @@
   .directoryTitle{
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 250px 100px 100px;
     align-items: center;
   }
   
@@ -19,6 +19,7 @@
     font-size: 12px;
     transform: scale(0.8);
     background: #048BA8;
+    justify-self: center;
   }
   
   .directoryHeader{
@@ -63,7 +64,17 @@
     font-size: 14;
     color:rgb(112, 112, 112);
     display: grid;
+    grid-template-columns: 5fr 1fr;
+    align-items: center;
+   
+    border-radius: 10px;
+  }
+
+  .directoryItemContainer{
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-flow: column;
+    justify-items: center;
   }
   
   .directoryItem:hover{
@@ -149,4 +160,54 @@
 .paginationInfo {
     justify-self: center;
     align-self: center;
+}
+
+.editDialogBody {
+  display: grid;
+  grid-auto-flow: row;
+  grid-gap: 20px;
+  padding: 30px;
+}
+
+.phoneRow{
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+}
+
+.deleteArea{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-left:50px;
+  padding-right: 50px;
+  grid-gap: 10px;
+}
+
+.deleteText {
+ grid-column: 1/span 2;
+}
+
+.deleteButton {
+  background: red;
+  color:white;
+}
+
+.cancelButton {
+  border: 1px solid black;
+}
+
+.deleteIcon {
+  justify-self: center;
+}
+
+.addNumberButton{
+  background: lightblue;
+  width:60%;
+  margin: auto;
+  color:white;
+}
+
+.deleteNumberButton{
+  background: lightcoral;
+  border-radius: 25px;
+  color:white;
 }

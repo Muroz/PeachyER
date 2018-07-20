@@ -45,8 +45,18 @@ router.post("/getUnconfirmed",  isLoggedIn,function(req, res){
 
 router.post("/getConfirmed", isLoggedIn, function(req, res){
   //confirmed shifts
+  var period = moment().week()
+  var extraPeriod = 0
+  if(period % 2 == 0)
+  {
+    extraPeriod = period + 1
+  }
+  else
+  {
+    extraPeriod = period - 1
+  }
   TestVisit.find({$and:[
-            {status:'In process'}
+            {status:'In process'}, { $or: [{payPeriod: period}, {payPeriod: extraPeriod}] }
           ]}).sort({clockInTime:1}).exec(function(err,visits){
             if(err){
               throw err;
@@ -192,7 +202,6 @@ router.post("/addVisit",  isLoggedIn,function(req,res){
 
 router.post("/addItem",  isLoggedIn,function(req, res) {
   var info = req.body;
-  console.log(info);
   if (info.type == 'Client'){
     Client.create({
       name: req.body.item.name,
@@ -200,7 +209,7 @@ router.post("/addItem",  isLoggedIn,function(req, res) {
       billedHours: 0,
       billedVisits: [],
       visitsBy:[],
-      phoneNumber:'1709'+req.body.item.phone,
+      phoneNumber:req.body.item.phone,
       company:'Coombs'
     }, function(err, clients){
         if (err) {
@@ -216,7 +225,7 @@ router.post("/addItem",  isLoggedIn,function(req, res) {
       payingHours: 0,
       billedVisits: [],
       visits:[],
-      phoneNumber:'1709'+req.body.item.phone,
+      phoneNumber:req.body.item.phone,
       company:'Coombs'
     }, function(err, staff){
         if (err) {
@@ -302,7 +311,7 @@ router.post("/clockOut",  isLoggedIn,function(req, res) {
 
 router.post("/reportInfo", isLoggedIn, function(req,res){
 
-  var period = moment().week()
+  var period = moment().week() - 2
   var extraPeriod = 0
   if(period % 2 == 0)
   {
@@ -323,12 +332,64 @@ router.post("/reportInfo", isLoggedIn, function(req,res){
 
 });
 
+router.post("/reportClient", isLoggedIn, function(req,res){
+
+  var sortDict = {};
+  sortDict['name'] = 1;
+  Client.find({}).sort(sortDict).exec(function(err,clients){
+      res.json(clients);
+  });
+
+});
+
+router.post("/reportStaff", isLoggedIn, function(req,res){
+
+  var sortDict = {};
+  sortDict['name'] = 1;
+  Caregiver.find({}).sort(sortDict).exec(function(err,staff){
+      res.json(staff);
+  });
+
+});
 router.post("/getAuth", function(req,res){
   res.json(req.isAuthenticated());
 })
 
 router.post("/getUser", isLoggedIn, function(req,res){
   res.json(req.user);
+})
+
+router.post("/updateItem",isLoggedIn,function(req,res){
+  if(req.body.type == 'Clients'){
+    Client.findOne({_id:req.body.uuid},function(err,client){
+      client.phones = req.body.phones;
+      client.name = req.body.name;
+      client.save();
+      res.json(client);
+    });
+  } else {
+    Caregiver.findOne({_id:req.body.uuid},function(err,staff){
+      staff.name = req.body.name;
+      staff.id = req.body.id;
+      staff.phoneNumber = req.body.phoneNumber;
+      staff.save();
+      res.json(staff);
+  });
+  }
+})
+
+router.post("/deleteItem",isLoggedIn,function(req,res){
+  if(req.body.type == 'Clients'){
+    Client.findOne({_id:req.body.id},function(err,client){
+      client.remove();
+      res.json(client);
+    });
+  } else {
+    Caregiver.findOne({_id:req.body.id},function(err,staff){
+      staff.remove();
+      res.json(staff);
+  });
+  }
 })
 
 function isLoggedIn(req, res, next) {

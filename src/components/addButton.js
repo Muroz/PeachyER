@@ -30,6 +30,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
+import Button from "@material-ui/core/Button/Button";
+
+import {TextMaskCustom} from '../helper.js'
 
 
 class AddButton extends React.Component {
@@ -37,7 +40,7 @@ class AddButton extends React.Component {
     super(props);
     this.state = {
       name: '',
-      phone: '',
+      phone: '+1709',
       id: '',
 
       message:'',
@@ -55,11 +58,10 @@ class AddButton extends React.Component {
   }
 
   handleSave = () => {
-
-    if(this.state.name != '' && this.state.phone != '' && this.state.id != '' && this.state.typeSelected != ''){
+    if(this.state.name != '' && this.state.phone != '' && this.state.typeSelected != ''){
       var newItemData = {
         name:this.state.name,
-        phone:this.state.phone,
+        phone:"+1"+this.state.phone.replace(/\D+/g, ''),
         id:this.state.id
       }
       var newItem = {
@@ -69,7 +71,7 @@ class AddButton extends React.Component {
       this.props.addItem(newItem);
       this.setState({
         name: '',
-        phone: '',
+        phone: '+1709',
         id: '',
         message: '',
         typeSelected: ''
@@ -126,40 +128,23 @@ class AddButton extends React.Component {
             id="input-with-icon-textfield"
             label="Name"
             onChange = {this.handleInputChange.bind(this,'name')}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccountCircle  style={{color: '#f55845'}}/>
-                </InputAdornment>
-              ),
-            }}
           />
-          <TextField
-            className='dialogText'
-            id="input-with-icon-textfield"
-            label="Phone"
-            onChange = {this.handleInputChange.bind(this,'phone')}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Phone  style={{color: '#f55845'}}/>
-                </InputAdornment>
-              ),
-            }}
-          />
+          <FormControl className='dialogText'>
+            <InputLabel htmlFor="formatted-text-mask-input">Phone</InputLabel>
+            <Input
+              value={this.state.phone.substring(2,12)}
+              onChange={this.handleInputChange.bind(this,'phone')}
+              id="formatted-text-mask-input"
+              inputComponent={TextMaskCustom}
+            />
+          </FormControl>
+          {this.state.typeSelected == 'Staff' ?
           <TextField
             className='dialogText'
             id="input-with-icon-textfield"
             label="ID"
             onChange = {this.handleInputChange.bind(this,'id')}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <CreditCard  style={{color: '#f55845'}}/>
-                </InputAdornment>
-              ),
-            }}
-          />
+          /> : null}
 
         </div>
         

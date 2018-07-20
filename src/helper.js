@@ -1,6 +1,7 @@
 //Helper functions
 import ReactGA from 'react-ga';
-
+import MaskedInput from 'react-text-mask';
+import React from "react";
 /**
  *  Format phone numbers
 */
@@ -26,3 +27,18 @@ export function fireEvent(category,action){
           action: action
       });
 }
+
+
+export function TextMaskCustom(props) {
+    const { inputRef, ...other } = props;
+  
+    return (
+      <MaskedInput
+        {...other}
+        ref={inputRef}
+        mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+        placeholderChar={'\u2000'}
+        showMask
+      />
+    );
+  }

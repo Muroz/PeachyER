@@ -162,6 +162,51 @@ app.use(function(req, res, next){
 // })
 
 
+
+//Change schema client
+// ClientModel.find({},function(err,clients){
+//   clients.forEach(function(client){
+//     client.phones.push(client.phoneNumber);
+//     client.save();
+//   })
+// })
+
+//Clean visits
+// var period = moment().week() - 2
+//   var extraPeriod = 0
+//   if(period % 2 == 0)
+//   {
+//     extraPeriod = period + 1
+//   }
+//   else
+//   {
+//     extraPeriod = period - 1
+//   }
+//   var sortDict = {};
+//   sortDict['clientName'] = 1;
+//   TestVisit.find({$and: [
+//     { status:'Completed' },
+//     { $or: [{payPeriod: period}, {payPeriod: extraPeriod}] }
+//     ]}).sort(sortDict).exec(function(err,visits){
+//       visits.forEach(function(visit){
+//         if(visit.clientName.indexOf('+')>-1){
+
+//           ClientModel.find({phoneNumber:visit.clientName}, function(err,clients){
+//             console.log('found client',clients);
+//             if (clients != null){
+//               clients.forEach(function(client){
+//                 console.log('phone updated',visit.clientName);
+//                 visit.clientName = client.name
+//                 visit.save();
+//                 console.log('phone updated',visit.clientName);
+//               })
+//             }
+//           })
+//         }
+
+//       })
+// });
+
 //get visits 
 // var period = moment().week()
 // var extraPeriod = 0

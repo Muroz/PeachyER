@@ -47,9 +47,10 @@ router.post("/", function(req, res) {
 
   }
 
+
   // If the user entered digits, process their request
   if (req.body.Digits) {
-
+  
     if(req.body.Digits.length >= 4){
       var input;
       if (req.body.Digits.length == 5){
@@ -57,69 +58,79 @@ router.post("/", function(req, res) {
       } else {
         input = req.body.Digits
       }
-      TestVisit.findOne({visitId: req.body.From+input, status:'In process'}, function(err, visit){
+      TestVisit.find({visitId: req.body.From+input, status:'In process'}, function(err, visitList){
         if(err) return err;
-        if(visit==null) {
-          Client.findOne({phoneNumber:req.body.From}, function(err,client){
-            var clientName = req.body.From
-            if (client != null){
-              clientName = client.name
+        if(visitList.length == 0) {
+        
+          //reply to the staff
+          communicate('You have just clocked in!');
+
+          Client.find({}, function(err,clients){
+            // clients.forEach
+            var phoneNumber = req.body.From;
+            var filteredClients = [];
+            for (var i = 0; i < clients.length; i++) {
+                if (clients[i].phones.indexOf(phoneNumber) >= 0) {
+                  filteredClients.push(clients[i]);
+                }
             }
 
-            Caregiver.findOne({employeeId:input}, function(err, carer){
+            //In case that no client can be found with the given
+            if(filteredClients.length == 0){
+              var unkownClient = {name:req.body.From}
+              filteredClients.push(unkownClient);
+            }
+  
 
+            Caregiver.findOne({employeeId:input}, function(err, carer){
               var carerName = input;
               if (carer != null){
                 carerName = carer.name
               }
-
-              TestVisit.create({
-                visitId:req.body.From+input,
-                caregiverName: carerName,
-                clientName:clientName,
-                status: 'In process',
-                clockInTime: new moment(),
-                date:new moment(),
-                company:'Coombs',
-                timezone: 'Canada',
-                payPeriod: new moment().week()
-              }) 
-
-              communicate('You have just clocked in!');
-
+              filteredClients.forEach(function(client){
+                TestVisit.create({
+                  visitId:req.body.From+input,
+                  caregiverName: carerName,
+                  clientName:client.name,
+                  status: 'In process',
+                  clockInTime: new moment(),
+                  date:new moment(),
+                  company:'Coombs',
+                  timezone: 'Canada',
+                  payPeriod: new moment().week()
+                }) 
+              })
             })
           })
 
 
-        } 
-        else if (visit.status == 'In process'){
+        } else {
           communicate('You have just clocked out!')
-          var endTime = new moment().tz('America/St_Johns');
-          visit.clockOutTime = endTime;
-          visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
-          visit.status = 'Completed';
+          visitList.forEach(function(visit){
+            var endTime = new moment().tz('America/St_Johns');
+            visit.clockOutTime = endTime;
+            visit.duration = (moment(visit.clockOutTime).diff(moment(visit.clockInTime),'hours',true));
+            visit.status = 'Completed';
+            visit.save()
+            Client.findOne({name:visit.clientName}, function(err,client){
+              if(err) return err;
+              if(client!=null){
+                client.billedHours += parseFloat(visit.duration);
+                client.billedVisits.push(visit);
+                client.save();
+              }
+              Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
+                if (err) return err;
+                if(carer!=null) {
+                  carer.payingHours += parseFloat(visit.duration);
+                  carer.billedVisits.push(visit);
+                  carer.visits.push(visit);
 
-          Client.findOne({name:visit.clientName}, function(err,client){
-            if(err) return err;
-            if(client!=null){
-              client.billedHours += parseFloat(visit.duration);
-              client.billedVisits.push(visit);
-              client.save();
-            }
-            Caregiver.findOne({name:visit.caregiverName}, function(err,carer){
-              if (err) return err;
-              if(carer!=null) {
-                carer.payingHours += parseFloat(visit.duration);
-                carer.billedVisits.push(visit);
-                carer.visits.push(visit);
-                carer.save();
-              };
+                  carer.save()
+                };
+              });
             });
-          });
-
-        } 
-        if(visit != null){
-          visit.save();
+          })
         }
 
       })

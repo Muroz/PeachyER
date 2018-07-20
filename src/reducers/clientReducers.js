@@ -54,6 +54,41 @@ export function clientReducers(
       )
       return {...state, allShifts: [...allshiftsToUpdate.slice(0, allindexToUpdate), action.payload, ...allshiftsToUpdate.slice(allindexToUpdate + 1)]}
       break;
+    case "UPDATE_ITEM":
+      var type = ""
+      var allItems = [];
+      if (action.payload.type == 'Clients'){
+        allItems = [...state.clients]
+        type = "clients";
+      } else {
+        allItems = [...state.staff]
+        type = "staff";
+      }
+      const updateIndex = allItems.findIndex(
+        function(item){
+          return item._id === action.payload.data._id;
+        }
+      )
+      return {...state, [type]: [...allItems.slice(0, updateIndex), action.payload.data, ...allItems.slice(updateIndex + 1)]}
+
+    case "DELETE_ITEM":
+      console.log('here')
+      console.log(action.payload);
+      var type = ""
+      var allItems = [];
+      if (action.payload.type == 'Clients'){
+        allItems = [...state.clients]
+        type = "clients";
+      } else {
+        allItems = [...state.staff]
+        type = "staff";
+      }
+      const deleteIndex = allItems.findIndex(
+        function(item){
+          return item._id === action.payload.data._id;
+        }
+      )
+      return {...state, [type]: [...allItems.slice(0, deleteIndex), ...allItems.slice(deleteIndex + 1)]}
     case "GET_USER":
       return {...state, user:action.payload}
       break;

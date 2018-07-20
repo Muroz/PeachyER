@@ -42,7 +42,7 @@ var clientSchema = new Schema({
     Sunday: [{start:String, end:String, caregiverName:String, shiftNumber:Number, date: String}],
   },
   phoneNumber: String,
-  secondaryPhoneNumber: String,
+  phones: [String],
   region: String,
   company: String
 });

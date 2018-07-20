@@ -198,7 +198,6 @@ export function clockOut(visit,time) {
 
 //get User
 export function getUser(){
-  console.log('fetching user');
   return function(dispatch){
     axios.post("/fetch/getUser")
     .then(res => {
@@ -209,4 +208,31 @@ export function getUser(){
     });
 }
 }
+
+//update item
+export function updateItem(item){
+  return function(dispatch){
+  axios.post("/fetch/updateItem", item)
+  .then(res => {
+    console.log('dispatching');
+    dispatch({ type: "UPDATE_ITEM", payload: {data:res.data, type:item.type} });
+  }).catch(function(err){
+    dispatch({type:"UPDATE_ITEM_REJECTED", payload:err});
+  })
+}
+}
+
+export function deleteItem(item){
+  console.log('deleting item',item)
+  return function(dispatch){
+  axios.post("/fetch/deleteItem", item)
+  .then(res => {
+    console.log('dispatching');
+    dispatch({ type: "DELETE_ITEM", payload: {data:res.data, type:item.type} });
+  }).catch(function(err){
+    dispatch({type:"DELETE_ITEM_REJECTED", payload:err});
+  })
+}
+}
+
 
